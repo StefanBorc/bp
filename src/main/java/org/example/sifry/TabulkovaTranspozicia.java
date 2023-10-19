@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.Sifra;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.example.Pokus.INT_MIN;
@@ -56,11 +55,9 @@ public class TabulkovaTranspozicia extends Sifra {
         vratPoradie(kluc);
 
         int pocetStlpcov = kluc.length();
-        int pocetRiadkov = kluc.length();
         char[][] tabulka;
-        int blok = 0;
         int index = 0;
-
+        int p=text.length()/kluc.length();
         while (index != text.length()) {
             tabulka=new char[pocetStlpcov][pocetStlpcov];
             for (int i = 0; i < pocetStlpcov; i++) {

@@ -1,17 +1,17 @@
 package org.example;
 
-import org.example.sifry.JednoduchaSubstitucia;
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String kluc="aioixnczouafwwaygxjcz";
+        String kluc="qwertyzanglictiny";
 
-        //pozor scitavas bigramy v pokuse
-        new Pokus("SK.txt",kluc);
-        System.out.println("kluc " + kluc.length());
+        Pokus pokus= new Pokus("SK3.txt",kluc);
+      //  System.out.println("kluc " + kluc.length());
+
+        Invariant pokusOT=new Invariant(pokus.getText(),pokus.getUpravenyText());
+
+        pokusOT.rozmedzieOpakovanychPismen(pokusOT.getTextBezMedzier());
     }
 
 }

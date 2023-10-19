@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.Sifra;
 
-import java.io.IOException;
-
 public class Vigenere extends Sifra {
     private int[] poradie;
     @Getter@Setter

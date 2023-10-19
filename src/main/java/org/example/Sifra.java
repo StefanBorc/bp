@@ -26,13 +26,14 @@ public abstract class Sifra {
         StringBuilder upravenyText=new StringBuilder();
         for(char c: text.toString().toCharArray()){
             if(Character.isAlphabetic(c) || Character.isSpaceChar(c)){
-                upravenyText.append(c);
+                upravenyText.append(Character.toUpperCase(c));
             }
             else{
                 upravenyText.append(" ");
             }
 
         }
+        br.close();
         return upravenyText;
     }
       protected StringBuilder vratSuborU(String nazovSuboru) throws IOException {
@@ -51,6 +52,7 @@ public abstract class Sifra {
                   upravenyText.append(Character.toUpperCase(c));
               }
           }
+          br.close();
           return upravenyText;
       }
     private BufferedReader otvorSubor(String nazovSuboru) throws FileNotFoundException {

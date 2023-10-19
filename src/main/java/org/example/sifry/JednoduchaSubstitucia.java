@@ -3,7 +3,6 @@ package org.example.sifry;
 import lombok.Getter;
 import org.example.Sifra;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 

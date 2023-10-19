@@ -1,5 +1,6 @@
 package org.example;
 
+import lombok.Getter;
 import org.example.sifry.JednoduchaSubstitucia;
 import org.example.sifry.TabulkovaTranspozicia;
 import org.example.sifry.Vigenere;
@@ -12,7 +13,9 @@ public class Pokus {
     public static final int INT_MAX = 999 ;
     public static final int INT_MIN = -999;
     private String nazovSuboru;
+    @Getter
     private StringBuilder upravenyText;
+    @Getter
     private StringBuilder text;
     private TabulkovaTranspozicia t;
     private Vigenere v;
@@ -27,22 +30,9 @@ public class Pokus {
         s = new JednoduchaSubstitucia('C', kluc);
         t = new TabulkovaTranspozicia(kluc);
         v = new Vigenere(kluc);
+        vygenerujKluce(10);
         upravenyText = new StringBuilder();
-
         sifrujTexty();
-        //ngramy(upravenyText, 4,16);
-        double priemernaDlzka = priemernaDlzka();
-        //porovnajDlzkyKlucov(t.getZasifrovanyText());
-        // p(upravenyText,4);
-        //vygenerujKluce(10);
-
-        // otestujKlucePreVigenera();
-
-        //vigenereUspesnostKlucov(priemernaDlzka);
-        transpoziciaPorovnajDlzkyKlucov(t.getZasifrovanyText());
-        //transpozicnaUspesnostKlucov();
-
-
     }
     private void vygenerujKluce(int n){
         Map<String,Integer> kluce=new HashMap<>();
@@ -67,75 +57,10 @@ public class Pokus {
     private void sifrujTexty() throws IOException {
         upravenyText = s.vratSuborU(nazovSuboru);
         text = s.vratSubor(nazovSuboru);
-        v.sifrovanie(upravenyText,prednastavenyKluc);
         s.sifrovanie(upravenyText,prednastavenyKluc);
         t.sifrovanie(upravenyText,prednastavenyKluc);
     }
 
-
-    protected void ngramy(StringBuilder sifra, int n,int kolko) {
-
-        Map<String, Integer> ngramy = new HashMap<>();
-
-        for (int i = 0; i < sifra.length() - n; i++) {
-            String ngram=new String();
-            for (int j = i; j < i+n; j++) {
-                ngram+=sifra.charAt(j);
-            }
-            ngramy.merge(ngram,1,Integer::sum);
-        }
-
-        List<Map.Entry<String, Integer>> vytriedeneNgramy = ngramy.entrySet()
-                .stream()
-                .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
-                .collect(Collectors.toList());
-        int pocitadlo = 0;
-        for (Map.Entry<String, Integer> vstup : vytriedeneNgramy) {
-            if(pocitadlo <  kolko){
-                System.out.println(vstup.getKey() + ": " + vstup.getValue());
-            }
-            pocitadlo++ ;
-        }
-    }
-
-    protected double priemernaDlzka(){
-        String[] slova = text.toString().split("\\s+");
-
-        int pocetPismen = 0;
-        int pocetSlov=slova.length;
-
-        for (String slovo : slova) {
-            pocetPismen+=slovo.length();
-        }
-        double priemer = (double) pocetPismen / pocetSlov;
-        return priemer;
-    }
-
-
-    private double indexkoincidencie(String zasifrovanyText) {
-        HashMap<Character, Integer> frekvencie = new HashMap<>();
-        int pocetPismen = 0;
-
-        for (char c = 'A'; c <= 'Z'; c++) {
-            frekvencie.put(c, 0);
-        }
-
-        for (int i = 0; i < zasifrovanyText.length(); i++) {
-            char c = Character.toUpperCase(zasifrovanyText.charAt(i));
-            if (Character.isLetter(c)) {
-                frekvencie.put(c, frekvencie.get(c) + 1);
-                pocetPismen++;
-            }
-        }
-
-        double index = 0.0;
-        for (char c = 'A'; c <= 'Z'; c++) {
-            int pom = frekvencie.get(c);
-            index += (pom * (pom - 1.0)) ;
-        }
-
-        return (1.0/ (pocetPismen * (pocetPismen - 1.0)))*index;
-    }
     private void otestujPattern(StringBuilder text, int n) {
         Map<String, Integer> paterny = new HashMap<>();
 
@@ -170,7 +95,6 @@ public class Pokus {
             pocitadlo++ ;
         }
     }
-
     private double vigenerePriemerDlzka(StringBuilder zt, int oKolko,double priemernaDlzka){
         Map<Character,Integer> pismena=new HashMap<>();
         double najviacVyskytovane=0;
@@ -189,7 +113,6 @@ public class Pokus {
         int x=v.getKluc().length();
         return c/priemernaDlzka;
     }
-
     private int[] vigenereNajdiMozneKluce(StringBuilder zt,double priemernaDlzka){
         int d=0;
         double max = INT_MIN;
@@ -230,6 +153,7 @@ public class Pokus {
         int k=0;
         System.out.println(vysledok);
     }
+    /* Skusanie roznych dlziek z ktoreho sa da ziskat dlzka kluca na zaklade bigramov  */
     protected int zhodnostBigramov(StringBuilder zasifrovanyText,int oKolko){
         ArrayList<Character> spoluhlasky=new ArrayList<>(List.of('B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','F','Z','X'));
         ArrayList<Character> samohlasky=new ArrayList<>(List.of('A','E','I','O','U','Y'));
@@ -250,23 +174,14 @@ public class Pokus {
                 .stream()
                 .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
                 .collect(Collectors.toList());
-        int pocitadlo = 0;
-        int pocet=0;
-        for (Map.Entry<String, Integer> vstup : vytriedeneNgramy) {
-            if(pocitadlo <  10){
-               // System.out.println(vstup.getKey() + ": " + vstup.getValue());
-                pocet+= vstup.getValue();
-            }
-            pocitadlo++;
-        }
-        return pocet;
+
+        return vytriedeneNgramy.get(0).getValue();
     }
     private int transpoziciaPorovnajDlzkyKlucov(StringBuilder zt){
         Map<Integer,Integer> mozneKluce=new HashMap<>();
         int maxIndex=0;
         int max=0;
         for(int i=10;i<=30;i++){
-            //System.out.println(i);
             mozneKluce.put(i,zhodnostBigramov(zt,i));
         }
 
