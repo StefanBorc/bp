@@ -1,7 +1,7 @@
 package org.example;
 
-import com.sun.source.tree.Tree;
 import lombok.Getter;
+import org.w3c.dom.ls.LSOutput;
 
 
 import java.util.*;
@@ -19,7 +19,6 @@ public class Invariant {
         this.textSMedzerami = OT;
         this.textBezMedzier = OTUpraveny;
         vsetkySlova = textSMedzerami.toString().split(" ");
-        spoluHlaskySamohlasky(textSMedzerami);
     }
     protected void ngramy(StringBuilder sifra, int n,int kolko) {
 
@@ -84,7 +83,7 @@ public class Invariant {
     }
 
     /* Slova ktore sa najcastejsie na seba viazu */
-    protected Map<String, Integer> najviacVyskystovanaSekvenciaSlov(StringBuilder text) {
+    protected Map<String, Integer> viazaneSlova(StringBuilder text) {
         Map<String, Integer> slova = new HashMap<>();
         vsetkySlova = text.toString().split(" ");
 
@@ -140,25 +139,32 @@ public class Invariant {
     }
 
     /* Vyskyt jednotlivych samohlasok a spoluhlasok na zaciatku a konci slova */
-    protected ArrayList<Map<Character,Integer>> spoluHlaskySamohlasky(StringBuilder text) {
+    protected ArrayList<Map<Character,Integer>> spoluhlaskySamohlasky(StringBuilder text) {
         Map<Character, Integer> zaciatokSlova = new HashMap<>();
 
         Map<Character, Integer> koniecSlova = new HashMap<>();
         vsetkySlova = text.toString().split(" ");
 
         for (var slovo : vsetkySlova) {
-            if(slovo.length()>=1 && Character.isAlphabetic(slovo.charAt(0))){
+            if(!slovo.isEmpty() && Character.isAlphabetic(slovo.charAt(0))){
                 zaciatokSlova.merge(slovo.charAt(0), 1, Integer::sum);
             }
             if (slovo.length() > 2) {
-                koniecSlova.merge(slovo.charAt(slovo.length() - 1), 1, Integer::sum);
+                koniecSlova.merge(slovo.charAt(slovo.length() -1), 1, Integer::sum);
             }
+        }
+        for (Map.Entry<Character,Integer> vstup : zaciatokSlova.entrySet()) {
+            System.out.println(vstup.getKey()+" "+vstup.getValue());
+        }
+        System.out.println();
+        for (Map.Entry<Character,Integer> vstup : koniecSlova.entrySet()) {
+            System.out.println(vstup.getKey()+" "+vstup.getValue());
         }
         return new ArrayList<>(List.of(zaciatokSlova,koniecSlova));
     }
 
     /*  Po kolkych znakoch sa opakuju jednotlive pismena  ,*/
-    protected void rozmedzieOpakovanychPismen(StringBuilder text) {
+    protected void vzdialenostiMedziPismenami(StringBuilder text) {
 
         ArrayList<Map<Integer,Integer>> rozmedzia= new ArrayList<>();
         for(var c='A';c<='Z';c++){
@@ -200,5 +206,7 @@ public class Invariant {
             }
         }
     }
+
+
 
 }

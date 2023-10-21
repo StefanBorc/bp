@@ -4,14 +4,12 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String kluc="qwertyzanglictiny";
+        String kluc="notaktomusimprerobit";
 
-        Pokus pokus= new Pokus("SK3.txt",kluc);
-      //  System.out.println("kluc " + kluc.length());
+        PokusTabulkovaTranspozicia p=new PokusTabulkovaTranspozicia("SK3.txt",kluc);
+        Invariant pokusOT=new Invariant(p.getText(),p.getUpravenyText());
 
-        Invariant pokusOT=new Invariant(pokus.getText(),pokus.getUpravenyText());
-
-        pokusOT.rozmedzieOpakovanychPismen(pokusOT.getTextBezMedzier());
+        System.out.println(kluc.length());
     }
 
 }

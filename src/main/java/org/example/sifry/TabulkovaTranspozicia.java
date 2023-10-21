@@ -15,13 +15,17 @@ public class TabulkovaTranspozicia extends Sifra {
     private String kluc;
     @Getter
     private StringBuilder zasifrovanyText;
+    private int nZasifrovanychZnakov;
 
     public TabulkovaTranspozicia(String kluc) {
-        super();
+        nZasifrovanychZnakov=0;
         this.kluc = kluc;
         zasifrovanyText = new StringBuilder();
     }
-
+    private void setnZasifrovanychZnakov(int n){
+        nZasifrovanychZnakov=n;
+        sifrovanie(getUpravenyText(),kluc);
+    }
     private int min(ArrayList<Integer> p) {
         int minimum = p.get(0);
         int index = 0;
@@ -35,45 +39,46 @@ public class TabulkovaTranspozicia extends Sifra {
     }
 
     protected void vratPoradie(String heslo) {
-        poradie = new int[heslo.length()];
-        ArrayList<Integer> p = new ArrayList<>();
-        for (int i = 0; i < heslo.length(); i++) {
+        poradie=new int[heslo.length()];
+        ArrayList<Integer> p=new ArrayList<>();
+        for(int i=0;i<heslo.length();i++){
             p.add((int) heslo.charAt(i));
         }
-        int pismenoVPoradi = 1;
-        for (int i = 0; i < heslo.length(); i++) {
-            var index = min(p);
-            poradie[index] = pismenoVPoradi;
-            p.set(index, 999);
+
+        int pismenoVPoradi=0;
+        for(int i=0;i<heslo.length();i++){
+            var index=min(p);
+            poradie[index]=pismenoVPoradi;
+            p.set(index,999);
             pismenoVPoradi++;
         }
     }
-
+    public void zasifrujText(StringBuilder text,String kluc,int n){
+        nZasifrovanychZnakov=n;
+        sifrovanie(text,kluc);
+    }
     @Override
     public void sifrovanie(StringBuilder text,String kluc) {
-        this.kluc=kluc;
+        this.kluc = kluc;
         vratPoradie(kluc);
-
         int pocetStlpcov = kluc.length();
-        char[][] tabulka;
+        int pocetRiadkov = nZasifrovanychZnakov/kluc.length();
+        char[][] tabulka = new char[pocetRiadkov][pocetStlpcov];
         int index = 0;
-        int p=text.length()/kluc.length();
-        while (index != text.length()) {
-            tabulka=new char[pocetStlpcov][pocetStlpcov];
-            for (int i = 0; i < pocetStlpcov; i++) {
+
+        while (index != nZasifrovanychZnakov) {
+
+            for (int i = 0; i < pocetRiadkov; i++) {
                 for (int j = 0; j < pocetStlpcov; j++) {
-                    if (index < text.length()) {
+                    if (index < nZasifrovanychZnakov) {
                         tabulka[i][j] = text.charAt(index);
                         index++;
                     }
-                    else{
-                        tabulka[i][j] = 'p';
-                    }
                 }
             }
-            int stlpec = INT_MIN;
-            int stlpecVPoradi = 1;
-            while (stlpec != pocetStlpcov && stlpecVPoradi <= pocetStlpcov) {
+            int stlpec = -999;
+            int stlpecVPoradi = 0;
+            while (stlpec != pocetStlpcov && stlpecVPoradi < pocetStlpcov) {
                 if (stlpecVPoradi != poradie[0]) {
                     for (int i = 0; poradie[i] != stlpecVPoradi && pocetStlpcov > i; i++) {
                         stlpec = i + 1;
@@ -81,14 +86,17 @@ public class TabulkovaTranspozicia extends Sifra {
                 } else {
                     stlpec = 0;
                 }
-                for (int r = 0; r < pocetStlpcov; r++) {
+                for (int r = 0; r < pocetRiadkov; r++) {
                     if (index <= text.length()) {
-                        zasifrovanyText.append(tabulka[r][stlpec]);
+                        if (Character.isAlphabetic(tabulka[r][stlpec])) {
+                            zasifrovanyText.append(tabulka[r][stlpec]);
+                        }
                     }
                 }
                 stlpecVPoradi++;
             }
         }
+      //  System.out.println(zasifrovanyText);
     }
 
 

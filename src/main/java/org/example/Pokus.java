@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.example.sifry.JednoduchaSubstitucia;
 import org.example.sifry.TabulkovaTranspozicia;
 import org.example.sifry.Vigenere;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.util.*;
@@ -17,22 +18,21 @@ public class Pokus {
     private StringBuilder upravenyText;
     @Getter
     private StringBuilder text;
-    private TabulkovaTranspozicia t;
-    private Vigenere v;
-    private JednoduchaSubstitucia s;
+    private TabulkovaTranspozicia transpozicia;
+    private Vigenere vigenere;
+    private JednoduchaSubstitucia substitucia;
     private ArrayList<String> vygenerovaneKluce;
     private String prednastavenyKluc;
+    private Invariant invariant;
 
     public Pokus(String nazovSuboru,String kluc) throws IOException {
         this.nazovSuboru = nazovSuboru;
         this.prednastavenyKluc = kluc;
         vygenerovaneKluce = new ArrayList<>();
-        s = new JednoduchaSubstitucia('C', kluc);
-        t = new TabulkovaTranspozicia(kluc);
-        v = new Vigenere(kluc);
-        vygenerujKluce(10);
-        upravenyText = new StringBuilder();
+        //vygenerujKluce(10);
+
         sifrujTexty();
+        invariant=new Invariant(text,upravenyText);
     }
     private void vygenerujKluce(int n){
         Map<String,Integer> kluce=new HashMap<>();
@@ -55,10 +55,16 @@ public class Pokus {
 
     }
     private void sifrujTexty() throws IOException {
-        upravenyText = s.vratSuborU(nazovSuboru);
-        text = s.vratSubor(nazovSuboru);
-        s.sifrovanie(upravenyText,prednastavenyKluc);
-        t.sifrovanie(upravenyText,prednastavenyKluc);
+        substitucia = new JednoduchaSubstitucia('C', prednastavenyKluc);
+        transpozicia = new TabulkovaTranspozicia(prednastavenyKluc);
+        vigenere = new Vigenere(prednastavenyKluc);
+
+        upravenyText = substitucia.vratSuborU(nazovSuboru);
+        text = substitucia.vratSubor(nazovSuboru);
+
+        //vigenere.sifrovanie(upravenyText,prednastavenyKluc);
+        //substitucia.sifrovanie(upravenyText,prednastavenyKluc);
+        transpozicia.sifrovanie(upravenyText,prednastavenyKluc);
     }
 
     private void otestujPattern(StringBuilder text, int n) {
@@ -110,7 +116,7 @@ public class Pokus {
                 .collect(Collectors.toList());
         double p=f.get(0).getValue();
         double c=(p/pocet)*100;
-        int x=v.getKluc().length();
+        int x= vigenere.getKluc().length();
         return c/priemernaDlzka;
     }
     private int[] vigenereNajdiMozneKluce(StringBuilder zt,double priemernaDlzka){
@@ -141,9 +147,9 @@ public class Pokus {
         for(int i=0;i<vygenerovaneKluce.size();i++){
             int [] mozneKluce=new int[2];
             int dlzkaKluca=vygenerovaneKluce.get(i).length();
-            v.sifrovanie(upravenyText,vygenerovaneKluce.get(i));
-            v.setKluc(vygenerovaneKluce.get(i));
-            mozneKluce=vigenereNajdiMozneKluce(v.getZasifrovanyText(),priemernaDlzka);
+            vigenere.sifrovanie(upravenyText,vygenerovaneKluce.get(i));
+            vigenere.setKluc(vygenerovaneKluce.get(i));
+            mozneKluce=vigenereNajdiMozneKluce(vigenere.getZasifrovanyText(),priemernaDlzka);
             if(dlzkaKluca==mozneKluce[0] || dlzkaKluca==mozneKluce[1]){
                 pocetUhadnutychKlucov++;
             }
@@ -202,10 +208,10 @@ public class Pokus {
         for(int i=0;i<vygenerovaneKluce.size();i++){
 
             int dlzkaKluca=vygenerovaneKluce.get(i).length();
-            t.setKluc(vygenerovaneKluce.get(i));
-            t.sifrovanie(upravenyText,vygenerovaneKluce.get(i));
-            int moznyKluc=transpoziciaPorovnajDlzkyKlucov(t.getZasifrovanyText());
-            System.out.println("kluc "+t.getKluc().length());
+            transpozicia.setKluc(vygenerovaneKluce.get(i));
+            transpozicia.sifrovanie(upravenyText,vygenerovaneKluce.get(i));
+            int moznyKluc=transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
+            System.out.println("kluc "+ transpozicia.getKluc().length());
             System.out.println("odhad "+moznyKluc);
             if(dlzkaKluca==moznyKluc){
                 pocetUhadnutychKlucov++;
@@ -218,6 +224,80 @@ public class Pokus {
         System.out.println(vysledok);
     }
 
+    /* otacame na n poziciach o nejake cislo a ocakavame podobne vysledky ake mali zaciatky slov alebo konce slov */
+    protected void otestujNPozicie(){
+
+        ArrayList<ArrayList<Map<Character,Integer>>> vysledky=new ArrayList<>();
+
+        for(int oKolko=5;oKolko<=30;oKolko++){
+            vysledky.add(new ArrayList<>());
+            StringBuilder text=new StringBuilder();
+            int pocitadlo=0;
+            for(var c:vigenere.getZasifrovanyText().toString().toCharArray()){
+                if(pocitadlo==oKolko){
+                    pocitadlo=0;
+                    text.append(" ");
+                    text.append(c);
+                }
+                else{
+                    text.append(c);
+                }
+                pocitadlo++;
+            }
+            String[] slova=text.toString().split(" ");
+
+            for(char c='A';c<='Z';c++){
+                vysledky.get(oKolko-5).add(new HashMap<>());
+                for(var slovo : slova){
+                    if(slovo.charAt(0)<=90 && slovo.charAt(0)>=65){
+                        int novePismeno=(int)(slovo.charAt(0)+(c-65));
+                        if(novePismeno>90){
+                            novePismeno=(novePismeno-26);
+                        }
+                        vysledky.get(oKolko-5).get(c-65).merge((char)novePismeno,1,Integer::sum);
+                    }
+                }
+            }
+        }
+        ArrayList<ArrayList<Map<Character,Double>>> vysledkyPercenta=new ArrayList<>();
+
+        int index=0;
+        for(var vyskyty:vysledky){
+            vysledkyPercenta.add(new ArrayList<>());
+
+            int indexPismena=0;
+            for(var mapa : vyskyty){
+
+               double suma=mapa.values().stream().mapToInt(Integer::intValue).sum();
+               vysledkyPercenta.get(index).add(new HashMap<>());
+
+               for(var pismeno : mapa.entrySet()){
+                   vysledkyPercenta.get(index).get(indexPismena).put(pismeno.getKey(),(pismeno.getValue()/suma)*100);
+
+               }
+               indexPismena++;
+            }
+            index++;
+        }
+        int i=5;
+        double max=0;
+        int maxIndex=0;
+
+        for(var vyskyty:vysledkyPercenta){
+            System.out.println();
+            System.out.println(i);
+            System.out.println();
+            char c='A';
+            for(var percenta:vyskyty){
+                //double maxPercenta = Collections.max(percenta.values());
+
+                System.out.println(c+": "+percenta);
+                c++;
+            }
+            i++;
+        }
+
+    }
 
 
 }
