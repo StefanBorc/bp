@@ -15,15 +15,15 @@ public class TabulkovaTranspozicia extends Sifra {
     private String kluc;
     @Getter
     private StringBuilder zasifrovanyText;
-    private int nZasifrovanychZnakov;
+    private int pocetRiadkov;
 
     public TabulkovaTranspozicia(String kluc) {
-        nZasifrovanychZnakov=0;
+        pocetRiadkov = 0;
         this.kluc = kluc;
         zasifrovanyText = new StringBuilder();
     }
-    private void setnZasifrovanychZnakov(int n){
-        nZasifrovanychZnakov=n;
+    public void setPocetRiadkov(int pocetRiadkov) {
+        this.pocetRiadkov = pocetRiadkov;
         sifrovanie(getUpravenyText(),kluc);
     }
     private int min(ArrayList<Integer> p) {
@@ -38,7 +38,7 @@ public class TabulkovaTranspozicia extends Sifra {
         return index;
     }
 
-    protected void vratPoradie(String heslo) {
+    private void vratPoradie(String heslo) {
         poradie=new int[heslo.length()];
         ArrayList<Integer> p=new ArrayList<>();
         for(int i=0;i<heslo.length();i++){
@@ -53,8 +53,8 @@ public class TabulkovaTranspozicia extends Sifra {
             pismenoVPoradi++;
         }
     }
-    public void zasifrujText(StringBuilder text,String kluc,int n){
-        nZasifrovanychZnakov=n;
+    public void zasifrujText(StringBuilder text,String kluc,int pRiadkov){
+        pocetRiadkov=pRiadkov;
         sifrovanie(text,kluc);
     }
     @Override
@@ -62,15 +62,16 @@ public class TabulkovaTranspozicia extends Sifra {
         this.kluc = kluc;
         vratPoradie(kluc);
         int pocetStlpcov = kluc.length();
-        int pocetRiadkov = nZasifrovanychZnakov/kluc.length();
         char[][] tabulka = new char[pocetRiadkov][pocetStlpcov];
+        System.out.println("pocet riadkov:"+pocetRiadkov);
         int index = 0;
+        int n=pocetRiadkov*pocetStlpcov;
 
-        while (index != nZasifrovanychZnakov) {
+        while (index != n) {
 
             for (int i = 0; i < pocetRiadkov; i++) {
                 for (int j = 0; j < pocetStlpcov; j++) {
-                    if (index < nZasifrovanychZnakov) {
+                    if (index < n) {
                         tabulka[i][j] = text.charAt(index);
                         index++;
                     }
@@ -96,7 +97,7 @@ public class TabulkovaTranspozicia extends Sifra {
                 stlpecVPoradi++;
             }
         }
-      //  System.out.println(zasifrovanyText);
+
     }
 
 

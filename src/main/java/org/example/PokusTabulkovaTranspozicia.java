@@ -8,16 +8,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PokusTabulkovaTranspozicia {
-    public static int POCIATOCNA_VELKOST=200;
+    public static int POCIATOCNA_VELKOST=100;
     @Getter
     private StringBuilder upravenyText;
     @Getter
     private StringBuilder text;
+    @Getter
+    private StringBuilder zt;
     private TabulkovaTranspozicia transpozicia;
     private final ArrayList<String> vygenerovaneKluce;
+
     private Invariant invariant;
+    private int odhaDnutaDlzkaKluca;
 
     public PokusTabulkovaTranspozicia(String nazovSuboru, String kluc) throws IOException {
+        odhaDnutaDlzkaKluca=kluc.length();
         vygenerovaneKluce=new ArrayList<>();
         vygenerujKluce(10);
         transpozicia = new TabulkovaTranspozicia(kluc);
@@ -27,13 +32,18 @@ public class PokusTabulkovaTranspozicia {
 
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST);
 
+
         invariant = new Invariant(text, upravenyText);
 
-        transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
+        //transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
+
+        otestujDlzkuKluca();
+
     }
 
     private void spustiSifrovanie(String kluc,int n) {
         transpozicia.zasifrujText(upravenyText, kluc,n);
+        zt=transpozicia.getZasifrovanyText();
     }
     private void vygenerujKluce(int n){
         Map<String,Integer> kluce=new HashMap<>();
@@ -123,5 +133,51 @@ public class PokusTabulkovaTranspozicia {
         System.out.println(vysledok);
     }
 
+    private void testujPermutacia(){
 
+    }
+    private List<Map.Entry<String,Double>> spravStatistikuBigramov(){
+        List<Map.Entry<String, Integer>> vyskytBigramov=invariant.ngramy(zt,2);
+        Map<String,Double> statistika=new TreeMap<>();
+
+
+        double pocet=vyskytBigramov.stream()
+                .mapToInt(Map.Entry::getValue)
+                .sum();
+        for(var vyskyt : vyskytBigramov){
+            statistika.put(vyskyt.getKey(),(vyskyt.getValue()/pocet)*100);
+
+        }
+        var mapa=statistika.entrySet()
+                .stream()
+                .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
+                .collect(Collectors.toList());
+        return mapa;
+    }
+    private void otestujDlzkuKluca(){
+        ArrayList<StringBuilder> riadky;
+        ArrayList<List<Map.Entry<String, Double>>> statistika=new ArrayList<>();
+
+        for(int i=0;i<30;i++){
+            if(i<5){
+                statistika.add(new ArrayList<>());
+                continue;
+            }
+            riadky=new ArrayList<>();
+            StringBuilder riadok=new StringBuilder();
+            for(int j=0;j<zt.length();j++){
+                if(riadok.length()==i){
+                    riadky.add(riadok);
+                    riadok=new StringBuilder();
+                }
+                else{
+                    riadok.append(zt.charAt(j));
+                }
+            }
+            statistika.add(spravStatistikuBigramov());
+
+
+        }
+        System.out.println();
+    }
 }

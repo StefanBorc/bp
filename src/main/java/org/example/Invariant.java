@@ -1,7 +1,6 @@
 package org.example;
 
 import lombok.Getter;
-import org.w3c.dom.ls.LSOutput;
 
 
 import java.util.*;
@@ -20,14 +19,14 @@ public class Invariant {
         this.textBezMedzier = OTUpraveny;
         vsetkySlova = textSMedzerami.toString().split(" ");
     }
-    protected void ngramy(StringBuilder sifra, int n,int kolko) {
+    protected List<Map.Entry<String, Integer>> ngramy(StringBuilder text, int n) {
 
         Map<String, Integer> ngramy = new HashMap<>();
 
-        for (int i = 0; i < sifra.length() - n; i++) {
+        for (int i = 0; i < text.length() - n; i++) {
             String ngram=new String();
             for (int j = i; j < i+n; j++) {
-                ngram+=sifra.charAt(j);
+                ngram+=text.charAt(j);
             }
             ngramy.merge(ngram,1,Integer::sum);
         }
@@ -36,13 +35,16 @@ public class Invariant {
                 .stream()
                 .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
                 .collect(Collectors.toList());
+
         int pocitadlo = 0;
+        int kolko=10;
         for (Map.Entry<String, Integer> vstup : vytriedeneNgramy) {
             if(pocitadlo <  kolko){
-                System.out.println(vstup.getKey() + ": " + vstup.getValue());
+              //  System.out.println(vstup.getKey() + ": " + vstup.getValue());
             }
             pocitadlo++ ;
         }
+        return vytriedeneNgramy;
     }
 
     protected double priemernaDlzka(StringBuilder text){
