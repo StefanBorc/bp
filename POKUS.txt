@@ -1,3 +1,66 @@
-dlzka kluca:13
-pocet riadkov:100
+dlzka kluca:14
+pocet riadkov:200
+5
+6
+odhadovana dlzka: 13
+0
+1
+odhadovana dlzka: 14
+1
+2
+odhadovana dlzka: 14
+4
+5
+odhadovana dlzka: 14
+5
+6
+odhadovana dlzka: 14
+6
+7
+odhadovana dlzka: 14
+8
+9
+odhadovana dlzka: 14
+10
+11
+odhadovana dlzka: 14
+11
+12
+odhadovana dlzka: 14
+12
+13
+odhadovana dlzka: 14
+8
+10
+odhadovana dlzka: 18
+14
+0
+odhadovana dlzka: 21
+2
+9
+odhadovana dlzka: 22
+24
+0
+odhadovana dlzka: 25
+3
+1
+odhadovana dlzka: 28
+3
+5
+odhadovana dlzka: 28
+8
+10
+odhadovana dlzka: 28
+13
+15
+odhadovana dlzka: 28
+14
+16
+odhadovana dlzka: 28
+19
+15
+odhadovana dlzka: 28
+22
+24
+odhadovana dlzka: 28
 

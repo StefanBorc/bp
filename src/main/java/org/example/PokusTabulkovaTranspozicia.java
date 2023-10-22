@@ -2,13 +2,14 @@ package org.example;
 
 import lombok.Getter;
 import org.example.sifry.TabulkovaTranspozicia;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PokusTabulkovaTranspozicia {
-    public static int POCIATOCNA_VELKOST=100;
+    public static int POCIATOCNA_VELKOST = 200;
     @Getter
     private StringBuilder upravenyText;
     @Getter
@@ -17,23 +18,22 @@ public class PokusTabulkovaTranspozicia {
     private StringBuilder zt;
     private TabulkovaTranspozicia transpozicia;
     private final ArrayList<String> vygenerovaneKluce;
-
     private Invariant invariant;
-    private int odhaDnutaDlzkaKluca;
+    private List<Map.Entry<String, Double>> statistikaBigramovOT;
+    private Map<String,Double> statistikaBigramov;
 
     public PokusTabulkovaTranspozicia(String nazovSuboru, String kluc) throws IOException {
-        odhaDnutaDlzkaKluca=kluc.length();
-        vygenerovaneKluce=new ArrayList<>();
+
+        vygenerovaneKluce = new ArrayList<>();
         vygenerujKluce(10);
         transpozicia = new TabulkovaTranspozicia(kluc);
 
         upravenyText = transpozicia.vratSuborU(nazovSuboru);
         text = transpozicia.vratSubor(nazovSuboru);
 
-        spustiSifrovanie(kluc,POCIATOCNA_VELKOST);
-
-
         invariant = new Invariant(text, upravenyText);
+
+        spustiSifrovanie(kluc, POCIATOCNA_VELKOST);
 
         //transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
 
@@ -41,30 +41,39 @@ public class PokusTabulkovaTranspozicia {
 
     }
 
-    private void spustiSifrovanie(String kluc,int n) {
-        transpozicia.zasifrujText(upravenyText, kluc,n);
-        zt=transpozicia.getZasifrovanyText();
+    private void spustiSifrovanie(String kluc, int n) {
+        transpozicia.zasifrujText(upravenyText, kluc, n);
+        zt = transpozicia.getZasifrovanyText();
+        spravStatistikuOT();
     }
-    private void vygenerujKluce(int n){
-        Map<String,Integer> kluce=new HashMap<>();
-        Random r=new Random();
+    private void spravStatistikuOT(){
+        statistikaBigramovOT = invariant.getStatistikaBigramovOT();
+        statistikaBigramov=new HashMap<>();
+        for(var bigram:statistikaBigramovOT){
+            statistikaBigramov.put(bigram.getKey(),bigram.getValue());
+        }
+    }
+    private void vygenerujKluce(int n) {
+        Map<String, Integer> kluce = new HashMap<>();
+        Random r = new Random();
         int minI = 10;
         int maxI = 30;
         int minC = 'a';
         int maxC = 'z';
-        while(kluce.size()!=n){
-            StringBuilder s= new StringBuilder("");
-            for(int i=0;i<r.nextInt(maxI-minI) + minI;i++){
+        while (kluce.size() != n) {
+            StringBuilder s = new StringBuilder("");
+            for (int i = 0; i < r.nextInt(maxI - minI) + minI; i++) {
                 s.append((char) (r.nextInt(maxC - minC) + minC));
             }
-            kluce.merge(s.toString(),1,Integer::sum);
+            kluce.merge(s.toString(), 1, Integer::sum);
         }
-        for ( Map.Entry<String, Integer> vstup : kluce.entrySet()) {
+        for (Map.Entry<String, Integer> vstup : kluce.entrySet()) {
             String kluc = vstup.getKey();
             vygenerovaneKluce.add(kluc);
         }
 
     }
+
     /* skusame rozne pravdepodobne bigramy */
     protected int zhodnostBigramov(StringBuilder zasifrovanyText, int oKolko) {
         ArrayList<Character> spoluhlasky = new ArrayList<>(List.of('B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'F', 'Z', 'X'));
@@ -132,88 +141,107 @@ public class PokusTabulkovaTranspozicia {
 
         System.out.println(vysledok);
     }
-    private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky,int n1,int n2){
-        int pocetRiadkov=bloky.get(0).length();
-        int pocetStlpcov=2;
-        char[][] tabulka=new char[pocetRiadkov][2];
-        for(int i=0;i<pocetStlpcov;i++){
-            for(int j=0;j<pocetRiadkov;j++){
-                if(bloky.get(i).length()>j){
-                    tabulka[j][i]=bloky.get(i).charAt(j);
+
+
+    private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
+        int pocetRiadkov = bloky.get(0).length();
+        int pocetStlpcov = 2;
+        int[] stlpce = new int[]{n1, n2};
+        char[][] tabulka = new char[pocetRiadkov][2];
+        for (int i = 0; i < pocetStlpcov; i++) {
+            for (int j = 0; j < pocetRiadkov; j++) {
+                if (bloky.get(stlpce[i]).length() > j) {
+                    tabulka[j][i] = bloky.get(stlpce[i]).charAt(j);
                 }
             }
         }
         StringBuilder text = new StringBuilder();
-        for(int i=0;i<pocetRiadkov;i++){
-            for(int j=0;j<pocetStlpcov;j++){
+        for (int i = 0; i < pocetRiadkov; i++) {
+            for (int j = 0; j < pocetStlpcov; j++) {
                 text.append(tabulka[i][j]);
             }
         }
         return text;
     }
 
-    private List<Map.Entry<String,Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky){
+    private List<Map.Entry<String, Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky) {
+        List<Map.Entry<String, Double>> vyskytBigramov=new ArrayList<>();
 
-        StringBuilder text=premenBlokyNaText(bloky,1,2);
+        Map<String,Double> statistikaZT = new HashMap<>();
 
-        List<Map.Entry<String, Integer>> vyskytBigramov=invariant.ngramy(text,2);
-        Map<String,Double> statistika=new TreeMap<>();
+        ArrayList<Map<String,Double>> bigramyVelkostiKluca=new ArrayList<>();
+        ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
 
+        double vaha=0.75;
 
-        double pocet=vyskytBigramov.stream()
-                .mapToInt(Map.Entry::getValue)
-                .sum();
-        for(var vyskyt : vyskytBigramov){
-            statistika.put(vyskyt.getKey(),(vyskyt.getValue()/pocet)*100);
-
+        for(int prvy=0;prvy<bloky.size();prvy++) {
+            for (int druhy = 0; druhy < bloky.size(); druhy++) {
+                if (prvy != druhy) {
+                    StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
+                    vyskytBigramov = invariant.ngramy(text, 2, false);
+                    int pocitadlo=0;
+                    for(int bigram=0;bigram<10;bigram++){
+                        if(statistikaBigramov.get(vyskytBigramov.get(bigram).getKey())!=null){
+                            if(statistikaBigramov.get(vyskytBigramov.get(bigram).getKey())<vaha){
+                                pocitadlo++;
+                            }
+                        }
+                    }
+                    if(pocitadlo>3){
+                        //  System.out.println("nie je kombinacia ");
+                    }
+                    else{
+                        mozneKombinacie.add(new Integer[]{prvy,druhy});
+                        System.out.println(prvy);
+                        System.out.println(druhy);
+                        bigramyVelkostiKluca.add(statistikaBigramov);
+                        System.out.println("odhadovana dlzka: "+bloky.size());
+                    }
+                }
+            }
         }
-        var mapa=statistika.entrySet()
-                .stream()
-                .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
-                .collect(Collectors.toList());
-        return mapa;
-    }
-    private void otestujDlzkuKluca(){
-        ArrayList<StringBuilder> riadky;
-        ArrayList<List<Map.Entry<String, Double>>> statistika=new ArrayList<>();
-        int n=zt.length();
 
-        for(int i=0;i<30;i++){
-            if(i<5){
+        return vyskytBigramov;
+    }
+
+    private void otestujDlzkuKluca() {
+        ArrayList<StringBuilder> riadky;
+        ArrayList<List<Map.Entry<String, Double>>> statistika = new ArrayList<>();
+        int n = zt.length();
+
+        for (int i = 0; i < 30; i++) {
+            if (i < 5) {
                 statistika.add(new ArrayList<>());
                 continue;
             }
-            int pZnakovVRiadku=n/i;
-            int zvysok=n%i;
-            int zvysokPreRiadok=0;
-            if(zvysok!=0){
-                zvysokPreRiadok=1;
+            int pZnakovVRiadku = n / i;
+            int zvysok = n % i;
+            int zvysokPreRiadok = 0;
+            if (zvysok != 0) {
+                zvysokPreRiadok = 1;
                 zvysok--;
             }
-            riadky=new ArrayList<>();
-            StringBuilder riadok=new StringBuilder();
-            for(int j=0;j<=zt.length();j++){
-                if(riadok.length()==pZnakovVRiadku+zvysokPreRiadok){
+            riadky = new ArrayList<>();
+            StringBuilder riadok = new StringBuilder();
+            for (int j = 0; j <= zt.length(); j++) {
+                if (riadok.length() == pZnakovVRiadku + zvysokPreRiadok) {
                     riadky.add(riadok);
-                    riadok=new StringBuilder();
-                    if(zvysok>0){
+                    riadok = new StringBuilder();
+                    if (zvysok > 0) {
                         zvysok--;
+                    } else {
+                        zvysokPreRiadok = 0;
                     }
-                    else{
-                        zvysokPreRiadok=0;
-                    }
-                    if(zt.length()>j) {
+                    if (zt.length() > j) {
                         riadok.append(zt.charAt(j));
                     }
-                }
-                else{
-                    if(zt.length()>j){
+                } else {
+                    if (zt.length() > j) {
                         riadok.append(zt.charAt(j));
                     }
                 }
             }
             statistika.add(spravStatistikuBigramov(riadky));
-
         }
         System.out.println();
     }
