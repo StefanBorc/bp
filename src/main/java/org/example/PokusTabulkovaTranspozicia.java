@@ -132,12 +132,30 @@ public class PokusTabulkovaTranspozicia {
 
         System.out.println(vysledok);
     }
-
-    private void testujPermutacia(){
-
+    private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky,int n1,int n2){
+        int pocetRiadkov=bloky.get(0).length();
+        int pocetStlpcov=2;
+        char[][] tabulka=new char[pocetRiadkov][2];
+        for(int i=0;i<pocetStlpcov;i++){
+            for(int j=0;j<pocetRiadkov;j++){
+                if(bloky.get(i).length()>j){
+                    tabulka[j][i]=bloky.get(i).charAt(j);
+                }
+            }
+        }
+        StringBuilder text = new StringBuilder();
+        for(int i=0;i<pocetRiadkov;i++){
+            for(int j=0;j<pocetStlpcov;j++){
+                text.append(tabulka[i][j]);
+            }
+        }
+        return text;
     }
-    private List<Map.Entry<String,Double>> spravStatistikuBigramov(){
-        List<Map.Entry<String, Integer>> vyskytBigramov=invariant.ngramy(zt,2);
+    private List<Map.Entry<String,Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky){
+
+        StringBuilder text=premenBlokyNaText(bloky,1,2);
+
+        List<Map.Entry<String, Integer>> vyskytBigramov=invariant.ngramy(text,2);
         Map<String,Double> statistika=new TreeMap<>();
 
 
@@ -157,25 +175,43 @@ public class PokusTabulkovaTranspozicia {
     private void otestujDlzkuKluca(){
         ArrayList<StringBuilder> riadky;
         ArrayList<List<Map.Entry<String, Double>>> statistika=new ArrayList<>();
+        int n=zt.length();
 
         for(int i=0;i<30;i++){
             if(i<5){
                 statistika.add(new ArrayList<>());
                 continue;
             }
+            int pZnakovVRiadku=n/i;
+            int zvysok=n%i;
+            int zvysokPreRiadok=0;
+            if(zvysok!=0){
+                zvysokPreRiadok=1;
+                zvysok--;
+            }
             riadky=new ArrayList<>();
             StringBuilder riadok=new StringBuilder();
-            for(int j=0;j<zt.length();j++){
-                if(riadok.length()==i){
+            for(int j=0;j<=zt.length();j++){
+                if(riadok.length()==pZnakovVRiadku+zvysokPreRiadok){
                     riadky.add(riadok);
                     riadok=new StringBuilder();
+                    if(zvysok>0){
+                        zvysok--;
+                    }
+                    else{
+                        zvysokPreRiadok=0;
+                    }
+                    if(zt.length()>j) {
+                        riadok.append(zt.charAt(j));
+                    }
                 }
                 else{
-                    riadok.append(zt.charAt(j));
+                    if(zt.length()>j){
+                        riadok.append(zt.charAt(j));
+                    }
                 }
             }
-            statistika.add(spravStatistikuBigramov());
-
+            statistika.add(spravStatistikuBigramov(riadky));
 
         }
         System.out.println();

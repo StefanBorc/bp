@@ -4,9 +4,9 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        String kluc="tanejebetikusbratku";
+        String kluc="abcdefghijklm";
         System.out.println("dlzka kluca:"+kluc.length());
-        PokusTabulkovaTranspozicia p=new PokusTabulkovaTranspozicia("SK3.txt",kluc);
+        PokusTabulkovaTranspozicia p=new PokusTabulkovaTranspozicia("SK1.txt",kluc);
         Invariant pokusOT=new Invariant(p.getText(),p.getUpravenyText());
 
        // System.out.println(p.getZt());
