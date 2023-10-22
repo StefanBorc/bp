@@ -151,6 +151,7 @@ public class PokusTabulkovaTranspozicia {
         }
         return text;
     }
+
     private List<Map.Entry<String,Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky){
 
         StringBuilder text=premenBlokyNaText(bloky,1,2);
