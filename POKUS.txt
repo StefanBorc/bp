@@ -1,66 +1,48 @@
-dlzka kluca:14
+dlzka kluca:17
 pocet riadkov:200
-5
-6
-odhadovana dlzka: 13
 0
 1
-odhadovana dlzka: 14
-1
+pocet nespravnych: 0
+pocet vyskytovanych: 314.0
+odhadovana dlzka: 17
 2
-odhadovana dlzka: 14
-4
-5
-odhadovana dlzka: 14
+3
+pocet nespravnych: 0
+pocet vyskytovanych: 120.0
+odhadovana dlzka: 17
 5
 6
-odhadovana dlzka: 14
+pocet nespravnych: 0
+pocet vyskytovanych: 231.0
+odhadovana dlzka: 17
 6
 7
-odhadovana dlzka: 14
+pocet nespravnych: 0
+pocet vyskytovanych: 136.0
+odhadovana dlzka: 17
+7
+8
+pocet nespravnych: 0
+pocet vyskytovanych: 194.0
+odhadovana dlzka: 17
 8
 9
-odhadovana dlzka: 14
+pocet nespravnych: 0
+pocet vyskytovanych: 346.0
+odhadovana dlzka: 17
 10
 11
-odhadovana dlzka: 14
+pocet nespravnych: 0
+pocet vyskytovanych: 350.0
+odhadovana dlzka: 17
 11
 12
-odhadovana dlzka: 14
-12
-13
-odhadovana dlzka: 14
-8
-10
-odhadovana dlzka: 18
+pocet nespravnych: 0
+pocet vyskytovanych: 264.0
+odhadovana dlzka: 17
 14
-0
-odhadovana dlzka: 21
-2
-9
-odhadovana dlzka: 22
-24
-0
-odhadovana dlzka: 25
-3
-1
-odhadovana dlzka: 28
-3
-5
-odhadovana dlzka: 28
-8
-10
-odhadovana dlzka: 28
-13
 15
-odhadovana dlzka: 28
-14
-16
-odhadovana dlzka: 28
-19
-15
-odhadovana dlzka: 28
-22
-24
-odhadovana dlzka: 28
+pocet nespravnych: 0
+pocet vyskytovanych: 260.0
+odhadovana dlzka: 17
 

@@ -2,7 +2,7 @@ package org.example;
 
 import lombok.Getter;
 import org.example.sifry.TabulkovaTranspozicia;
-import org.w3c.dom.ls.LSOutput;
+
 
 import java.io.*;
 import java.util.*;
@@ -21,9 +21,9 @@ public class PokusTabulkovaTranspozicia {
     private Invariant invariant;
     private List<Map.Entry<String, Double>> statistikaBigramovOT;
     private Map<String,Double> statistikaBigramov;
-
+    private ArrayList<String> topDobrych;
+    private ArrayList<String> topZlych;
     public PokusTabulkovaTranspozicia(String nazovSuboru, String kluc) throws IOException {
-
         vygenerovaneKluce = new ArrayList<>();
         vygenerujKluce(10);
         transpozicia = new TabulkovaTranspozicia(kluc);
@@ -35,6 +35,14 @@ public class PokusTabulkovaTranspozicia {
 
         spustiSifrovanie(kluc, POCIATOCNA_VELKOST);
 
+        topDobrych =new ArrayList<>();
+        for(int i=0;i<40;i++){
+            topDobrych.add(statistikaBigramovOT.get(i).getKey());
+        }
+        topZlych=new ArrayList<>();
+        for(int i=statistikaBigramov.size()-1;i>=statistikaBigramov.size()-350;i--){
+            topZlych.add(statistikaBigramovOT.get(i).getKey());
+        }
         //transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
 
         otestujDlzkuKluca();
@@ -148,6 +156,7 @@ public class PokusTabulkovaTranspozicia {
         int pocetStlpcov = 2;
         int[] stlpce = new int[]{n1, n2};
         char[][] tabulka = new char[pocetRiadkov][2];
+
         for (int i = 0; i < pocetStlpcov; i++) {
             for (int j = 0; j < pocetRiadkov; j++) {
                 if (bloky.get(stlpce[i]).length() > j) {
@@ -167,40 +176,59 @@ public class PokusTabulkovaTranspozicia {
     private List<Map.Entry<String, Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky) {
         List<Map.Entry<String, Double>> vyskytBigramov=new ArrayList<>();
 
-        Map<String,Double> statistikaZT = new HashMap<>();
-
-        ArrayList<Map<String,Double>> bigramyVelkostiKluca=new ArrayList<>();
+        ArrayList<List<Map.Entry<String,Double>>> bigramyVelkostiKluca=new ArrayList<>();
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
 
-        double vaha=0.75;
+
+        double vahaHornaHranica=0.75;
+        double vahaDolnaHranica=0.1;
 
         for(int prvy=0;prvy<bloky.size();prvy++) {
+
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
+
                 if (prvy != druhy) {
                     StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
                     vyskytBigramov = invariant.ngramy(text, 2, false);
+                    double sucet=0;
                     int pocitadlo=0;
-                    for(int bigram=0;bigram<10;bigram++){
+                    double percentaBigramu;
+
+                    int velkostPorovnania=20;
+                    for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(statistikaBigramov.get(vyskytBigramov.get(bigram).getKey())!=null){
-                            if(statistikaBigramov.get(vyskytBigramov.get(bigram).getKey())<vaha){
+                            percentaBigramu=statistikaBigramov.get(vyskytBigramov.get(bigram).getKey());
+
+                            if(topZlych.contains(vyskytBigramov.get(bigram).getKey())){
+                                if(topZlych.indexOf(vyskytBigramov.get(bigram).getKey())>statistikaBigramovOT.size()-300){
+                                    pocitadlo+=10;
+                                }
                                 pocitadlo++;
+                            }
+                            else if(topDobrych.contains(vyskytBigramov.get(bigram).getKey())){
+
+                                int index = topDobrych.indexOf(vyskytBigramov.get(bigram).getKey());
+                                if(index<5){
+                                    sucet+=5*(velkostPorovnania-bigram);
+                                }
+
+                                sucet++;
                             }
                         }
                     }
-                    if(pocitadlo>3){
-                        //  System.out.println("nie je kombinacia ");
-                    }
-                    else{
+
+                    if(sucet>10 && pocitadlo<1){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
                         System.out.println(prvy);
                         System.out.println(druhy);
-                        bigramyVelkostiKluca.add(statistikaBigramov);
+                        System.out.println("pocet nespravnych: "+pocitadlo);
+                        System.out.println("pocet vyskytovanych: "+sucet);
+                        bigramyVelkostiKluca.add(vyskytBigramov);
                         System.out.println("odhadovana dlzka: "+bloky.size());
                     }
                 }
             }
         }
-
         return vyskytBigramov;
     }
 
