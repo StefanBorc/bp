@@ -9,36 +9,27 @@ import java.util.*;
 
 
 public class PokusTabulkovaTranspozicia {
-    public static int POCIATOCNA_VELKOST = 800;
+    public static int POCIATOCNA_VELKOST = 600;
     @Getter
     private StringBuilder upravenyText;
     @Getter
-    private StringBuilder text;
-    @Getter
     private StringBuilder zt;
     private TabulkovaTranspozicia transpozicia;
-    private final ArrayList<String> vygenerovaneKluce;
     private Invariant invariant;
     private List<Map.Entry<String, Double>> statistikaOTUsporiadana;
     private Map<String,Double> statistikaBigramov;
-    private ArrayList<String> topDobrych;
     private ArrayList<String> topZlych;
+
     public PokusTabulkovaTranspozicia(String nazovSuboru, String kluc) throws IOException {
-        vygenerovaneKluce = new ArrayList<>();
-        vygenerujKluce(10);
+
         transpozicia = new TabulkovaTranspozicia(kluc);
 
         upravenyText = transpozicia.vratSuborU(nazovSuboru);
-        text = transpozicia.vratSubor(nazovSuboru);
 
-        invariant = new Invariant(text, upravenyText);
+        invariant = new Invariant(transpozicia.vratSubor(nazovSuboru), upravenyText);
 
         spustiSifrovanie(kluc, POCIATOCNA_VELKOST);
 
-        topDobrych =new ArrayList<>();
-        for(int i=0;i<20;i++){
-            topDobrych.add(statistikaOTUsporiadana.get(i).getKey());
-        }
         topZlych=new ArrayList<>();
         for(int i=statistikaBigramov.size()-1;i>=statistikaBigramov.size()-300;i--){
             topZlych.add(statistikaOTUsporiadana.get(i).getKey());
@@ -57,7 +48,8 @@ public class PokusTabulkovaTranspozicia {
         statistikaOTUsporiadana = invariant.getStatistikaBigramovUsporiadana();
         statistikaBigramov=invariant.getSkumanaMapa();
     }
-    private void vygenerujKluce(int n) {
+    private ArrayList<String> vygenerujKluce(int n) {
+        ArrayList<String> vygenerovaneKluce=new ArrayList<>();
         Map<String, Integer> kluce = new HashMap<>();
         Random r = new Random();
         int minI = 10;
@@ -75,7 +67,7 @@ public class PokusTabulkovaTranspozicia {
             String kluc = vstup.getKey();
             vygenerovaneKluce.add(kluc);
         }
-
+        return vygenerovaneKluce;
     }
     private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
         int pocetRiadkov = bloky.get(0).length();
@@ -114,7 +106,7 @@ public class PokusTabulkovaTranspozicia {
                 double odchylka;
                 if(index<50){
                     odchylka=Math.abs(statistikaOTUsporiadana.get(index).getValue()-bigram);
-                    System.out.println();
+                  //  System.out.println();
                     if(odchylka>moznaOdchylka){
                         if(odchylka==statistikaOTUsporiadana.get(index).getValue()){
                             odchylkyBigramov+=10;
@@ -138,7 +130,7 @@ public class PokusTabulkovaTranspozicia {
             indexBigramov++;
             odchylky.add(odchylkyBigramov);
             pocetMaloPravdepodobnych.add(maloPravdepodobnych);
-            System.out.println();
+        //    System.out.println();
         }
         System.out.println();
     }
@@ -182,26 +174,15 @@ public class PokusTabulkovaTranspozicia {
                             percentaBigramu=statistikaBigramov.get(vyskytBigramov.get(bigram).getKey());
 
                             if(topZlych.contains(vyskytBigramov.get(bigram).getKey())){
-                                if(topZlych.indexOf(vyskytBigramov.get(bigram).getKey())> statistikaOTUsporiadana.size()-300){
-                                    pocitadlo+=1*(velkostPorovnania-bigram);
+                                if(topZlych.indexOf(vyskytBigramov.get(bigram).getKey()) > statistikaOTUsporiadana.size()-500){
+                                    pocitadlo+=(velkostPorovnania-bigram);
                                 }
                                 pocitadlo++;
                             }
-                            else if(topDobrych.contains(vyskytBigramov.get(bigram).getKey())){
-                                int index=topDobrych.indexOf(vyskytBigramov.get(bigram).getKey());
-                                if(index<5){
-                                    sucet+=5*(velkostPorovnania-bigram);
-                                }
-                                else if(index<10){
-                                    sucet+=3*(velkostPorovnania-bigram);
-                                }
-                                else{
-                                    sucet+=2*(velkostPorovnania-bigram);
-                                }
-                            }
+
                         }
                     }
-                    if(sucet>9 && pocitadlo<5){
+                    if(pocitadlo<3){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
                         bigramyVelkostiKluca.add(vyskytBigramov);
                       //System.out.println("["+prvy+" , "+druhy+"]"+" : "+sucet+" , odhad: "+bloky.size());

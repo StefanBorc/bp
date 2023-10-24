@@ -8,7 +8,6 @@ public class Main {
 
         System.out.println("dlzka kluca:"+kluc.length());
         PokusTabulkovaTranspozicia p=new PokusTabulkovaTranspozicia("SK2.txt",kluc);
-        Invariant pokusOT=new Invariant(p.getText(),p.getUpravenyText());
 
        // System.out.println(p.getZt());
 
