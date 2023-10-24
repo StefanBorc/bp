@@ -9,7 +9,7 @@ import java.util.*;
 
 
 public class PokusTabulkovaTranspozicia {
-    public static int POCIATOCNA_VELKOST = 200;
+    public static int POCIATOCNA_VELKOST = 800;
     @Getter
     private StringBuilder upravenyText;
     @Getter
@@ -48,7 +48,6 @@ public class PokusTabulkovaTranspozicia {
         otestujDlzkuKluca();
 
     }
-
     private void spustiSifrovanie(String kluc, int n) {
         transpozicia.zasifrujText(upravenyText, kluc, n);
         zt = transpozicia.getZasifrovanyText();
@@ -99,22 +98,51 @@ public class PokusTabulkovaTranspozicia {
         }
         return text;
     }
-    private int najdiNajlepsieHodnoty(ArrayList<Double[]> statistikyNajlepsichBigramov){
-        Double[] suctyNajlepsichPercient=new Double[statistikyNajlepsichBigramov.size()];
-        int index=0;
-        for(var statistika:statistikyNajlepsichBigramov){
-            double sucet=0.0;
-            for(int i=0;i<5;i++){
-                if(statistika[i]>1){
-                    sucet+=statistika[i];
+    private void najdiSpravnyStlpec(ArrayList<Double[]> usporiadaneBigramyPodlaOt,ArrayList<Integer[]> mozneKombinacie,double moznaOdchylka){
+
+        ArrayList<Double> odchylky=new ArrayList<>(usporiadaneBigramyPodlaOt.size());
+        ArrayList<Double> pocetMaloPravdepodobnych=new ArrayList<>();
+        int indexBigramov=0;
+
+        for(var bigramy:usporiadaneBigramyPodlaOt){
+            int index=0;
+            int indexOdzadu=bigramy.length-1;
+            double odchylkyBigramov=0.0;
+            double maloPravdepodobnych=0;
+            for(var bigram:bigramy){
+
+                double odchylka;
+                if(index<50){
+                    odchylka=Math.abs(statistikaOTUsporiadana.get(index).getValue()-bigram);
+                    System.out.println();
+                    if(odchylka>moznaOdchylka){
+                        if(odchylka==statistikaOTUsporiadana.get(index).getValue()){
+                            odchylkyBigramov+=10;
+                        }
+                    }
+                    odchylkyBigramov+=odchylka;
                 }
+                if(index<300){
+                    if(bigramy[indexOdzadu]>0.0){
+                        maloPravdepodobnych+=bigramy[indexOdzadu]*indexOdzadu;
+                    }
+                }
+                else{
+                    break;
+                }
+
+                index++;
+                indexOdzadu--;
             }
-            suctyNajlepsichPercient[index]=sucet;
-            index++;
+
+            indexBigramov++;
+            odchylky.add(odchylkyBigramov);
+            pocetMaloPravdepodobnych.add(maloPravdepodobnych);
+            System.out.println();
         }
-        return 0;
+        System.out.println();
     }
-    private ArrayList<Double[]> vratUsporiadanuMapuPodlaOT(ArrayList<List<Map.Entry<String,Double>>> mapy){
+    private ArrayList<Double[]> usporiadajPodlaOT(ArrayList<List<Map.Entry<String,Double>>> mapy){
         Map<String,Integer> indexyMapy=invariant.vratIndexyUsporiadanejMapy(statistikaOTUsporiadana);
         ArrayList<Double[]> listyPercient=new ArrayList<>(mapy.size());
         for(var mapa : mapy){
@@ -173,10 +201,10 @@ public class PokusTabulkovaTranspozicia {
                             }
                         }
                     }
-                    if(sucet>10 && pocitadlo<1){
+                    if(sucet>9 && pocitadlo<5){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
                         bigramyVelkostiKluca.add(vyskytBigramov);
-                      //  System.out.println("["+prvy+" , "+druhy+"]"+" : "+sucet+" , odhad: "+bloky.size());
+                      //System.out.println("["+prvy+" , "+druhy+"]"+" : "+sucet+" , odhad: "+bloky.size());
                     }
                 }
             }
@@ -193,7 +221,8 @@ public class PokusTabulkovaTranspozicia {
                 }
                 System.out.print("] ");
             }
-            najdiNajlepsieHodnoty(vratUsporiadanuMapuPodlaOT(bigramyVelkostiKluca));
+            ArrayList<Double[]> usporiadanePodlaOT=usporiadajPodlaOT(bigramyVelkostiKluca);
+            najdiSpravnyStlpec(usporiadanePodlaOT,mozneKombinacie,0.6);
             System.out.println();
         }
         return vyskytBigramov;

@@ -52,6 +52,14 @@ public class TabulkovaTranspozicia extends Sifra {
             p.set(index,999);
             pismenoVPoradi++;
         }
+        System.out.println("poradie");
+        int i=0;
+        for(var c:poradie){
+            System.out.print("["+c+"]->"+i+" ");
+            i++;
+        }
+        System.out.println();
+
     }
     public void zasifrujText(StringBuilder text,String kluc,int pRiadkov){
         pocetRiadkov=pRiadkov;
