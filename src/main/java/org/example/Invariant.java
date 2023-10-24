@@ -1,6 +1,5 @@
 package org.example;
 
-import com.sun.jdi.DoubleValue;
 import lombok.Getter;
 
 
@@ -15,13 +14,16 @@ public class Invariant {
     @Getter
     private String[] vsetkySlova;
     @Getter
-    private List<Map.Entry<String,Double>> statistikaBigramovOT;
-
+    private List<Map.Entry<String,Double>> statistikaBigramovUsporiadana;
+    @Getter
+    private Map<String,Double> skumanaMapa;
     public Invariant(StringBuilder OT, StringBuilder OTUpraveny) {
         this.textSMedzerami = OT;
         this.textBezMedzier = OTUpraveny;
         vsetkySlova = textSMedzerami.toString().split(" ");
-        statistikaBigramovOT=ngramy(OT,2,true);
+        skumanaMapa=new HashMap<>();
+        statistikaBigramovUsporiadana =ngramy(OT,2,true);
+
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
         List<Map.Entry<String, Double>> vytriedeneNgramy = mapa.entrySet()
@@ -29,6 +31,13 @@ public class Invariant {
                 .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
                 .collect(Collectors.toList());
         return vytriedeneNgramy;
+    }
+    protected Map<String,Integer> vratIndexyUsporiadanejMapy(List<Map.Entry<String,Double>> usporiadanaMapa){
+        Map<String, Integer> indexyMapy = new HashMap<>();
+        for (int i = 0; i < usporiadanaMapa.size(); i++) {
+            indexyMapy.put(usporiadanaMapa.get(i).getKey(), i);
+        }
+        return indexyMapy;
     }
     protected List<Map.Entry<String, Double>> ngramy(StringBuilder text, int n,boolean jeOtvorenyText) {
         Map<String, Double> ngramy = new HashMap<>();
@@ -55,6 +64,7 @@ public class Invariant {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
+        skumanaMapa=ngramy;
         double pocet=ngramy.entrySet().stream().mapToDouble(Map.Entry::getValue).sum();
         Map<String,Double> ngramyPercenta=new HashMap<>();
         for(var bigram:ngramy.entrySet()){

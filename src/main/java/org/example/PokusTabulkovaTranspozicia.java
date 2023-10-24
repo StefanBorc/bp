@@ -6,7 +6,7 @@ import org.example.sifry.TabulkovaTranspozicia;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class PokusTabulkovaTranspozicia {
     public static int POCIATOCNA_VELKOST = 200;
@@ -19,7 +19,7 @@ public class PokusTabulkovaTranspozicia {
     private TabulkovaTranspozicia transpozicia;
     private final ArrayList<String> vygenerovaneKluce;
     private Invariant invariant;
-    private List<Map.Entry<String, Double>> statistikaBigramovOT;
+    private List<Map.Entry<String, Double>> statistikaOTUsporiadana;
     private Map<String,Double> statistikaBigramov;
     private ArrayList<String> topDobrych;
     private ArrayList<String> topZlych;
@@ -36,12 +36,12 @@ public class PokusTabulkovaTranspozicia {
         spustiSifrovanie(kluc, POCIATOCNA_VELKOST);
 
         topDobrych =new ArrayList<>();
-        for(int i=0;i<40;i++){
-            topDobrych.add(statistikaBigramovOT.get(i).getKey());
+        for(int i=0;i<20;i++){
+            topDobrych.add(statistikaOTUsporiadana.get(i).getKey());
         }
         topZlych=new ArrayList<>();
-        for(int i=statistikaBigramov.size()-1;i>=statistikaBigramov.size()-350;i--){
-            topZlych.add(statistikaBigramovOT.get(i).getKey());
+        for(int i=statistikaBigramov.size()-1;i>=statistikaBigramov.size()-300;i--){
+            topZlych.add(statistikaOTUsporiadana.get(i).getKey());
         }
         //transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
 
@@ -55,11 +55,8 @@ public class PokusTabulkovaTranspozicia {
         spravStatistikuOT();
     }
     private void spravStatistikuOT(){
-        statistikaBigramovOT = invariant.getStatistikaBigramovOT();
-        statistikaBigramov=new HashMap<>();
-        for(var bigram:statistikaBigramovOT){
-            statistikaBigramov.put(bigram.getKey(),bigram.getValue());
-        }
+        statistikaOTUsporiadana = invariant.getStatistikaBigramovUsporiadana();
+        statistikaBigramov=invariant.getSkumanaMapa();
     }
     private void vygenerujKluce(int n) {
         Map<String, Integer> kluce = new HashMap<>();
@@ -81,76 +78,6 @@ public class PokusTabulkovaTranspozicia {
         }
 
     }
-
-    /* skusame rozne pravdepodobne bigramy */
-    protected int zhodnostBigramov(StringBuilder zasifrovanyText, int oKolko) {
-        ArrayList<Character> spoluhlasky = new ArrayList<>(List.of('B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'F', 'Z', 'X'));
-        ArrayList<Character> samohlasky = new ArrayList<>(List.of('A', 'E', 'I', 'O', 'U', 'Y'));
-
-        Map<String, Integer> najdene = new HashMap<>();
-        for (int i = 0; i < zasifrovanyText.length() - oKolko * 2; i++) {
-
-            String ngram = new String();
-            ngram += zasifrovanyText.charAt(i);
-            int j = i + oKolko;
-            ngram += zasifrovanyText.charAt(j);
-            if ((spoluhlasky.contains(ngram.charAt(0)) && samohlasky.contains(ngram.charAt(1)))
-                    || (samohlasky.contains(ngram.charAt(0)) && spoluhlasky.contains(ngram.charAt(1)))) {
-                najdene.merge(ngram, 1, Integer::sum);
-            }
-        }
-        List<Map.Entry<String, Integer>> vytriedeneNgramy = najdene.entrySet()
-                .stream()
-                .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
-                .collect(Collectors.toList());
-
-        return vytriedeneNgramy.get(0).getValue();
-    }
-
-    /* porovnavame najlepsie vysledky klucov */
-    private int transpoziciaPorovnajDlzkyKlucov(StringBuilder zt) {
-        Map<Integer, Integer> mozneKluce = new HashMap<>();
-        int maxIndex = 0;
-        int max = 0;
-        for (int i = 10; i <= 30; i++) {
-            mozneKluce.put(i, zhodnostBigramov(zt, i));
-        }
-
-        for (Map.Entry<Integer, Integer> vstup : mozneKluce.entrySet()) {
-            if (vstup.getValue() > max) {
-                max = vstup.getValue();
-                maxIndex = vstup.getKey();
-            }
-        }
-        System.out.println(maxIndex);
-        return maxIndex;
-    }
-
-    /* testujeme uspesnost klucov pre tabulkovu transpoziciu */
-    private void transpozicnaUspesnostKlucov() {
-
-        double pocetUhadnutychKlucov = 0;
-        double pocetVsetkychKlucov = vygenerovaneKluce.size();
-
-        for (String s : vygenerovaneKluce) {
-            int dlzkaKluca = s.length();
-            transpozicia.setKluc(s);
-            transpozicia.sifrovanie(upravenyText, s);
-            int moznyKluc = transpoziciaPorovnajDlzkyKlucov(transpozicia.getZasifrovanyText());
-            System.out.println("kluc " + transpozicia.getKluc().length());
-            System.out.println("odhad " + moznyKluc);
-            if (dlzkaKluca == moznyKluc) {
-                pocetUhadnutychKlucov++;
-            }
-
-
-        }
-        double vysledok = (pocetUhadnutychKlucov / pocetVsetkychKlucov) * 100;
-
-        System.out.println(vysledok);
-    }
-
-
     private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
         int pocetRiadkov = bloky.get(0).length();
         int pocetStlpcov = 2;
@@ -172,62 +99,102 @@ public class PokusTabulkovaTranspozicia {
         }
         return text;
     }
+    private int najdiNajlepsieHodnoty(ArrayList<Double[]> statistikyNajlepsichBigramov){
+        Double[] suctyNajlepsichPercient=new Double[statistikyNajlepsichBigramov.size()];
+        int index=0;
+        for(var statistika:statistikyNajlepsichBigramov){
+            double sucet=0.0;
+            for(int i=0;i<5;i++){
+                if(statistika[i]>1){
+                    sucet+=statistika[i];
+                }
+            }
+            suctyNajlepsichPercient[index]=sucet;
+            index++;
+        }
+        return 0;
+    }
+    private ArrayList<Double[]> vratUsporiadanuMapuPodlaOT(ArrayList<List<Map.Entry<String,Double>>> mapy){
+        Map<String,Integer> indexyMapy=invariant.vratIndexyUsporiadanejMapy(statistikaOTUsporiadana);
+        ArrayList<Double[]> listyPercient=new ArrayList<>(mapy.size());
+        for(var mapa : mapy){
+            Double[] usporiadanePercenta=new Double[statistikaBigramov.size()];
+            Arrays.fill(usporiadanePercenta, 0.0);
+            for(var bigram:mapa){
+                int index=-1;
+                if (indexyMapy.containsKey(bigram.getKey())) {
+                     index = indexyMapy.get(bigram.getKey());
+                     usporiadanePercenta[index]=bigram.getValue();
+                }
+            }
+            listyPercient.add(usporiadanePercenta);
+        }
+        return listyPercient;
+    }
+    /* toto treba dorobit podrobnu analyzu maximalnych hodnot z predpokladanych statistik */
 
     private List<Map.Entry<String, Double>> spravStatistikuBigramov(ArrayList<StringBuilder> bloky) {
         List<Map.Entry<String, Double>> vyskytBigramov=new ArrayList<>();
-
         ArrayList<List<Map.Entry<String,Double>>> bigramyVelkostiKluca=new ArrayList<>();
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
-
-
-        double vahaHornaHranica=0.75;
-        double vahaDolnaHranica=0.1;
 
         for(int prvy=0;prvy<bloky.size();prvy++) {
 
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
-
                 if (prvy != druhy) {
                     StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
                     vyskytBigramov = invariant.ngramy(text, 2, false);
-                    double sucet=0;
+                    int sucet=0;
                     int pocitadlo=0;
                     double percentaBigramu;
-
                     int velkostPorovnania=20;
+
                     for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(statistikaBigramov.get(vyskytBigramov.get(bigram).getKey())!=null){
                             percentaBigramu=statistikaBigramov.get(vyskytBigramov.get(bigram).getKey());
 
                             if(topZlych.contains(vyskytBigramov.get(bigram).getKey())){
-                                if(topZlych.indexOf(vyskytBigramov.get(bigram).getKey())>statistikaBigramovOT.size()-300){
-                                    pocitadlo+=10;
+                                if(topZlych.indexOf(vyskytBigramov.get(bigram).getKey())> statistikaOTUsporiadana.size()-300){
+                                    pocitadlo+=1*(velkostPorovnania-bigram);
                                 }
                                 pocitadlo++;
                             }
                             else if(topDobrych.contains(vyskytBigramov.get(bigram).getKey())){
-
-                                int index = topDobrych.indexOf(vyskytBigramov.get(bigram).getKey());
+                                int index=topDobrych.indexOf(vyskytBigramov.get(bigram).getKey());
                                 if(index<5){
                                     sucet+=5*(velkostPorovnania-bigram);
                                 }
-
-                                sucet++;
+                                else if(index<10){
+                                    sucet+=3*(velkostPorovnania-bigram);
+                                }
+                                else{
+                                    sucet+=2*(velkostPorovnania-bigram);
+                                }
                             }
                         }
                     }
-
                     if(sucet>10 && pocitadlo<1){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
-                        System.out.println(prvy);
-                        System.out.println(druhy);
-                        System.out.println("pocet nespravnych: "+pocitadlo);
-                        System.out.println("pocet vyskytovanych: "+sucet);
                         bigramyVelkostiKluca.add(vyskytBigramov);
-                        System.out.println("odhadovana dlzka: "+bloky.size());
+                      //  System.out.println("["+prvy+" , "+druhy+"]"+" : "+sucet+" , odhad: "+bloky.size());
                     }
                 }
             }
+        }
+
+        if(!mozneKombinacie.isEmpty()) {
+            System.out.println();
+            System.out.println(bloky.size());
+           // System.out.println(najvacsiePocty);
+            for (var permutacia:mozneKombinacie) {
+                System.out.print("[ ");
+                for(var prvok:permutacia){
+                    System.out.print(prvok+" ");
+                }
+                System.out.print("] ");
+            }
+            najdiNajlepsieHodnoty(vratUsporiadanuMapuPodlaOT(bigramyVelkostiKluca));
+            System.out.println();
         }
         return vyskytBigramov;
     }

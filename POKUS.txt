@@ -1,48 +1,6 @@
-dlzka kluca:17
+dlzka kluca:15
 pocet riadkov:200
-0
-1
-pocet nespravnych: 0
-pocet vyskytovanych: 314.0
-odhadovana dlzka: 17
-2
-3
-pocet nespravnych: 0
-pocet vyskytovanych: 120.0
-odhadovana dlzka: 17
-5
-6
-pocet nespravnych: 0
-pocet vyskytovanych: 231.0
-odhadovana dlzka: 17
-6
-7
-pocet nespravnych: 0
-pocet vyskytovanych: 136.0
-odhadovana dlzka: 17
-7
-8
-pocet nespravnych: 0
-pocet vyskytovanych: 194.0
-odhadovana dlzka: 17
-8
-9
-pocet nespravnych: 0
-pocet vyskytovanych: 346.0
-odhadovana dlzka: 17
-10
-11
-pocet nespravnych: 0
-pocet vyskytovanych: 350.0
-odhadovana dlzka: 17
-11
-12
-pocet nespravnych: 0
-pocet vyskytovanych: 264.0
-odhadovana dlzka: 17
-14
+
 15
-pocet nespravnych: 0
-pocet vyskytovanych: 260.0
-odhadovana dlzka: 17
+[ 0 1 ] [ 1 2 ] [ 2 3 ] [ 5 6 ] [ 6 7 ] [ 7 8 ] [ 8 9 ] [ 9 10 ] [ 11 12 ] [ 12 13 ] [ 13 14 ] 
 
