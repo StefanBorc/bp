@@ -7,7 +7,7 @@ import org.example.Sifra;
 import java.util.ArrayList;
 
 public class TabulkovaTranspozicia extends Sifra {
-
+    @Getter
     private int[] poradie;
     @Setter@Getter
     private String kluc;

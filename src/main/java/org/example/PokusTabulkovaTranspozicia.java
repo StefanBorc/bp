@@ -217,12 +217,12 @@ public class PokusTabulkovaTranspozicia {
         }
         return false;
     }
-    private void hladajPermutaciu(ArrayList<StringBuilder> bloky) {
-        List<Map.Entry<String, Double>> bigramyZT=new ArrayList<>();
+    private void hladajPermutaciu(ArrayList<StringBuilder> bloky,int prvyStlpec,int rozsahSkumania) {
+        List<Map.Entry<String, Double>> bigramyZT;
         ArrayList<List<Map.Entry<String,Double>>> bigramyVelkostiKluca=new ArrayList<>();
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
 
-        for(int prvy=0;prvy<bloky.size();prvy++) {
+        for(int prvy=prvyStlpec;prvy<rozsahSkumania;prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 if (prvy != druhy && !existujeKombinacia(prvy,druhy)) {
                     StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
@@ -245,61 +245,9 @@ public class PokusTabulkovaTranspozicia {
         }
 
         if(!mozneKombinacie.isEmpty()) {
-         //   System.out.println(mozneKombinacie.size());
-            for (var permutacia:mozneKombinacie) {
-               // System.out.print("[ ");
-                for(var prvok:permutacia){
-                  //  System.out.print(prvok+" ");
-                }
-               // System.out.print("] ");
-            }
             ArrayList<Double[]> usporiadanePodlaOT=usporiadajPodlaOT(bigramyVelkostiKluca);
-
             najdiSpravnyStlpec(usporiadanePodlaOT,mozneKombinacie,0.8);
-
-
         }
-    }
-    private void otestujChi(ArrayList<Double[]> observedFrequencies){
-        Double[] expectedFrequencies= new Double[statistikaBigramovOT.size()];
-        for(int i = 0; i< statistikaBigramovOT.size(); i++){
-            expectedFrequencies[i]= usporiadaneBigramyOT.get(i).getValue();
-        }
-        double[] chiSquaredValues = new double[observedFrequencies.size()];
-
-        for (int i = 0; i < observedFrequencies.size(); i++) {
-            Double[] observed = observedFrequencies.get(i);
-
-            double chiSquared = calculateChiSquared(observed, expectedFrequencies);
-            chiSquaredValues[i] = chiSquared;
-        }
-
-        // Find the combination with the smallest chi-squared value
-        int bestCombinationIndex = findIndexOfSmallestValue(chiSquaredValues);
-        //System.out.println("The best combination of rows is: " + bestCombinationIndex);
-    }
-    private static double calculateChiSquared(Double[] observed, Double[] expected) {
-        double chiSquared = 0.0;
-        for (int i = 0; i < observed.length; i++) {
-            double O = observed[i];
-            double E = expected[i];
-            chiSquared += Math.pow(O - E, 2) / E;
-        }
-        return chiSquared;
-    }
-
-    private static int findIndexOfSmallestValue(double[] values) {
-        int index = 0;
-        double smallestValue = values[0];
-
-        for (int i = 1; i < values.length; i++) {
-            if (values[i] < smallestValue) {
-                smallestValue = values[i];
-                index = i;
-            }
-        }
-
-        return index;
     }
     private void najdiSpravnyStlpec(ArrayList<Double[]> usporiadaneBigramyPodlaOt,ArrayList<Integer[]> mozneKombinacie,double moznaOdchylka){
 
@@ -349,30 +297,39 @@ public class PokusTabulkovaTranspozicia {
         double minimalnaOdchylka=Collections.min(odchylky);
         int indexMinOdchylky=odchylky.indexOf(minimalnaOdchylka);
         poradieStlpcov.add(mozneKombinacie.get(indexMinOdchylky));
-      //  System.out.println();
-        /*
-        ArrayList<Double[]> najlepsich5BigramovZT=new ArrayList<>();
-
-        for(var bigramy:usporiadaneBigramyPodlaOt){
-            Double[] top5Bigramov=new Double[usporiadaneBigramyPodlaOt.size()];
-            for(int i=0;i<usporiadaneBigramyPodlaOt.size();i++){
-                top5Bigramov[i]=bigramy[i];
-            }
-            najlepsich5BigramovZT.add(top5Bigramov);
-        }
-        //otestujChi(usporiadaneBigramyPodlaOTNajlepsich5);
-         */
+        System.out.println();
     }
     private void najdiPermutaciu(){
         poradieStlpcov =new ArrayList<>();
-        int i=0;
+
+        int rozsahSkumania=transpozicia.getZtVBlokoch().size();
+        int prvyStlpec=0;
+
         while(poradieStlpcov.size()!=dlzkaKluca-1){
-            hladajPermutaciu(transpozicia.getZtVBlokoch());
-            System.out.println("["+poradieStlpcov.get(i)[0]+" "+poradieStlpcov.get(i)[1]+"]");
-            i++;
+            if(!poradieStlpcov.isEmpty()){
+                prvyStlpec=poradieStlpcov.get(poradieStlpcov.size()-1)[1];
+                rozsahSkumania=prvyStlpec+1;
+
+            }
+            hladajPermutaciu(transpozicia.getZtVBlokoch(),prvyStlpec,rozsahSkumania);
         }
-        for(var kombinacia:poradieStlpcov){
-            //System.out.print(kombinacia[0]+" "+kombinacia[1]+" ");
+        int[] permutacia=new int[poradieStlpcov.size()+1];
+        for(int k=0;k<poradieStlpcov.size();k++){
+            if(k==poradieStlpcov.size()-1){
+                permutacia[k]=(poradieStlpcov.get(k)[0]);
+                permutacia[k+1]=(poradieStlpcov.get(k)[1]);
+            }
+            else{
+                permutacia[k]=(poradieStlpcov.get(k)[0]);
+            }
         }
+        for(var stlpec:permutacia){
+            System.out.print(stlpec+" ");
+        }
+        System.out.println();
+        if(Arrays.equals(permutacia, transpozicia.getPoradie())){
+            System.out.println("Uhadol si permutaciu");
+        }
+
     }
 }
