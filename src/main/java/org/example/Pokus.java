@@ -55,15 +55,9 @@ public class Pokus {
 
     }
     private void sifrujTexty() throws IOException {
-        substitucia = new JednoduchaSubstitucia('C', prednastavenyKluc);
         transpozicia = new TabulkovaTranspozicia(prednastavenyKluc);
-        vigenere = new Vigenere(prednastavenyKluc);
-
         upravenyText = substitucia.vratSuborU(nazovSuboru);
         text = substitucia.vratSubor(nazovSuboru);
-
-        //vigenere.sifrovanie(upravenyText,prednastavenyKluc);
-        //substitucia.sifrovanie(upravenyText,prednastavenyKluc);
         transpozicia.sifrovanie(upravenyText,prednastavenyKluc);
     }
 

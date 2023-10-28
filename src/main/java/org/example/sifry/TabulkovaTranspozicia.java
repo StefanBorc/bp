@@ -6,8 +6,6 @@ import org.example.Sifra;
 
 import java.util.ArrayList;
 
-import static org.example.Pokus.INT_MIN;
-
 public class TabulkovaTranspozicia extends Sifra {
 
     private int[] poradie;
@@ -16,8 +14,11 @@ public class TabulkovaTranspozicia extends Sifra {
     @Getter
     private StringBuilder zasifrovanyText;
     private int pocetRiadkov;
+    @Setter@Getter
+    private ArrayList<StringBuilder> ztVBlokoch;
 
     public TabulkovaTranspozicia(String kluc) {
+        ztVBlokoch=new ArrayList<>();
         pocetRiadkov = 0;
         this.kluc = kluc;
         zasifrovanyText = new StringBuilder();
@@ -52,9 +53,10 @@ public class TabulkovaTranspozicia extends Sifra {
             p.set(index,999);
             pismenoVPoradi++;
         }
-        System.out.println("poradie");
+
         int i=0;
         for(var c:poradie){
+
             System.out.print("["+c+"]->"+i+" ");
             i++;
         }
@@ -71,7 +73,7 @@ public class TabulkovaTranspozicia extends Sifra {
         vratPoradie(kluc);
         int pocetStlpcov = kluc.length();
         char[][] tabulka = new char[pocetRiadkov][pocetStlpcov];
-        System.out.println("pocet riadkov:"+pocetRiadkov);
+        System.out.println("pocet zasifrovanych riadkov:"+pocetRiadkov);
         int index = 0;
         int n=pocetRiadkov*pocetStlpcov;
 
