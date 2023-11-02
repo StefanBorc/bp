@@ -5,11 +5,12 @@ import lombok.Setter;
 import org.example.Sifra;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TabulkovaTranspozicia extends Sifra {
     @Getter
     private int[] poradie;
-    @Setter@Getter
+    @Getter
     private String kluc;
     @Getter
     private StringBuilder zasifrovanyText;
@@ -21,7 +22,10 @@ public class TabulkovaTranspozicia extends Sifra {
         ztVBlokoch=new ArrayList<>();
         pocetRiadkov = 0;
         this.kluc = kluc;
-        zasifrovanyText = new StringBuilder();
+    }
+    public void setKluc(String kluc) {
+        this.kluc = kluc;
+        sifrovanie(getUpravenyText(),kluc);
     }
     public void setPocetRiadkov(int pocetRiadkov) {
         this.pocetRiadkov = pocetRiadkov;
@@ -53,27 +57,25 @@ public class TabulkovaTranspozicia extends Sifra {
             p.set(index,999);
             pismenoVPoradi++;
         }
-
-        int i=0;
         for(var c:poradie){
+            System.out.print(c+" ");
 
-            System.out.print("["+c+"]->"+i+" ");
-            i++;
         }
         System.out.println();
 
     }
     public void zasifrujText(StringBuilder text,String kluc,int pRiadkov){
         pocetRiadkov=pRiadkov;
+        System.out.println("pocet zasifrovanych riadkov:"+pocetRiadkov);
         sifrovanie(text,kluc);
     }
     @Override
     public void sifrovanie(StringBuilder text,String kluc) {
+        zasifrovanyText = new StringBuilder();
         this.kluc = kluc;
         vratPoradie(kluc);
         int pocetStlpcov = kluc.length();
         char[][] tabulka = new char[pocetRiadkov][pocetStlpcov];
-        System.out.println("pocet zasifrovanych riadkov:"+pocetRiadkov);
         int index = 0;
         int n=pocetRiadkov*pocetStlpcov;
 
@@ -107,7 +109,18 @@ public class TabulkovaTranspozicia extends Sifra {
                 stlpecVPoradi++;
             }
         }
-
+    }
+    public boolean jeZhodnaPermutacia(ArrayList<Integer> poradieT){
+        int[] poradieTestu=new int[poradieT.size()];
+        for(int i=0;i<poradieT.size();i++){
+            poradieTestu[i]=poradieT.get(i);
+        }
+        if(Arrays.equals(poradieTestu, poradie)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 

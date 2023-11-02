@@ -1,10 +1,10 @@
 package org.example;
 
 import lombok.Getter;
+import org.example.aplikacia.Bigramy;
 import org.example.sifry.JednoduchaSubstitucia;
 import org.example.sifry.TabulkovaTranspozicia;
 import org.example.sifry.Vigenere;
-import org.w3c.dom.ls.LSOutput;
 
 import java.io.*;
 import java.util.*;
@@ -23,7 +23,7 @@ public class Pokus {
     private JednoduchaSubstitucia substitucia;
     private ArrayList<String> vygenerovaneKluce;
     private String prednastavenyKluc;
-    private Invariant invariant;
+    private Bigramy bigramy;
 
     public Pokus(String nazovSuboru,String kluc) throws IOException {
         this.nazovSuboru = nazovSuboru;
@@ -32,7 +32,7 @@ public class Pokus {
         //vygenerujKluce(10);
 
         sifrujTexty();
-        invariant=new Invariant(text,upravenyText);
+        bigramy =new Bigramy(text);
     }
     private void vygenerujKluce(int n){
         Map<String,Integer> kluce=new HashMap<>();

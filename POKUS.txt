@@ -1,7 +1,3 @@
-dlzka kluca:13
-[0]->0 [1]->1 [2]->2 [3]->3 [4]->4 [5]->5 [6]->6 [7]->7 [8]->8 [9]->9 [10]->10 [11]->11 [12]->12 
-pocet zasifrovanych riadkov:900
-odhadnuta dlzka kluca : 13
-
-
-
+pocet zasifrovanych riadkov:600
+5 9 16 4 1 2 8 0 12 6 14 7 17 3 13 10 18 15 11 
+5 9 16 4 1 2 8 0 12 6 14 7 17 3 13 10 18 15 11 

@@ -1,14 +1,36 @@
 package org.example;
 
+import org.example.aplikacia.Priebeh;
+import org.example.aplikacia.Text;
+
 import java.io.IOException;
 
+import java.util.Random;
+
 public class Main {
+
+    public static int POCIATOCNA_VELKOST = 600;
+
     public static void main(String[] args) throws IOException {
-        String kluc="abcdefghijklm";
-        //
-        System.out.println("dlzka kluca:"+kluc.length());
-        PokusTabulkovaTranspozicia p=new PokusTabulkovaTranspozicia("SK1.txt",kluc);
+        Text text=new Text("SK1.txt");
+        String kluc=vygenerujKluc();
+        Priebeh priebeh=new Priebeh(text.getUpravenyText(),kluc);
 
     }
+
+    public static String vygenerujKluc(){
+        Random r = new Random();
+        int minI = 10;
+        int maxI = 30;
+        int minC = 'a';
+        int maxC = 'z';
+
+        StringBuilder s = new StringBuilder("");
+        for (int i = 0; i < r.nextInt(maxI - minI) + minI; i++) {
+            s.append((char) (r.nextInt(maxC - minC) + minC));
+        }
+        return s.toString();
+    }
+
 
 }
