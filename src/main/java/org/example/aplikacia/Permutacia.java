@@ -21,32 +21,10 @@ public class Permutacia {
         this.bigramy=bigramy;
 
         ArrayList<Integer> s = hladajPermutaciu(transpozicia.getZtVBlokoch());
-        for(int i=0;i<s.size();i++){
-            System.out.print(s.get(i)+" ");
+        for (Integer integer : s) {
+            System.out.print(integer + " ");
         }
 
-    }
-
-    private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
-        int pocetRiadkov = bloky.get(0).length();
-        int pocetStlpcov = 2;
-        int[] stlpce = new int[]{n1, n2};
-        char[][] tabulka = new char[pocetRiadkov][2];
-
-        for (int i = 0; i < pocetStlpcov; i++) {
-            for (int j = 0; j < pocetRiadkov; j++) {
-                if (bloky.get(stlpce[i]).length() > j) {
-                    tabulka[j][i] = bloky.get(stlpce[i]).charAt(j);
-                }
-            }
-        }
-        StringBuilder text = new StringBuilder();
-        for (int i = 0; i < pocetRiadkov; i++) {
-            for (int j = 0; j < pocetStlpcov; j++) {
-                text.append(tabulka[i][j]);
-            }
-        }
-        return text;
     }
 
     protected ArrayList<Integer> hladajPermutaciu(ArrayList<StringBuilder> bloky) {
@@ -58,7 +36,7 @@ public class Permutacia {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
 
                 if (prvy != druhy ) {
-                    StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
+                    StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
                     bigramyZT = bigramy.ngramy(text, 2, false);
                     int pocitadlo=0;
                     int velkostPorovnania=25;
@@ -109,15 +87,15 @@ public class Permutacia {
         if(mozneKombinacie.size()!=dlzkaKluca-1){
             //System.out.println("Smola");
         }
-        else{
+        else if(mozneKombinacie.size()==dlzkaKluca-1){
             //este preverit aby dlzka bola rovnaka pre kluc 17 napr lebo moze byt vela stlpcov ktore sa tam vyskytnu naviac
             while(cesta.size()!=dlzkaKluca){
                 boolean nasielSusednyStlpec=false;
-                for(int i=0;i<mozneKombinacie.size();i++){
-                    if(stlpec==mozneKombinacie.get(i)[0]){
-                        stlpec=mozneKombinacie.get(i)[1];
-                        cesta.add(mozneKombinacie.get(i)[1]);
-                        nasielSusednyStlpec=true;
+                for (Integer[] kombo : mozneKombinacie) {
+                    if (stlpec == kombo[0]) {
+                        stlpec = kombo[1];
+                        cesta.add(kombo[1]);
+                        nasielSusednyStlpec = true;
                     }
                 }
                 if(!nasielSusednyStlpec){
@@ -125,10 +103,6 @@ public class Permutacia {
                     break;
                 }
             }
-            for(int i=0;i<cesta.size();i++){
-              //  System.out.print(cesta.get(i)+" ");
-            }
-           // System.out.println();
         }
         return cesta;
 

@@ -18,34 +18,13 @@ public class OdhadKluca {
         this.bigramy=bigramy;
         najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
     }
-    private StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
-        int pocetRiadkov = bloky.get(0).length();
-        int pocetStlpcov = 2;
-        int[] stlpce = new int[]{n1, n2};
-        char[][] tabulka = new char[pocetRiadkov][2];
-
-        for (int i = 0; i < pocetStlpcov; i++) {
-            for (int j = 0; j < pocetRiadkov; j++) {
-                if (bloky.get(stlpce[i]).length() > j) {
-                    tabulka[j][i] = bloky.get(stlpce[i]).charAt(j);
-                }
-            }
-        }
-        StringBuilder text = new StringBuilder();
-        for (int i = 0; i < pocetRiadkov; i++) {
-            for (int j = 0; j < pocetStlpcov; j++) {
-                text.append(tabulka[i][j]);
-            }
-        }
-        return text;
-    }
     private void hodnotyDlzkyKluca(ArrayList<StringBuilder> bloky) {
         List<Map.Entry<String, Double>> vyskytBigramov;
         int pocet=0;
         for(int prvy=0;prvy<bloky.size();prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 if (prvy != druhy) {
-                    StringBuilder text = premenBlokyNaText(bloky, prvy, druhy);
+                    StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
                     vyskytBigramov = bigramy.ngramy(text, 2, false);
                     int pocitadlo=0;
                     int velkostPorovnania=20;
@@ -116,13 +95,9 @@ public class OdhadKluca {
                     } else {
                         zvysokPreRiadok = 0;
                     }
-                    if (zt.length() > j) {
-                        riadok.append(zt.charAt(j));
-                    }
-                } else {
-                    if (zt.length() > j) {
-                        riadok.append(zt.charAt(j));
-                    }
+                }
+                if (zt.length() > j) {
+                    riadok.append(zt.charAt(j));
                 }
             }
             hodnotyDlzkyKluca(riadky);

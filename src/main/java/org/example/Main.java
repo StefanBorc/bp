@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.aplikacia.Priebeh;
-import org.example.aplikacia.Text;
 
 import java.io.IOException;
 
@@ -14,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Text text=new Text("SK1.txt");
         String kluc=vygenerujKluc();
-        Priebeh priebeh=new Priebeh(text.getUpravenyText(),kluc);
+        new Priebeh(text.getUpravenyText(),kluc);
 
     }
 
@@ -25,7 +24,7 @@ public class Main {
         int minC = 'a';
         int maxC = 'z';
 
-        StringBuilder s = new StringBuilder("");
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < r.nextInt(maxI - minI) + minI; i++) {
             s.append((char) (r.nextInt(maxC - minC) + minC));
         }

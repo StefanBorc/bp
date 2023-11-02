@@ -27,10 +27,6 @@ public class TabulkovaTranspozicia extends Sifra {
         this.kluc = kluc;
         sifrovanie(getUpravenyText(),kluc);
     }
-    public void setPocetRiadkov(int pocetRiadkov) {
-        this.pocetRiadkov = pocetRiadkov;
-        sifrovanie(getUpravenyText(),kluc);
-    }
     private int min(ArrayList<Integer> p) {
         int minimum = p.get(0);
         int index = 0;
@@ -115,12 +111,7 @@ public class TabulkovaTranspozicia extends Sifra {
         for(int i=0;i<poradieT.size();i++){
             poradieTestu[i]=poradieT.get(i);
         }
-        if(Arrays.equals(poradieTestu, poradie)){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return Arrays.equals(poradieTestu, poradie);
     }
 
 

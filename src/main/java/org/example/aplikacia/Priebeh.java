@@ -10,18 +10,15 @@ import static org.example.Main.POCIATOCNA_VELKOST;
 public class Priebeh {
 
     private TabulkovaTranspozicia transpozicia;
-    private Bigramy bigramy;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
 
     public Priebeh(StringBuilder otUpraveny,String kluc) throws IOException {
         transpozicia=new TabulkovaTranspozicia(kluc);
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
-        bigramy = new Bigramy(otUpraveny);
+        Bigramy bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
         permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
-
-
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
         transpozicia.zasifrujText(text, kluc, n);
@@ -35,7 +32,7 @@ public class Priebeh {
         int minC = 'a';
         int maxC = 'z';
         while (kluce.size() != n) {
-            StringBuilder s = new StringBuilder("");
+            StringBuilder s = new StringBuilder();
             for (int i = 0; i < r.nextInt(maxI - minI) + minI; i++) {
                 s.append((char) (r.nextInt(maxC - minC) + minC));
             }
@@ -51,14 +48,13 @@ public class Priebeh {
 
         double uspesnostTestu=0;
         int pocetNeuhadnutychKlucov=0;
-        for(int i=0;i<kluce.size();i++){
-            transpozicia.setKluc(kluce.get(i));
+        for (String s : kluce) {
+            transpozicia.setKluc(s);
 
-            ArrayList<Integer> najdenaPermutacia=permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
-            if(transpozicia.jeZhodnaPermutacia(najdenaPermutacia) && transpozicia.getKluc().length()== odhadKluca.getDlzkaKluca()){
+            ArrayList<Integer> najdenaPermutacia = permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
+            if (transpozicia.jeZhodnaPermutacia(najdenaPermutacia) && transpozicia.getKluc().length() == odhadKluca.getDlzkaKluca()) {
                 uspesnostTestu++;
-            }
-            else if(transpozicia.getKluc().length()!= odhadKluca.getDlzkaKluca()){
+            } else if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
             }
         }

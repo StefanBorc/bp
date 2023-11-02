@@ -47,7 +47,7 @@ public class Bigramy {
             pripocitaj=1;
         }
         for (int i = 0; i < text.length() - n; i++) {
-            String ngram=new String();
+            String ngram= "";
             for (int j = i; j < i+n; j++) {
                 ngram+=text.charAt(j);
             }
@@ -66,7 +66,7 @@ public class Bigramy {
             statistikaBigramov = ngramy;
         }
 
-        double pocet=ngramy.entrySet().stream().mapToDouble(Map.Entry::getValue).sum();
+        double pocet=ngramy.values().stream().mapToDouble(v -> v).sum();
         Map<String,Double> ngramyPercenta=new HashMap<>();
         for(var bigram:ngramy.entrySet()){
             ngramyPercenta.put(bigram.getKey(),(bigram.getValue()/pocet)*100);
@@ -100,6 +100,27 @@ public class Bigramy {
             listyPercient.add(usporiadanePercenta);
         }
         return listyPercient;
+    }
+    protected StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
+        int pocetRiadkov = bloky.get(0).length();
+        int pocetStlpcov = 2;
+        int[] stlpce = new int[]{n1, n2};
+        char[][] tabulka = new char[pocetRiadkov][2];
+
+        for (int i = 0; i < pocetStlpcov; i++) {
+            for (int j = 0; j < pocetRiadkov; j++) {
+                if (bloky.get(stlpce[i]).length() > j) {
+                    tabulka[j][i] = bloky.get(stlpce[i]).charAt(j);
+                }
+            }
+        }
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < pocetRiadkov; i++) {
+            for (int j = 0; j < pocetStlpcov; j++) {
+                text.append(tabulka[i][j]);
+            }
+        }
+        return text;
     }
 
 
