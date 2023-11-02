@@ -2,7 +2,7 @@ package org.example.aplikacia;
 
 import org.example.sifry.TabulkovaTranspozicia;
 
-import java.io.IOException;
+
 import java.util.*;
 
 import static org.example.Main.POCIATOCNA_VELKOST;
@@ -24,10 +24,12 @@ public class Priebeh {
             spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
             Bigramy bigramy = new Bigramy(otUpraveny);
             odhadKluca =new OdhadKluca(bigramy,transpozicia);
-            permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
-            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
-                pocetNeuspesnychPermutacii++;
-            }
+          //  permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
+           // transpozicia.vytlacPermutaciu();
+          //  permutacia.vytlacTestovanuPermutaciu();
+          //  if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+          //      pocetNeuspesnychPermutacii++;
+          //  }
             if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
             }
@@ -35,8 +37,10 @@ public class Priebeh {
         }
         double uspesnostKlucov=((n-pocetNeuhadnutychKlucov)/n)*100;
         double uspesnostPermutacii=((n-pocetNeuspesnychPermutacii)/n)*100;
-        System.out.println(uspesnostPermutacii+"% - permutacie");
-        System.out.println(uspesnostKlucov+"% - kluce");
+        System.out.println(uspesnostKlucov);
+        System.out.println(uspesnostPermutacii);
+
+
 
 
     }
@@ -71,17 +75,14 @@ public class Priebeh {
         for (String s : kluce) {
             transpozicia.setKluc(s);
             odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-            transpozicia.vytlacPermutaciu();
             permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
-            permutacia.vytlacTestovanuPermutaciu();
-            /*
             if (transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                 uspesnostTestu++;
             }
             else if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
             }
-             */
+
 
         }
         System.out.println();

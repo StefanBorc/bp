@@ -8,12 +8,11 @@ import java.util.Random;
 
 public class Main {
 
-    public static int POCIATOCNA_VELKOST = 200;
+    public static int POCIATOCNA_VELKOST = 500;
 
     public static void main(String[] args) throws IOException {
-        Text text=new Text("SK2.txt");
+        Text text=new Text("EN1.txt");
         new Priebeh(text.getUpravenyText());
-
     }
 
     public static String vygenerujKluc(){

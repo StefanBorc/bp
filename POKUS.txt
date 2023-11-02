@@ -1,0 +1,11 @@
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+	at java.base/java.util.Arrays.copyOf(Arrays.java:3689)
+	at java.base/java.util.ArrayList.grow(ArrayList.java:237)
+	at java.base/java.util.ArrayList.grow(ArrayList.java:242)
+	at java.base/java.util.ArrayList.add(ArrayList.java:485)
+	at java.base/java.util.ArrayList.add(ArrayList.java:498)
+	at org.example.aplikacia.Permutacia.najdiCestu(Permutacia.java:129)
+	at org.example.aplikacia.Permutacia.hladajPermutaciu(Permutacia.java:58)
+	at org.example.aplikacia.Permutacia.<init>(Permutacia.java:24)
+	at org.example.aplikacia.Priebeh.<init>(Priebeh.java:27)
+	at org.example.Main.main(Main.java:15)
