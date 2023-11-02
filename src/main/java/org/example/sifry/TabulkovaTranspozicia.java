@@ -65,7 +65,6 @@ public class TabulkovaTranspozicia extends Sifra {
     }
     public void zasifrujText(StringBuilder text,String kluc,int pRiadkov){
         pocetRiadkov=pRiadkov;
-        System.out.println("pocet zasifrovanych riadkov:"+pocetRiadkov);
         sifrovanie(text,kluc);
     }
     @Override
@@ -109,13 +108,8 @@ public class TabulkovaTranspozicia extends Sifra {
             }
         }
     }
-    public boolean jeZhodnaPermutacia(ArrayList<Integer> poradieT){
-        int[] poradieTestu=new int[poradieT.size()];
-        for(int i=0;i<poradieT.size();i++){
-            poradieTestu[i]=poradieT.get(i);
-        }
-        return Arrays.equals(poradieTestu, poradie);
+    public boolean jeZhodnaPermutacia(int[] poradieT){
+        return Arrays.equals(poradieT,poradie);
     }
-
 
 }

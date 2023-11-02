@@ -14,7 +14,8 @@ public class Permutacia {
     private StringBuilder zt;
     private Bigramy bigramy;
     private int dlzkaKluca;
-    private Integer[] permutacia;
+    @Getter
+    private int[] permutacia;
 
     public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
@@ -135,11 +136,15 @@ public class Permutacia {
             }
 
         }
+        permutacia=new int[cesta.size()];
+        for(int i=0;i<cesta.size();i++){
+            permutacia[i]=cesta.get(i);
+        }
         return cesta;
     }
     public void vytlacTestovanuPermutaciu(){
-        for(var c:cesta){
-                 System.out.print(c+" ");
+        for(var c:permutacia){
+            System.out.print(c+" ");
         }
             System.out.println();
     }
