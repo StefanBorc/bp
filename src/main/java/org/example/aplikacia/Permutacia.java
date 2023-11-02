@@ -3,8 +3,7 @@ package org.example.aplikacia;
 import lombok.Getter;
 import org.example.sifry.TabulkovaTranspozicia;
 
-
-import java.io.*;
+import java.lang.reflect.AnnotatedArrayType;
 import java.util.*;
 
 
@@ -16,15 +15,12 @@ public class Permutacia {
     private Bigramy bigramy;
     private int dlzkaKluca;
 
-    public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) throws IOException {
+    public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
         this.bigramy=bigramy;
 
         ArrayList<Integer> s = hladajPermutaciu(transpozicia.getZtVBlokoch());
-        for (Integer integer : s) {
-            System.out.print(integer + " ");
-        }
-
+        int a=0;
     }
 
     protected ArrayList<Integer> hladajPermutaciu(ArrayList<StringBuilder> bloky) {
@@ -39,7 +35,7 @@ public class Permutacia {
                     StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
                     bigramyZT = bigramy.ngramy(text, 2, false);
                     int pocitadlo=0;
-                    int velkostPorovnania=25;
+                    int velkostPorovnania=30;
                     for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(bigramy.getTopZlych().contains(bigramyZT.get(bigram).getKey())){
@@ -57,14 +53,54 @@ public class Permutacia {
 
         if(!mozneKombinacie.isEmpty()) {
             ArrayList<Double[]> usporiadanePodlaOT = bigramy.usporiadajPodlaOT(bigramyKombinacii);
-            //najdiSpravnyStlpec(usporiadanePodlaOT,mozneKombinacie,0.8);
-            return najdiCestu(mozneKombinacie);
+            return najdiCestu(mozneKombinacie,usporiadanePodlaOT);
         }
         else{
             return null;
         }
     }
-    private ArrayList<Integer> najdiCestu(ArrayList<Integer[]> mozneKombinacie){
+    private boolean suRovnake(Integer[] kombinacia1,Integer[] kombinacia2){
+        Integer[] kombinaciaPomocna=new Integer[]{kombinacia1[1],kombinacia1[0]};
+        return Arrays.equals(kombinaciaPomocna, kombinacia2);
+    }
+    private void spravPodrobnuStatistiku(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT,int[] kombinacie){
+        ArrayList<Double> odchylky=new ArrayList<>();
+        for(int k=0;k<2;k++){
+            double odchylka=0.0;
+            for(int i=0;i<10;i++){
+                odchylka+=usporiadanePodlaOT.get(kombinacie[k])[i]*(10-i);
+            }
+            odchylky.add(odchylka);
+        }
+        if(odchylky.get(0)>odchylky.get(1)){
+            mozneKombinacie.remove(mozneKombinacie.remove(kombinacie[1]));
+        }
+        else{
+            mozneKombinacie.remove(mozneKombinacie.remove(kombinacie[0]));
+        }
+
+    }
+    private ArrayList<Integer[]> vyradNevhodneKombinacie(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
+        ArrayList<Integer[]> kombinacie = new ArrayList<>();
+        kombinacie.addAll(mozneKombinacie);
+
+        for(int i=0;i<mozneKombinacie.size();i++){
+            for(int j=0;j<mozneKombinacie.size();j++){
+                if(mozneKombinacie.get(i)!=mozneKombinacie.get(j)){
+                    if(suRovnake(mozneKombinacie.get(i),mozneKombinacie.get(j))){
+                        spravPodrobnuStatistiku(mozneKombinacie,usporiadanePodlaOT,new int[]{mozneKombinacie.indexOf(mozneKombinacie.get(i)),mozneKombinacie.indexOf(mozneKombinacie.get(j))});
+                    }
+                }
+            }
+
+        }
+
+        return mozneKombinacie;
+    }
+    private ArrayList<Integer> najdiCestu(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
+        if(mozneKombinacie.size()!=dlzkaKluca+1){
+            vyradNevhodneKombinacie(mozneKombinacie,usporiadanePodlaOT);
+        }
         boolean najdenyPrvyStlpec;
         int stlpec=0;
         ArrayList<Integer> cesta=new ArrayList<>();
@@ -81,15 +117,11 @@ public class Permutacia {
             if(najdenyPrvyStlpec ){
                 stlpec=mozneKombinacie.get(i)[0];
             }
-
         }
         cesta.add(stlpec);
-        if(mozneKombinacie.size()!=dlzkaKluca-1){
-            //System.out.println("Smola");
-        }
-        else if(mozneKombinacie.size()==dlzkaKluca-1){
-            //este preverit aby dlzka bola rovnaka pre kluc 17 napr lebo moze byt vela stlpcov ktore sa tam vyskytnu naviac
-            while(cesta.size()!=dlzkaKluca){
+        if(mozneKombinacie.size()==dlzkaKluca-1){
+            int dlzka=dlzkaKluca;
+            while(cesta.size()!=dlzka){
                 boolean nasielSusednyStlpec=false;
                 for (Integer[] kombo : mozneKombinacie) {
                     if (stlpec == kombo[0]) {
@@ -99,11 +131,18 @@ public class Permutacia {
                     }
                 }
                 if(!nasielSusednyStlpec){
-                //    System.out.println("neda sa");
                     break;
                 }
             }
+
         }
+        else{
+            int a=0;
+        }
+        for(var c:cesta){
+            System.out.print(c+" ");
+        }
+        System.out.println();
         return cesta;
 
     }

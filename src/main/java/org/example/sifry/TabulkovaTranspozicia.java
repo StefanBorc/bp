@@ -17,15 +17,18 @@ public class TabulkovaTranspozicia extends Sifra {
     private int pocetRiadkov;
     @Setter@Getter
     private ArrayList<StringBuilder> ztVBlokoch;
+    @Setter
+    private StringBuilder textNaSifrovanie;
 
-    public TabulkovaTranspozicia(String kluc) {
+    public TabulkovaTranspozicia(StringBuilder otUpraveny,String kluc) {
         ztVBlokoch=new ArrayList<>();
+        textNaSifrovanie=otUpraveny;
         pocetRiadkov = 0;
         this.kluc = kluc;
     }
     public void setKluc(String kluc) {
         this.kluc = kluc;
-        sifrovanie(getUpravenyText(),kluc);
+        sifrovanie(textNaSifrovanie,kluc);
     }
     private int min(ArrayList<Integer> p) {
         int minimum = p.get(0);
@@ -53,6 +56,7 @@ public class TabulkovaTranspozicia extends Sifra {
             p.set(index,999);
             pismenoVPoradi++;
         }
+
         for(var c:poradie){
             System.out.print(c+" ");
 

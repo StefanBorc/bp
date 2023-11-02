@@ -8,10 +8,10 @@ import java.util.Random;
 
 public class Main {
 
-    public static int POCIATOCNA_VELKOST = 600;
+    public static int POCIATOCNA_VELKOST = 500;
 
     public static void main(String[] args) throws IOException {
-        Text text=new Text("SK1.txt");
+        Text text=new Text("SK2.txt");
         String kluc=vygenerujKluc();
         new Priebeh(text.getUpravenyText(),kluc);
 

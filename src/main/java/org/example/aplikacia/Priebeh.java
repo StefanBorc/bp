@@ -8,17 +8,20 @@ import java.util.*;
 import static org.example.Main.POCIATOCNA_VELKOST;
 
 public class Priebeh {
-
+    private ArrayList<String> kluce;
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
 
     public Priebeh(StringBuilder otUpraveny,String kluc) throws IOException {
-        transpozicia=new TabulkovaTranspozicia(kluc);
+        transpozicia=new TabulkovaTranspozicia(otUpraveny,kluc);
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
         Bigramy bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
         permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
+        kluce=vygenerujKluce(10);
+      //  otestujRozneKluce(kluce);
+
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
         transpozicia.zasifrujText(text, kluc, n);
@@ -50,16 +53,22 @@ public class Priebeh {
         int pocetNeuhadnutychKlucov=0;
         for (String s : kluce) {
             transpozicia.setKluc(s);
+            odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
 
             ArrayList<Integer> najdenaPermutacia = permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
-            if (transpozicia.jeZhodnaPermutacia(najdenaPermutacia) && transpozicia.getKluc().length() == odhadKluca.getDlzkaKluca()) {
+            if (transpozicia.jeZhodnaPermutacia(najdenaPermutacia)) {
                 uspesnostTestu++;
-            } else if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
+            }
+            else if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
             }
+
         }
+        System.out.println();
         System.out.println("neuhadnute kluce "+(pocetNeuhadnutychKlucov/kluce.size())*100+"%");
+        System.out.println(("uspesnost permutacii "+(uspesnostTestu/kluce.size())*100)+"%");
         return (uspesnostTestu/kluce.size())*100;
     }
+
 
 }
