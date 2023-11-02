@@ -8,17 +8,18 @@ import java.util.Random;
 
 public class Main {
 
-    public static int POCIATOCNA_VELKOST = 500;
+    public static int POCIATOCNA_VELKOST = 300;
+    public static String SUBOR="EN2.txt";
 
     public static void main(String[] args) throws IOException {
-        Text text=new Text("EN1.txt");
+        Text text=new Text(SUBOR);
         new Priebeh(text.getUpravenyText());
     }
 
     public static String vygenerujKluc(){
         Random r = new Random();
         int minI = 10;
-        int maxI = 30;
+        int maxI = 20;
         int minC = 'a';
         int maxC = 'z';
 

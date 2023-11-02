@@ -36,6 +36,7 @@ public class Permutacia {
                     StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
                     bigramyZT = bigramy.ngramy(text, 2, false);
                     int pocitadlo=0;
+                    //tu bolo 30
                     int velkostPorovnania=30;
                     for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
@@ -44,7 +45,7 @@ public class Permutacia {
                             }
                         }
                     }
-                    if(pocitadlo<1){
+                    if(pocitadlo<2){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
                         bigramyKombinacii.add(bigramyZT);
                     }
@@ -62,7 +63,7 @@ public class Permutacia {
         Integer[] kombinaciaPomocna=new Integer[]{kombinacia1[1],kombinacia1[0]};
         return Arrays.equals(kombinaciaPomocna, kombinacia2);
     }
-    private void spravPodrobnuStatistiku(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT,int[] kombinacie){
+    private void spravPodrobnuStatistikuRovnakych(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT, int[] kombinacie){
         ArrayList<Double> odchylky=new ArrayList<>();
         for(int k=0;k<2;k++){
             double odchylka=0.0;
@@ -79,19 +80,40 @@ public class Permutacia {
         }
 
     }
+    private void vyradNevhodneStlpce(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
+        ArrayList<Double> odchylky=new ArrayList<>();
+        int index=0;
+        int n=10;
+        for(var kombo:mozneKombinacie){
+            double odchylka=0;
+            for(int i=0;i<n;i++){
+                odchylka+=(usporiadanePodlaOT.get(index)[i])*(n-1);
+            }
+            odchylky.add(odchylka);
+            index++;
+        }
+        if(mozneKombinacie.size()>dlzkaKluca-1){
+            while(mozneKombinacie.size()!=dlzkaKluca-1){
+                int nevhodny=odchylky.indexOf(Collections.min(odchylky));
+                odchylky.remove(nevhodny);
+                mozneKombinacie.remove(nevhodny);
+            }
+        }
+
+    }
     private ArrayList<Integer[]> vyradNevhodneKombinacie(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
         ArrayList<Integer[]> kombinacie = new ArrayList<>();
         kombinacie.addAll(mozneKombinacie);
-
         for(int i=0;i<mozneKombinacie.size();i++){
             for(int j=0;j<mozneKombinacie.size();j++){
                 if(mozneKombinacie.get(i)!=mozneKombinacie.get(j)){
                     if(suRovnake(mozneKombinacie.get(i),mozneKombinacie.get(j))){
-                        spravPodrobnuStatistiku(mozneKombinacie,usporiadanePodlaOT,new int[]{mozneKombinacie.indexOf(mozneKombinacie.get(i)),mozneKombinacie.indexOf(mozneKombinacie.get(j))});
+                        spravPodrobnuStatistikuRovnakych(mozneKombinacie,usporiadanePodlaOT,new int[]{mozneKombinacie.indexOf(mozneKombinacie.get(i)),mozneKombinacie.indexOf(mozneKombinacie.get(j))});
                     }
                 }
             }
         }
+        vyradNevhodneStlpce( mozneKombinacie,usporiadanePodlaOT);
         return mozneKombinacie;
     }
     private void najdiCestu(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
@@ -126,7 +148,7 @@ public class Permutacia {
                         stlpec = kombo[1];
                         cesta.add(kombo[1]);
                         nasielSusednyStlpec = true;
-                        if(cesta.size()>4){
+                        if(cesta.size()>6){
                             if(cesta.get(cesta.size()-1)==cesta.get(cesta.size()-3)){
                                 stop=true;
                                 break;
@@ -147,7 +169,7 @@ public class Permutacia {
         for(int i=0;i<cesta.size();i++){
             permutacia[i]=cesta.get(i);
         }
-
+        int a=0;
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){

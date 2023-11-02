@@ -71,7 +71,8 @@ public class OdhadKluca {
         ArrayList<List<Map.Entry<String, Double>>> statistika = new ArrayList<>();
         int n = zt.length();
         ArrayList<ArrayList<StringBuilder>> blokyDlzkyN=new ArrayList<>();
-        for (int i = 0; i <= 30; i++) {
+        //tu bolo 30
+        for (int i = 0; i <= 20; i++) {
             if (i < 10) {
                 statistika.add(new ArrayList<>());
                 blokyDlzkyN.add(new ArrayList<>());

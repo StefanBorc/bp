@@ -17,22 +17,21 @@ public class Priebeh {
     public Priebeh(StringBuilder otUpraveny){
         double pocetNeuspesnychPermutacii=0;
         double pocetNeuhadnutychKlucov=0;
-        int n=100;
+        int n=50;
         for(int i=0;i<n;i++){
             String kluc=vygenerujKluc();
             transpozicia=new TabulkovaTranspozicia(otUpraveny,vygenerujKluc());
-            spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
+            spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);;
             Bigramy bigramy = new Bigramy(otUpraveny);
             odhadKluca =new OdhadKluca(bigramy,transpozicia);
-          //  permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
-           // transpozicia.vytlacPermutaciu();
-          //  permutacia.vytlacTestovanuPermutaciu();
-          //  if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
-          //      pocetNeuspesnychPermutacii++;
-          //  }
+            permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
             if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
             }
+            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+                pocetNeuspesnychPermutacii++;
+            }
+
 
         }
         double uspesnostKlucov=((n-pocetNeuhadnutychKlucov)/n)*100;
