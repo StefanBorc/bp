@@ -50,19 +50,18 @@ public class TabulkovaTranspozicia extends Sifra {
         }
 
         int pismenoVPoradi=0;
-        for(int i=0;i<heslo.length();i++){
-            var index=min(p);
-            poradie[index]=pismenoVPoradi;
-            p.set(index,999);
+        for(int i=0;i<heslo.length();i++) {
+            var index = min(p);
+            poradie[index] = pismenoVPoradi;
+            p.set(index, 999);
             pismenoVPoradi++;
         }
-
+    }
+    public void vytlacPermutaciu(){
         for(var c:poradie){
             System.out.print(c+" ");
-
         }
         System.out.println();
-
     }
     public void zasifrujText(StringBuilder text,String kluc,int pRiadkov){
         pocetRiadkov=pRiadkov;

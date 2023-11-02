@@ -14,13 +14,14 @@ public class Permutacia {
     private StringBuilder zt;
     private Bigramy bigramy;
     private int dlzkaKluca;
+    private Integer[] permutacia;
 
     public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
         this.bigramy=bigramy;
 
         ArrayList<Integer> s = hladajPermutaciu(transpozicia.getZtVBlokoch());
-        int a=0;
+
     }
 
     protected ArrayList<Integer> hladajPermutaciu(ArrayList<StringBuilder> bloky) {
@@ -92,13 +93,11 @@ public class Permutacia {
                     }
                 }
             }
-
         }
-
         return mozneKombinacie;
     }
     private ArrayList<Integer> najdiCestu(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
-        if(mozneKombinacie.size()!=dlzkaKluca+1){
+        if(mozneKombinacie.size()!=dlzkaKluca-1){
             vyradNevhodneKombinacie(mozneKombinacie,usporiadanePodlaOT);
         }
         boolean najdenyPrvyStlpec;
@@ -136,14 +135,12 @@ public class Permutacia {
             }
 
         }
-        else{
-            int a=0;
-        }
-        for(var c:cesta){
-            System.out.print(c+" ");
-        }
-        System.out.println();
         return cesta;
-
+    }
+    public void vytlacTestovanuPermutaciu(){
+        for(var c:cesta){
+                 System.out.print(c+" ");
+        }
+            System.out.println();
     }
 }

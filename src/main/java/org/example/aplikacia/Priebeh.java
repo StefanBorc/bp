@@ -19,8 +19,8 @@ public class Priebeh {
         Bigramy bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
         permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
-        kluce=vygenerujKluce(10);
-      //  otestujRozneKluce(kluce);
+        kluce=vygenerujKluce(50);
+        otestujRozneKluce(kluce);
 
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
@@ -54,7 +54,7 @@ public class Priebeh {
         for (String s : kluce) {
             transpozicia.setKluc(s);
             odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-
+            transpozicia.vytlacPermutaciu();
             ArrayList<Integer> najdenaPermutacia = permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
             if (transpozicia.jeZhodnaPermutacia(najdenaPermutacia)) {
                 uspesnostTestu++;
@@ -65,8 +65,9 @@ public class Priebeh {
 
         }
         System.out.println();
-        System.out.println("neuhadnute kluce "+(pocetNeuhadnutychKlucov/kluce.size())*100+"%");
-        System.out.println(("uspesnost permutacii "+(uspesnostTestu/kluce.size())*100)+"%");
+       // System.out.println("neuhadnute kluce "+(pocetNeuhadnutychKlucov/kluce.size())*100+"%");
+
+        //System.out.println(("uspesnost permutacii "+(uspesnostTestu/kluce.size())*100)+"%");
         return (uspesnostTestu/kluce.size())*100;
     }
 
