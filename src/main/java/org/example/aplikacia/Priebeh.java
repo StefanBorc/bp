@@ -9,37 +9,20 @@ import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.vygenerujKluc;
 
 public class Priebeh {
-    private ArrayList<String> kluce;
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
+    private Bigramy bigramy;
 
     public Priebeh(StringBuilder otUpraveny){
-        double pocetNeuspesnychPermutacii=0;
-        double pocetNeuhadnutychKlucov=0;
-        int n=50;
-        for(int i=0;i<n;i++){
-            String kluc=vygenerujKluc();
-            transpozicia=new TabulkovaTranspozicia(otUpraveny,vygenerujKluc());
-            spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);;
-            Bigramy bigramy = new Bigramy(otUpraveny);
-            odhadKluca =new OdhadKluca(bigramy,transpozicia);
-            permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
-            if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
-                pocetNeuhadnutychKlucov++;
-            }
-            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
-                pocetNeuspesnychPermutacii++;
-            }
+        String kluc=vygenerujKluc();
+        transpozicia=new TabulkovaTranspozicia(otUpraveny,vygenerujKluc());
+        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);;
+        bigramy = new Bigramy(otUpraveny);
+        odhadKluca =new OdhadKluca(bigramy,transpozicia);
+        permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
 
-
-        }
-        double uspesnostKlucov=((n-pocetNeuhadnutychKlucov)/n)*100;
-        double uspesnostPermutacii=((n-pocetNeuspesnychPermutacii)/n)*100;
-        System.out.println(uspesnostKlucov);
-        System.out.println(uspesnostPermutacii);
-
-
+        otestujRozneKluce(100);
 
 
     }
@@ -67,28 +50,32 @@ public class Priebeh {
         }
         return vygenerovaneKluce;
     }
-    protected double otestujRozneKluce(ArrayList<String> kluce){
+    protected void otestujRozneKluce(int n){
+        ArrayList<String> kluce=vygenerujKluce(n);
+        double pocetNeuspesnychPermutacii=0;
+        double pocetNeuhadnutychKlucov=0;
 
-        double uspesnostTestu=0;
-        int pocetNeuhadnutychKlucov=0;
-        for (String s : kluce) {
-            transpozicia.setKluc(s);
+        for(int i=0;i<n;i++){
+            String kluc=kluce.get(i);
+            transpozicia.setKluc(kluc);
             odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+            permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
             permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
-            if (transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
-                uspesnostTestu++;
-            }
-            else if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
+
+            if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
+            }
+            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+                pocetNeuspesnychPermutacii++;
             }
 
 
         }
-        System.out.println();
-        System.out.println("neuhadnute kluce "+(pocetNeuhadnutychKlucov/kluce.size())*100+"%");
+        double uspesnostKlucov=((n-pocetNeuhadnutychKlucov)/n)*100;
+        double uspesnostPermutacii=((n-pocetNeuspesnychPermutacii)/n)*100;
+        System.out.println(uspesnostKlucov);
+        System.out.println(uspesnostPermutacii);
 
-        System.out.println(("uspesnost permutacii "+(uspesnostTestu/kluce.size())*100)+"%");
-        return (uspesnostTestu/kluce.size())*100;
     }
 
 

@@ -1,9 +1,12 @@
 package org.example.aplikacia;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.sifry.TabulkovaTranspozicia;
 
 import java.util.*;
+
+import static org.example.Main.SUBOR;
 
 
 public class Permutacia {
@@ -12,6 +15,7 @@ public class Permutacia {
     @Getter
     private StringBuilder zt;
     private Bigramy bigramy;
+    @Setter
     private int dlzkaKluca;
     @Getter
     private int[] permutacia;
@@ -19,7 +23,6 @@ public class Permutacia {
     public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
         this.bigramy=bigramy;
-
         hladajPermutaciu(transpozicia.getZtVBlokoch());
 
     }
@@ -28,7 +31,10 @@ public class Permutacia {
         List<Map.Entry<String, Double>> bigramyZT;
         ArrayList<List<Map.Entry<String,Double>>> bigramyKombinacii=new ArrayList<>();
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
-
+        int vaha=1;
+        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt")){
+            vaha=2;
+        }
         for(int prvy=0;prvy<bloky.size();prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
 
@@ -36,7 +42,6 @@ public class Permutacia {
                     StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
                     bigramyZT = bigramy.ngramy(text, 2, false);
                     int pocitadlo=0;
-                    //tu bolo 30
                     int velkostPorovnania=30;
                     for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
@@ -45,7 +50,7 @@ public class Permutacia {
                             }
                         }
                     }
-                    if(pocitadlo<2){
+                    if(pocitadlo<vaha){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
                         bigramyKombinacii.add(bigramyZT);
                     }
@@ -148,11 +153,9 @@ public class Permutacia {
                         stlpec = kombo[1];
                         cesta.add(kombo[1]);
                         nasielSusednyStlpec = true;
-                        if(cesta.size()>6){
-                            if(cesta.get(cesta.size()-1)==cesta.get(cesta.size()-3)){
-                                stop=true;
-                                break;
-                            }
+                        if(cesta.size()==dlzka){
+                           stop=true;
+                           break;
                         }
                     }
                 }
@@ -163,13 +166,13 @@ public class Permutacia {
                     break;
                 }
             }
-
         }
-        permutacia=new int[cesta.size()];
-        for(int i=0;i<cesta.size();i++){
-            permutacia[i]=cesta.get(i);
+        if(cesta.size()<32){
+            permutacia=new int[cesta.size()];
+            for(int i=0;i<cesta.size();i++){
+                permutacia[i]=cesta.get(i);
+            }
         }
-        int a=0;
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
