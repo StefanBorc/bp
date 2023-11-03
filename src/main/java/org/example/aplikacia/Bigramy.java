@@ -6,6 +6,9 @@ import lombok.Getter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.example.Main.POCIATOCNA_VELKOST;
+import static org.example.Main.SUBOR;
+
 public class Bigramy {
     @Getter
     private String[] vsetkySlova;
@@ -74,8 +77,15 @@ public class Bigramy {
         return vytriedeneNgramy(ngramyPercenta);
     }
     private void urobTopBigramov(){
+        int n;
+        if(POCIATOCNA_VELKOST>500 && (SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt"))){
+            n=400;
+        }
+        else{
+            n=350;
+        }
         topZlych=new ArrayList<>();
-        for(int i = statistikaBigramovUsporiadana.size()-1; i>= statistikaBigramovUsporiadana.size()-350; i--){
+        for(int i = statistikaBigramovUsporiadana.size()-1; i>= statistikaBigramovUsporiadana.size()-n; i--){
             topZlych.add(statistikaBigramovUsporiadana.get(i).getKey());
         }
         topDobrych=new ArrayList<>();

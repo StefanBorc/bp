@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static org.example.Main.POCIATOCNA_VELKOST;
+import static org.example.Main.SUBOR;
+
 public class OdhadKluca {
     @Getter
     private int dlzkaKluca;
@@ -21,6 +24,8 @@ public class OdhadKluca {
     private void hodnotyDlzkyKluca(ArrayList<StringBuilder> bloky) {
         List<Map.Entry<String, Double>> vyskytBigramov;
         int pocet=0;
+        int vaha=1;
+
         for(int prvy=0;prvy<bloky.size();prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 if (prvy != druhy) {
@@ -32,11 +37,12 @@ public class OdhadKluca {
                         if(bigramy.getStatistikaBigramov().get(vyskytBigramov.get(bigram).getKey())!=null){
                             if(bigramy.getTopZlych().contains(vyskytBigramov.get(bigram).getKey()) &&
                                     vyskytBigramov.get(bigram).getValue()>0.5){
+
                                 pocitadlo+=1;
                             }
                         }
                     }
-                    if(pocitadlo<1 ){
+                    if(pocitadlo<vaha ){
                         pocet++;
                     }
                 }
@@ -66,6 +72,47 @@ public class OdhadKluca {
         return maxIndex;
     }
     protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
+        odhadovaneDlzky=new TreeMap<>();
+        ArrayList<StringBuilder> riadky;
+        ArrayList<List<Map.Entry<String, Double>>> statistika = new ArrayList<>();
+        int n = zt.length();
+        ArrayList<ArrayList<StringBuilder>> blokyDlzkyN=new ArrayList<>();
+        for (int i = 0; i <= 30; i++) {
+            if (i < 10) {
+                statistika.add(new ArrayList<>());
+                blokyDlzkyN.add(new ArrayList<>());
+                continue;
+            }
+            int pZnakovVRiadku = n / i;
+            int zvysok = n % i;
+            int zvysokPreRiadok = 0;
+            if (zvysok != 0) {
+                zvysokPreRiadok = 1;
+                zvysok--;
+            }
+            riadky = new ArrayList<>();
+            StringBuilder riadok = new StringBuilder();
+            for (int j = 0; j <= zt.length(); j++) {
+                if (riadok.length() == pZnakovVRiadku + zvysokPreRiadok) {
+                    riadky.add(riadok);
+                    riadok = new StringBuilder();
+                    if (zvysok > 0) {
+                        zvysok--;
+                    } else {
+                        zvysokPreRiadok = 0;
+                    }
+                }
+                if (zt.length() > j) {
+                    riadok.append(zt.charAt(j));
+                }
+            }
+            hodnotyDlzkyKluca(riadky);
+            blokyDlzkyN.add(riadky);
+        }
+        dlzkaKluca= spravnyKluc();
+        transpozicia.setZtVBlokoch(blokyDlzkyN.get(dlzkaKluca));
+    }
+    private void p(String zt, TabulkovaTranspozicia transpozicia){
         odhadovaneDlzky=new TreeMap<>();
         ArrayList<StringBuilder> riadky;
         ArrayList<List<Map.Entry<String, Double>>> statistika = new ArrayList<>();

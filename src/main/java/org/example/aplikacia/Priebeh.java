@@ -22,9 +22,6 @@ public class Priebeh {
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
         permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
 
-        otestujRozneKluce(100);
-
-
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
         transpozicia.zasifrujText(text, kluc, n);
@@ -50,19 +47,19 @@ public class Priebeh {
         }
         return vygenerovaneKluce;
     }
-    protected void otestujRozneKluce(int n){
-        ArrayList<String> kluce=vygenerujKluce(n);
-
-        for(int j=0;j<10;j++){
+    public void otestujRozneKluce(ArrayList<String> kluce,int poKolkychN){
+        int index=0;
+        int pocetBehov=kluce.size()/100;
+        for(int j=0;j<pocetBehov;j++){
             double pocetNeuspesnychPermutacii=0;
             double pocetNeuhadnutychKlucov=0;
-            for(int i=0;i<n;i++){
-                String kluc=kluce.get(i);
+            for(int i=0;i<poKolkychN;i++){
+                String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
                 permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
                 permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
-
+                index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;
                     pocetNeuspesnychPermutacii++;
@@ -71,9 +68,11 @@ public class Priebeh {
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                     pocetNeuspesnychPermutacii++;
                 }
+
             }
-            double uspesnostKlucov=((n-pocetNeuhadnutychKlucov)/(n))*100;
-            double uspesnostPermutacii=((n-pocetNeuspesnychPermutacii)/(n))*100;
+            double uspesnostKlucov=((poKolkychN-pocetNeuhadnutychKlucov)/(poKolkychN))*100;
+            double uspesnostPermutacii=((poKolkychN-pocetNeuspesnychPermutacii)/(poKolkychN))*100;
+            System.out.println((j+1)+".");
             System.out.println(uspesnostKlucov);
             System.out.println(uspesnostPermutacii);
         }
