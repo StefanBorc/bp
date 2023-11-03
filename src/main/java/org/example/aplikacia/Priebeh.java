@@ -17,7 +17,7 @@ public class Priebeh {
     public Priebeh(StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
         transpozicia=new TabulkovaTranspozicia(otUpraveny,kluc);
-        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);;
+        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
         bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
         permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());

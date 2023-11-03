@@ -107,8 +107,6 @@ public class Permutacia {
 
     }
     private ArrayList<Integer[]> vyradNevhodneKombinacie(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
-        ArrayList<Integer[]> kombinacie = new ArrayList<>();
-        kombinacie.addAll(mozneKombinacie);
         for(int i=0;i<mozneKombinacie.size();i++){
             for(int j=0;j<mozneKombinacie.size();j++){
                 if(mozneKombinacie.get(i)!=mozneKombinacie.get(j)){
