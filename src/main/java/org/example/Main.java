@@ -7,19 +7,18 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Main {
-
+    public static Random r = new Random();
     public static int POCIATOCNA_VELKOST = 800;
-    public static String SUBOR="SK1.txt";
+    public static String SUBOR="EN1.txt";
 
     public static void main(String[] args) throws IOException {
         Text text=new Text(SUBOR);
         new Priebeh(text.getUpravenyText());
     }
 
-    public static String vygenerujKluc(){
-        Random r = new Random();
-        int minI = 10;
-        int maxI = 30;
+    public static String vygenerujKluc(int min, int max){
+        int minI = min;
+        int maxI = max;
         int minC = 'a';
         int maxC = 'z';
 
