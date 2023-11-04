@@ -78,10 +78,10 @@ public class Bigramy {
     }
     private void urobTopBigramov(){
         int n;
-        if(POCIATOCNA_VELKOST>500 && (SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt"))){
+        if((SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt")|| SUBOR.equals("DE.txt"))){
             n=400;
         }
-        else{
+        else {
             n=350;
         }
         topZlych=new ArrayList<>();

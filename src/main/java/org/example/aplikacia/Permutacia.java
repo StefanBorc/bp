@@ -30,7 +30,7 @@ public class Permutacia {
     }
     private void topZlych(){
         topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt")){
+        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
                 for(int i=50;i<bigramy.getTopZlych().size();i++){
                     topZlychBigramovOT.add(bigramy.getTopZlych().get(i));
@@ -50,11 +50,11 @@ public class Permutacia {
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
         int vaha=1;
         int velkostPorovnania=30;
-        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt")){
+        if(SUBOR.equals("EN2.txt")){
             if(POCIATOCNA_VELKOST>500){
-                vaha=3;
+                vaha=2;
             }
-            else if(POCIATOCNA_VELKOST>800){
+            else if(POCIATOCNA_VELKOST>900){
                 vaha=4;
             }
             else{
@@ -71,14 +71,9 @@ public class Permutacia {
                     for(int bigram=0;bigram<velkostPorovnania;bigram++){
                         if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
-                                //toto je zmenene inak to je bez podmienky
-                                if(topZlychBigramovOT.indexOf(topZlychBigramovOT.contains(bigramyZT.get(bigram)))>250){
-                                    pocitadlo+=1;
-                                }
-
+                                pocitadlo+=1;
                             }
                         }
-                        //toto tu nebolo
                         if(pocitadlo>vaha){
                             break;
                         }
@@ -187,8 +182,8 @@ public class Permutacia {
                         cesta.add(kombo[1]);
                         nasielSusednyStlpec = true;
                         if(cesta.size()==dlzka){
-                           stop=true;
-                           break;
+                            stop=true;
+                            break;
                         }
                     }
                 }

@@ -11,8 +11,8 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 1000;
-    public static String SUBOR="EN1.txt";
+    public static int POCIATOCNA_VELKOST = 600;
+    public static String SUBOR="FR.txt";
 
     public static void main(String[] args) throws IOException {
         Instant starts = Instant.now();
@@ -22,7 +22,7 @@ public class Main {
         Instant ends = Instant.now();
         System.out.println(Duration.between(starts, ends));
     }
-    public static ArrayList<String> vygenerujKluce(int min, int max, int n) throws IOException {
+    public static ArrayList<String> vygenerujKluce(int min, int max, int n)  {
         int minI = min;
         int maxI = max;
         int minC = 'a';
