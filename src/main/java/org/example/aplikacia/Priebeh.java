@@ -20,7 +20,7 @@ public class Priebeh {
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
         bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
-        permutacia=new Permutacia(bigramy,transpozicia,odhadKluca.getDlzkaKluca());
+        permutacia=new Permutacia(bigramy,transpozicia,odhadKluca,odhadKluca.getDlzkaKluca());
 
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
@@ -57,8 +57,9 @@ public class Priebeh {
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-                permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
-                permutacia.hladajPermutaciu(transpozicia.getZtVBlokoch());
+                //permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+                //permutacia.hladajPermutaciu();
+
                 index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;

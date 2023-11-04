@@ -20,15 +20,18 @@ public class Permutacia {
     private int dlzkaKluca;
     @Getter
     private int[] permutacia;
+    private OdhadKluca odhadKluca;
     private ArrayList<String> topZlychBigramovOT;
 
-    public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,int dlzkaKluca) {
+    public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,OdhadKluca odhadKluca,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
         this.bigramy=bigramy;
+        this.odhadKluca=odhadKluca;
         topZlych();
-        hladajPermutaciu(transpozicia.getZtVBlokoch());
+        hladajPermutaciu();
     }
     private void topZlych(){
+
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
@@ -44,52 +47,9 @@ public class Permutacia {
             topZlychBigramovOT=bigramy.getTopZlych();
         }
     }
-    protected void hladajPermutaciu(ArrayList<StringBuilder> bloky) {
-        List<Map.Entry<String, Double>> bigramyZT;
-        ArrayList<List<Map.Entry<String,Double>>> bigramyKombinacii=new ArrayList<>();
-        ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
-        int vaha=1;
-        int velkostPorovnania=30;
-        if(SUBOR.equals("EN2.txt")){
-            if(POCIATOCNA_VELKOST>500){
-                vaha=2;
-            }
-            else if(POCIATOCNA_VELKOST>900){
-                vaha=4;
-            }
-            else{
-                vaha=2;
-            }
-        }
-        for(int prvy=0;prvy<bloky.size();prvy++) {
-            for (int druhy = 0; druhy < bloky.size(); druhy++) {
-
-                if (prvy != druhy ) {
-                    StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = bigramy.ngramy(text, 2, false);
-                    int pocitadlo=0;
-                    for(int bigram=0;bigram<velkostPorovnania;bigram++){
-                        if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
-                                pocitadlo+=1;
-                            }
-                        }
-                        if(pocitadlo>vaha){
-                            break;
-                        }
-                    }
-                    if(pocitadlo<vaha){
-                        mozneKombinacie.add(new Integer[]{prvy,druhy});
-                        bigramyKombinacii.add(bigramyZT);
-                    }
-                }
-            }
-        }
-
-        if(!mozneKombinacie.isEmpty()) {
-            ArrayList<Double[]> usporiadanePodlaOT = bigramy.usporiadajPodlaOT(bigramyKombinacii);
-            najdiCestu(mozneKombinacie,usporiadanePodlaOT);
-        }
+    protected void hladajPermutaciu() {
+            ArrayList<Double[]> usporiadanePodlaOT = bigramy.usporiadajPodlaOT(odhadKluca.getStatistikaKombinacii());
+            najdiCestu(odhadKluca.getKombinacie(),usporiadanePodlaOT);
 
     }
     private boolean suRovnake(Integer[] kombinacia1,Integer[] kombinacia2){
