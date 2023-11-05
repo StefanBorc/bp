@@ -47,9 +47,8 @@ public class Priebeh {
         }
         return vygenerovaneKluce;
     }
-    public void otestujRozneKluce(ArrayList<String> kluce,int poKolkychN){
+    public void otestujRozneKluce(ArrayList<String> kluce,int poKolkychN,int pocetBehov){
         int index=0;
-        int pocetBehov=kluce.size()/100;
         for(int j=0;j<pocetBehov;j++){
             double pocetNeuspesnychPermutacii=0;
             double pocetNeuhadnutychKlucov=0;
@@ -57,8 +56,8 @@ public class Priebeh {
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-                //permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
-                //permutacia.hladajPermutaciu();
+                permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+                permutacia.hladajPermutaciu();
 
                 index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
