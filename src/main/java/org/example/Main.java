@@ -8,20 +8,18 @@ import java.util.Random;
 public class Main {
     public static Random r = new Random();
     public static int POCIATOCNA_VELKOST = 200;
-    public static String SUBOR="EN2.txt";
+    public static String SUBOR="SK2.txt";
 
     public static void main(String[] args) throws IOException {
 
 
-        System.out.println("SK2");
-        SUBOR="SK2.txt";
-        Text text4=new Text(SUBOR);
+        Text text=new Text(SUBOR);
         POCIATOCNA_VELKOST=500;
         for(int i=POCIATOCNA_VELKOST;i<800;i+=100){
             POCIATOCNA_VELKOST=i;
             System.out.println(i + " riadkov");
-            Priebeh priebeh=new Priebeh(text4.getUpravenyText());
-            priebeh.otestujRozneKluce(text4.getKluce(),100,10);
+            Priebeh priebeh=new Priebeh(text.getUpravenyText());
+            priebeh.otestujRozneKluce(text.getKluce(),100,10);
 
         }
 

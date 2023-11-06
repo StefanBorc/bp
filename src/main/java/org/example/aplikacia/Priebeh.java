@@ -56,6 +56,7 @@ public class Priebeh {
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+                index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;
                     pocetNeuspesnychPermutacii++;
@@ -63,8 +64,6 @@ public class Priebeh {
                 }
                 permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
                 permutacia.hladajPermutaciu();
-
-                index++;
 
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                     pocetNeuspesnychPermutacii++;
