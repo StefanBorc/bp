@@ -56,19 +56,19 @@ public class Priebeh {
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-                permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
-                permutacia.hladajPermutaciu();
-
-                index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;
                     pocetNeuspesnychPermutacii++;
                     continue;
                 }
+                permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+                permutacia.hladajPermutaciu();
+
+                index++;
+
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                     pocetNeuspesnychPermutacii++;
                 }
-
             }
             double uspesnostKlucov=((poKolkychN-pocetNeuhadnutychKlucov)/(poKolkychN))*100;
             double uspesnostPermutacii=((poKolkychN-pocetNeuspesnychPermutacii)/(poKolkychN))*100;

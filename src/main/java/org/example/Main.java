@@ -3,23 +3,28 @@ package org.example;
 import org.example.aplikacia.Priebeh;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 400;
-    public static String SUBOR="SK2.txt";
+    public static int POCIATOCNA_VELKOST = 200;
+    public static String SUBOR="EN2.txt";
 
     public static void main(String[] args) throws IOException {
-        Instant starts = Instant.now();
-        Text text=new Text(SUBOR);
 
-        Priebeh priebeh=new Priebeh(text.getUpravenyText());
-        priebeh.otestujRozneKluce(text.getKluce(),100,10);
-        Instant ends = Instant.now();
-        System.out.println(Duration.between(starts, ends));
+
+        System.out.println("SK2");
+        SUBOR="SK2.txt";
+        Text text4=new Text(SUBOR);
+        POCIATOCNA_VELKOST=500;
+        for(int i=POCIATOCNA_VELKOST;i<800;i+=100){
+            POCIATOCNA_VELKOST=i;
+            System.out.println(i + " riadkov");
+            Priebeh priebeh=new Priebeh(text4.getUpravenyText());
+            priebeh.otestujRozneKluce(text4.getKluce(),100,10);
+
+        }
+
     }
 
     public static String vygenerujKluc(int min, int max){
