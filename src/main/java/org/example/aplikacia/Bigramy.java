@@ -2,11 +2,9 @@ package org.example.aplikacia;
 
 import lombok.Getter;
 
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.SUBOR;
 
 public class Bigramy {
@@ -89,7 +87,7 @@ public class Bigramy {
             topZlych.add(statistikaBigramovUsporiadana.get(i).getKey());
         }
         topDobrych=new ArrayList<>();
-        for(int i=0;i<100;i++){
+        for(int i=0;i<50;i++){
             topDobrych.add(statistikaBigramovUsporiadana.get(i).getKey());
         }
     }

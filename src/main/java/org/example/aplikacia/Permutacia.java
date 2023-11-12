@@ -2,9 +2,11 @@ package org.example.aplikacia;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.sifry.TabulkovaTranspozicia;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 
 import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.SUBOR;
@@ -23,7 +25,7 @@ public class Permutacia {
     private OdhadKluca odhadKluca;
     private ArrayList<String> topZlychBigramovOT;
 
-    public Permutacia(Bigramy bigramy,TabulkovaTranspozicia transpozicia,OdhadKluca odhadKluca,int dlzkaKluca) {
+    public Permutacia(Bigramy bigramy,OdhadKluca odhadKluca,int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
         this.bigramy=bigramy;
         this.odhadKluca=odhadKluca;

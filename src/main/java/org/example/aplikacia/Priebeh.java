@@ -14,13 +14,13 @@ public class Priebeh {
     private Permutacia permutacia;
     private Bigramy bigramy;
 
-    public Priebeh(StringBuilder otUpraveny){
+    public Priebeh(StringBuilder otNasifrovanie,StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
-        transpozicia=new TabulkovaTranspozicia(otUpraveny,kluc);
-        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otUpraveny);
+        transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
+        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otNasifrovanie);
         bigramy = new Bigramy(otUpraveny);
         odhadKluca =new OdhadKluca(bigramy,transpozicia);
-        permutacia=new Permutacia(bigramy,transpozicia,odhadKluca,odhadKluca.getDlzkaKluca());
+        permutacia=new Permutacia(bigramy,odhadKluca,odhadKluca.getDlzkaKluca());
 
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
@@ -49,6 +49,8 @@ public class Priebeh {
     }
     public void otestujRozneKluce(ArrayList<String> kluce,int poKolkychN,int pocetBehov){
         int index=0;
+        double p=0;
+        double k=0;
         for(int j=0;j<pocetBehov;j++){
             double pocetNeuspesnychPermutacii=0;
             double pocetNeuhadnutychKlucov=0;
@@ -71,11 +73,16 @@ public class Priebeh {
             }
             double uspesnostKlucov=((poKolkychN-pocetNeuhadnutychKlucov)/(poKolkychN))*100;
             double uspesnostPermutacii=((poKolkychN-pocetNeuspesnychPermutacii)/(poKolkychN))*100;
-            System.out.println((j+1)+".");
-            System.out.println(uspesnostKlucov);
-            System.out.println(uspesnostPermutacii);
+            p+=uspesnostPermutacii;
+            k+=uspesnostKlucov;
+           // System.out.println((j+1)+".");
+            //System.out.println(uspesnostKlucov);
+          //  System.out.println(uspesnostPermutacii);
         }
-
+        p=p/pocetBehov;
+        k=k/pocetBehov;
+        System.out.println(k);
+        System.out.println(p);
 
 
     }
