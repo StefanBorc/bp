@@ -62,7 +62,7 @@ public class Text {
                 textNaSifrovanie.append(Character.toUpperCase(c));
             }
         }
-        br.close();
+         br.close();
 
 
     }

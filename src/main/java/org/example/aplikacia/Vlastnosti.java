@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import static org.example.Main.SUBOR;
 
-public class Bigramy {
+public class Vlastnosti {
     @Getter
     private String[] vsetkySlova;
     @Getter
@@ -18,17 +18,21 @@ public class Bigramy {
     private ArrayList<String> topZlych;
     @Getter
     private ArrayList<String> topDobrych;
-    public Bigramy(StringBuilder ot) {
+    @Getter
+    private double statistikaSamohlasokSpoluhlasok;
+    public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
         statistikaBigramov =new HashMap<>();
         statistikaBigramovUsporiadana = ngramy(ot,2,true);
         urobTopBigramov();
+        statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
         List<Map.Entry<String, Double>> vytriedeneNgramy = mapa.entrySet()
                 .stream()
                 .sorted((vstup1, vstup2) -> vstup2.getValue().compareTo(vstup1.getValue()))
                 .collect(Collectors.toList());
+
         return vytriedeneNgramy;
     }
     protected Map<String,Integer> vratIndexyUsporiadanejMapy(List<Map.Entry<String,Double>> usporiadanaMapa){
@@ -63,7 +67,7 @@ public class Bigramy {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText){
+        if(jeOtvorenyText && statistikaBigramov.isEmpty()){
             statistikaBigramov = ngramy;
         }
 
@@ -129,6 +133,21 @@ public class Bigramy {
             }
         }
         return text;
+    }
+
+    protected double samohlaskySpoluhlasky(String text){
+        ArrayList<Character> samohlasky=new ArrayList<>(List.of('a','e','i','o','u','y'));
+        double pocetSamohlasok=0;
+        double pocetSpoluhlasok=0;
+        for(var c: text.toLowerCase().toCharArray()){
+            if(samohlasky.contains(c)){
+                pocetSamohlasok++;
+            }
+            else{
+                pocetSpoluhlasok++;
+            }
+        }
+        return pocetSamohlasok/pocetSpoluhlasok;
     }
 
 

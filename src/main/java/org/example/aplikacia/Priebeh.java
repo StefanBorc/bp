@@ -12,15 +12,18 @@ public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
-    private Bigramy bigramy;
+    private Vlastnosti vlastnosti;
 
     public Priebeh(StringBuilder otNasifrovanie,StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
+        System.out.println(kluc.length());
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otNasifrovanie);
-        bigramy = new Bigramy(otUpraveny);
-        odhadKluca =new OdhadKluca(bigramy,transpozicia);
-        permutacia=new Permutacia(bigramy,odhadKluca,odhadKluca.getDlzkaKluca());
+        vlastnosti = new Vlastnosti(otUpraveny);
+        odhadKluca =new OdhadKluca(vlastnosti,transpozicia);
+        permutacia=new Permutacia(vlastnosti,odhadKluca,odhadKluca.getDlzkaKluca());
+        transpozicia.vytlacPermutaciu();
+        permutacia.vytlacTestovanuPermutaciu();
 
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {

@@ -17,7 +17,7 @@ public class Permutacia {
     private StringBuilder upravenyText;
     @Getter
     private StringBuilder zt;
-    private Bigramy bigramy;
+    private Vlastnosti vlastnosti;
     @Setter
     private int dlzkaKluca;
     @Getter
@@ -25,9 +25,9 @@ public class Permutacia {
     private OdhadKluca odhadKluca;
     private ArrayList<String> topZlychBigramovOT;
 
-    public Permutacia(Bigramy bigramy,OdhadKluca odhadKluca,int dlzkaKluca) {
+    public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca, int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
-        this.bigramy=bigramy;
+        this.vlastnosti = vlastnosti;
         this.odhadKluca=odhadKluca;
         topZlych();
         hladajPermutaciu();
@@ -37,20 +37,20 @@ public class Permutacia {
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
-                for(int i=50;i<bigramy.getTopZlych().size();i++){
-                    topZlychBigramovOT.add(bigramy.getTopZlych().get(i));
+                for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
+                    topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
                 }
             }
             else{
-                topZlychBigramovOT=bigramy.getTopZlych();
+                topZlychBigramovOT= vlastnosti.getTopZlych();
             }
         }
         else{
-            topZlychBigramovOT=bigramy.getTopZlych();
+            topZlychBigramovOT= vlastnosti.getTopZlych();
         }
     }
     protected void hladajPermutaciu() {
-            ArrayList<Double[]> usporiadanePodlaOT = bigramy.usporiadajPodlaOT(odhadKluca.getStatistikaKombinacii());
+            ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(odhadKluca.getStatistikaKombinacii());
             najdiCestu(odhadKluca.getKombinacie(),usporiadanePodlaOT);
 
     }

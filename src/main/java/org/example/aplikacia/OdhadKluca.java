@@ -3,10 +3,7 @@ package org.example.aplikacia;
 import lombok.Getter;
 import org.example.sifry.TabulkovaTranspozicia;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.SUBOR;
@@ -15,7 +12,7 @@ public class OdhadKluca {
     @Getter
     private int dlzkaKluca;
     private Map<Integer,Integer> odhadovaneDlzky;
-    private Bigramy bigramy;
+    private Vlastnosti vlastnosti;
     ArrayList<String> topZlychBigramovOT;
     @Getter
     private ArrayList<Integer[]> kombinacie;
@@ -23,9 +20,8 @@ public class OdhadKluca {
     private ArrayList<List<Map.Entry<String, Double>>> statistikaKombinacii;
     int index;
 
-    public OdhadKluca(Bigramy bigramy,TabulkovaTranspozicia transpozicia){
-        this.bigramy=bigramy;
-
+    public OdhadKluca(Vlastnosti vlastnosti, TabulkovaTranspozicia transpozicia){
+        this.vlastnosti = vlastnosti;
         topZlych();
         najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
 
@@ -34,16 +30,16 @@ public class OdhadKluca {
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
-                for(int i=50;i<bigramy.getTopZlych().size();i++){
-                    topZlychBigramovOT.add(bigramy.getTopZlych().get(i));
+                for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
+                    topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
                 }
             }
             else{
-                topZlychBigramovOT=bigramy.getTopZlych();
+                topZlychBigramovOT= vlastnosti.getTopZlych();
             }
         }
         else{
-            topZlychBigramovOT=bigramy.getTopZlych();
+            topZlychBigramovOT= vlastnosti.getTopZlych();
         }
     }
     private void hodnotyDlzkyKluca(ArrayList<StringBuilder> bloky,ArrayList<ArrayList<List<Map.Entry<String,Double>>>> bigramyMoznychKlucov,ArrayList<ArrayList<Integer[]>> mozneKombinacieKlucov) {
@@ -69,22 +65,22 @@ public class OdhadKluca {
         for(int prvy=0;prvy<bloky.size();prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 if (prvy != druhy) {
-                    StringBuilder text = bigramy.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = bigramy.ngramy(text, 2, false);
+                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
+                    bigramyZT = vlastnosti.ngramy(text, 2, false);
                     int pocitadloKluca=0;
                     int pocitadloPermutacie=0;
 
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(bigram<velkostPorovnaniaPreKluc){
-                            if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                                if(bigramy.getTopZlych().contains(bigramyZT.get(bigram).getKey()) &&
+                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
+                                if(vlastnosti.getTopZlych().contains(bigramyZT.get(bigram).getKey()) &&
                                         bigramyZT.get(bigram).getValue()>0.5){
 
                                     pocitadloKluca+=1;
                                 }
                             }
                         }
-                        if(bigramy.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
+                        if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
                                 pocitadloPermutacie+=1;
                             }
@@ -139,17 +135,34 @@ public class OdhadKluca {
 
         return maxIndex;
     }
+    public double dKluca(ArrayList<StringBuilder> bloky){
+
+        ArrayList<StringBuilder> text=citajStlpce(bloky);
+
+        ArrayList<Double> percentaSamohlaskySpoluhlasky= new ArrayList<>();
+
+        for(int i=0;i<text.size();i++){
+            percentaSamohlaskySpoluhlasky.add(vlastnosti.samohlaskySpoluhlasky(text.get(i).toString()));
+        }
+        double suma= percentaSamohlaskySpoluhlasky.stream().mapToDouble(a->a).sum();
+        double pocet=percentaSamohlaskySpoluhlasky.size();
+
+        return suma/pocet;
+
+        //spravit frekvenciu spoluhlasok samohlasok a porovnat to pre jednotlive dlzky klucov
+    }
     protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
         odhadovaneDlzky=new TreeMap<>();
         ArrayList<ArrayList<Integer[]>> mozneKombinacieKlucov=new ArrayList<>();
         ArrayList<ArrayList<List<Map.Entry<String,Double>>>> bigramyMoznychKlucov=new ArrayList<>();
         ArrayList<StringBuilder> riadky;
-        ArrayList<List<Map.Entry<String, Double>>> statistika = new ArrayList<>();
+
+        ArrayList<Double> odchylky=new ArrayList<>();
         int n = zt.length();
         ArrayList<ArrayList<StringBuilder>> blokyDlzkyN=new ArrayList<>();
         for (int i = 0; i <= 30; i++) {
             if (i < 10) {
-                statistika.add(new ArrayList<>());
+                odchylky.add(null);
                 blokyDlzkyN.add(new ArrayList<>());
                 continue;
             }
@@ -176,14 +189,49 @@ public class OdhadKluca {
                     riadok.append(zt.charAt(j));
                 }
             }
+
             hodnotyDlzkyKluca(riadky,bigramyMoznychKlucov,mozneKombinacieKlucov);
+            double odchylka=dKluca(riadky);
+            odchylky.add(odchylka);
             blokyDlzkyN.add(riadky);
         }
         dlzkaKluca= spravnyKluc();
+        int o=vratKluc(odchylky);
+        System.out.println(o);
         statistikaKombinacii=bigramyMoznychKlucov.get(index);
         kombinacie=mozneKombinacieKlucov.get(index);
         transpozicia.setZtVBlokoch(blokyDlzkyN.get(dlzkaKluca));
     }
 
+    private ArrayList<StringBuilder> citajStlpce(ArrayList<StringBuilder> bloky){
+        ArrayList<StringBuilder> riadky=new ArrayList<>();
+
+        for(int i=0;i< bloky.get(0).length();i++){
+            StringBuilder text=new StringBuilder();
+            for(int j=0;j<bloky.size();j++){
+                if(bloky.get(j).length()>i){
+                    text.append(bloky.get(j).charAt(i));
+                }
+            }
+            riadky.add(text);
+
+        }
+        return riadky;
+    }
+
+    private int vratKluc(ArrayList<Double> samohlaskySpoluhlaskyStatistika){
+        ArrayList<Double> odchylky=new ArrayList<>();
+        double otStatistika= vlastnosti.getStatistikaSamohlasokSpoluhlasok();
+        for(var hodnota:samohlaskySpoluhlaskyStatistika){
+            double odchylka=99;
+            if(hodnota!=null){
+                odchylka=Math.abs(otStatistika-hodnota);
+            }
+            odchylky.add(odchylka);
+        }
+        int index=odchylky.indexOf(Collections.min(odchylky));
+
+        return index;
+    }
 
 }

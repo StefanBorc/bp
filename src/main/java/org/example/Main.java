@@ -7,19 +7,15 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 200;
+    public static int POCIATOCNA_VELKOST = 600;
     public static String SUBOR="CZ2.txt";
 
     public static void main(String[] args) throws IOException {
 
         Text text=new Text(SUBOR);
-        for(int i=POCIATOCNA_VELKOST; i<800;i+=100){
-            System.out.println(i);
-            POCIATOCNA_VELKOST+=100;
-            Priebeh priebeh=new Priebeh(text.getTextNaSifrovanie(),text.getUpravenyText());
-            priebeh.otestujRozneKluce(text.getKluce(),50,20);
-        }
 
+        Priebeh priebeh=new Priebeh(text.getTextNaSifrovanie(),text.getUpravenyText());
+       // priebeh.otestujRozneKluce(text.getKluce(),50,20);
 
 
     }
