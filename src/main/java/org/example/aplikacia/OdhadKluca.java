@@ -218,7 +218,6 @@ public class OdhadKluca {
         }
         return riadky;
     }
-
     private int vratKluc(ArrayList<Double> samohlaskySpoluhlaskyStatistika){
         ArrayList<Double> odchylky=new ArrayList<>();
         double otStatistika= vlastnosti.getStatistikaSamohlasokSpoluhlasok();
