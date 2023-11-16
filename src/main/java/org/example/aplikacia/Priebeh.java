@@ -2,8 +2,10 @@ package org.example.aplikacia;
 
 import org.example.sifry.TabulkovaTranspozicia;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.vygenerujKluc;
@@ -16,6 +18,7 @@ public class Priebeh {
 
     public Priebeh(StringBuilder otNasifrovanie,StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
+
         System.out.println(kluc.length());
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otNasifrovanie);

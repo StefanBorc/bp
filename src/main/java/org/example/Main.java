@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 600;
-    public static String SUBOR="CZ2.txt";
+    public static int POCIATOCNA_VELKOST = 100;
+    public static String SUBOR="EN1.txt";
 
     public static void main(String[] args) throws IOException {
 

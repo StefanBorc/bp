@@ -230,8 +230,20 @@ public class OdhadKluca {
             odchylky.add(odchylka);
         }
         int index=odchylky.indexOf(Collections.min(odchylky));
-
+        odchylky.set(index,999.0);
+        if(jeKlucDvojnasobok(index/2,odchylky)){
+            index/=2;
+        }
         return index;
     }
+
+    private boolean jeKlucDvojnasobok(int n,ArrayList<Double> odchylky){
+        int index = odchylky.indexOf(Collections.min(odchylky));
+        if(index==n){
+            return true;
+        }
+        return false;
+    }
+
 
 }
