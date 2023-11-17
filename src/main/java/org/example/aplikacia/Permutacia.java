@@ -37,17 +37,6 @@ public class Permutacia {
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
         ArrayList<List<Map.Entry<String,Double>>> bigramyMoznejPermutacieDlzkyKlucaN=new ArrayList<>();
 
-        if(SUBOR.equals("EN2.txt")){
-            if(POCIATOCNA_VELKOST>500){
-                vaha=2;
-            }
-            else if(POCIATOCNA_VELKOST>900){
-                vaha=4;
-            }
-            else{
-                vaha=2;
-            }
-        }
         for(int prvy=0;prvy<bloky.size();prvy++) {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 if (prvy != druhy) {
@@ -94,7 +83,7 @@ public class Permutacia {
     }
     private void topZlych(){
         topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
+        if(SUBOR.equals("EN1.txt")){
             if(POCIATOCNA_VELKOST>500){
                 for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
                     topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));

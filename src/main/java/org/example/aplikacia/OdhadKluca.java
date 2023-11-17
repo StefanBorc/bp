@@ -27,7 +27,7 @@ public class OdhadKluca {
     }
     private void topZlych(){
         topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
+        if(SUBOR.equals("EN1.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
                 for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
                     topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
@@ -55,8 +55,6 @@ public class OdhadKluca {
         double pocet=percentaSamohlaskySpoluhlasky.size();
 
         return suma/pocet;
-
-        //spravit frekvenciu spoluhlasok samohlasok a porovnat to pre jednotlive dlzky klucov
     }
     protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
 
@@ -124,7 +122,7 @@ public class OdhadKluca {
         ArrayList<Double> odchylky=new ArrayList<>();
         double otStatistika= vlastnosti.getStatistikaSamohlasokSpoluhlasok();
         for(var hodnota:samohlaskySpoluhlaskyStatistika){
-            double odchylka=99;
+            double odchylka=999.0;
             if(hodnota!=null){
                 odchylka=Math.abs(otStatistika-hodnota);
             }

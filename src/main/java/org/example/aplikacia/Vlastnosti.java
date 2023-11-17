@@ -80,8 +80,9 @@ public class Vlastnosti {
     }
     private void urobTopBigramov(){
         int n;
-        if((SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt")|| SUBOR.equals("DE.txt"))){
-            n=400;
+
+        if(SUBOR.equals("DE.txt")){
+            n=450;
         }
         else {
             n=350;
