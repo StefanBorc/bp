@@ -15,9 +15,8 @@ public class OdhadKluca {
     private Vlastnosti vlastnosti;
     ArrayList<String> topZlychBigramovOT;
     @Getter
-    private ArrayList<Integer[]> kombinacie;
-    @Getter
-    private ArrayList<List<Map.Entry<String, Double>>> statistikaKombinacii;
+    ArrayList<StringBuilder> blokyDlzkyKluca;
+
     int index;
 
     public OdhadKluca(Vlastnosti vlastnosti, TabulkovaTranspozicia transpozicia){
@@ -42,70 +41,7 @@ public class OdhadKluca {
             topZlychBigramovOT= vlastnosti.getTopZlych();
         }
     }
-    private void permutacia(ArrayList<StringBuilder> bloky) {
-        List<Map.Entry<String, Double>> bigramyZT;
-        int pocet=0;
-        int vaha=1;
-        int velkostPorovnaniaPrePermutaciu=30;
-        int velkostPorovnaniaPreKluc=20;
-        ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
-        ArrayList<List<Map.Entry<String,Double>>> bigramyMoznejPermutacieDlzkyKlucaN=new ArrayList<>();
 
-        if(SUBOR.equals("EN2.txt")){
-            if(POCIATOCNA_VELKOST>500){
-                vaha=2;
-            }
-            else if(POCIATOCNA_VELKOST>900){
-                vaha=4;
-            }
-            else{
-                vaha=2;
-            }
-        }
-        for(int prvy=0;prvy<bloky.size();prvy++) {
-            for (int druhy = 0; druhy < bloky.size(); druhy++) {
-                if (prvy != druhy) {
-                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = vlastnosti.ngramy(text, 2, false);
-                    int pocitadloKluca=0;
-                    int pocitadloPermutacie=0;
-
-                    for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
-                        if(bigram<velkostPorovnaniaPreKluc){
-                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                                if(vlastnosti.getTopZlych().contains(bigramyZT.get(bigram).getKey()) &&
-                                        bigramyZT.get(bigram).getValue()>0.5){
-
-                                    pocitadloKluca+=1;
-                                }
-                            }
-                        }
-                        if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
-                                pocitadloPermutacie+=1;
-                            }
-                        }
-                        if(pocitadloKluca>vaha || pocitadloKluca>1){
-                            break;
-                        }
-                    }
-                    if(pocitadloKluca<1 ){
-                        pocet++;
-                    }
-                    if(pocitadloPermutacie<vaha){
-                        mozneKombinacie.add(new Integer[]{prvy,druhy});
-                        bigramyMoznejPermutacieDlzkyKlucaN.add(bigramyZT);
-                    }
-
-                }
-            }
-        }
-        if(pocet>0) {
-            kombinacie=mozneKombinacie;
-            statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
-            int a=0;
-        }
-    }
     public double dKluca(ArrayList<StringBuilder> bloky){
 
         ArrayList<StringBuilder> text=citajStlpce(bloky);
@@ -165,10 +101,8 @@ public class OdhadKluca {
             blokyDlzkyN.add(riadky);
         }
         dlzkaKluca= vratKluc(odchylky);
-
-        permutacia(blokyDlzkyN.get(dlzkaKluca));
-
         transpozicia.setZtVBlokoch(blokyDlzkyN.get(dlzkaKluca));
+        blokyDlzkyKluca=transpozicia.getZtVBlokoch();
     }
 
     private ArrayList<StringBuilder> citajStlpce(ArrayList<StringBuilder> bloky){

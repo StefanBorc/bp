@@ -3,10 +3,7 @@ package org.example.aplikacia;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.SUBOR;
@@ -24,6 +21,8 @@ public class Permutacia {
     private int[] permutacia;
     private OdhadKluca odhadKluca;
     private ArrayList<String> topZlychBigramovOT;
+    private ArrayList<Integer[]> kombinacie;
+    private ArrayList<List<Map.Entry<String, Double>>> statistikaKombinacii;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca, int dlzkaKluca) {
         this.dlzkaKluca= dlzkaKluca;
@@ -32,8 +31,71 @@ public class Permutacia {
         topZlych();
         hladajPermutaciu();
     }
-    private void topZlych(){
+    private void permutacia(ArrayList<StringBuilder> bloky) {
+        List<Map.Entry<String, Double>> bigramyZT;
+        int pocet=0;
+        int vaha=1;
+        int velkostPorovnaniaPrePermutaciu=30;
+        int velkostPorovnaniaPreKluc=20;
+        ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
+        ArrayList<List<Map.Entry<String,Double>>> bigramyMoznejPermutacieDlzkyKlucaN=new ArrayList<>();
 
+        if(SUBOR.equals("EN2.txt")){
+            if(POCIATOCNA_VELKOST>500){
+                vaha=2;
+            }
+            else if(POCIATOCNA_VELKOST>900){
+                vaha=4;
+            }
+            else{
+                vaha=2;
+            }
+        }
+        for(int prvy=0;prvy<bloky.size();prvy++) {
+            for (int druhy = 0; druhy < bloky.size(); druhy++) {
+                if (prvy != druhy) {
+                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
+                    bigramyZT = vlastnosti.ngramy(text, 2, false);
+                    int pocitadloKluca=0;
+                    int pocitadloPermutacie=0;
+
+                    for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
+                        if(bigram<velkostPorovnaniaPreKluc){
+                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
+                                if(vlastnosti.getTopZlych().contains(bigramyZT.get(bigram).getKey()) &&
+                                        bigramyZT.get(bigram).getValue()>0.5){
+
+                                    pocitadloKluca+=1;
+                                }
+                            }
+                        }
+                        if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
+                            if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
+                                pocitadloPermutacie+=1;
+                            }
+                        }
+                        if(pocitadloKluca>vaha || pocitadloKluca>1){
+                            break;
+                        }
+                    }
+                    if(pocitadloKluca<1 ){
+                        pocet++;
+                    }
+                    if(pocitadloPermutacie<vaha){
+                        mozneKombinacie.add(new Integer[]{prvy,druhy});
+                        bigramyMoznejPermutacieDlzkyKlucaN.add(bigramyZT);
+                    }
+
+                }
+            }
+        }
+        if(pocet>0) {
+            kombinacie=mozneKombinacie;
+            statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
+            int a=0;
+        }
+    }
+    private void topZlych(){
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN1.txt") || SUBOR.equals("EN2.txt") || SUBOR.equals("DE.txt")){
             if(POCIATOCNA_VELKOST>500){
@@ -50,8 +112,9 @@ public class Permutacia {
         }
     }
     protected void hladajPermutaciu() {
-            ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(odhadKluca.getStatistikaKombinacii());
-            najdiCestu(odhadKluca.getKombinacie(),usporiadanePodlaOT);
+            permutacia(odhadKluca.getBlokyDlzkyKluca());
+            ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(statistikaKombinacii);
+            najdiCestu(kombinacie,usporiadanePodlaOT);
 
     }
     private boolean suRovnake(Integer[] kombinacia1,Integer[] kombinacia2){
