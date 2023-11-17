@@ -10,24 +10,21 @@ import static org.example.Main.SUBOR;
 
 
 public class Permutacia {
-    @Getter
-    private StringBuilder upravenyText;
-    @Getter
-    private StringBuilder zt;
     private Vlastnosti vlastnosti;
     @Setter
     private int dlzkaKluca;
     @Getter
     private int[] permutacia;
-    private OdhadKluca odhadKluca;
+    @Setter
+    private ArrayList<StringBuilder> blokyZt;
     private ArrayList<String> topZlychBigramovOT;
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> statistikaKombinacii;
 
-    public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca, int dlzkaKluca) {
-        this.dlzkaKluca= dlzkaKluca;
+    public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
+        this.dlzkaKluca= odhadKluca.getDlzkaKluca();
+        this.blokyZt=odhadKluca.blokyDlzkyKluca;
         this.vlastnosti = vlastnosti;
-        this.odhadKluca=odhadKluca;
         topZlych();
         hladajPermutaciu();
     }
@@ -112,7 +109,7 @@ public class Permutacia {
         }
     }
     protected void hladajPermutaciu() {
-            permutacia(odhadKluca.getBlokyDlzkyKluca());
+            permutacia(blokyZt);
             ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(statistikaKombinacii);
             najdiCestu(kombinacie,usporiadanePodlaOT);
 

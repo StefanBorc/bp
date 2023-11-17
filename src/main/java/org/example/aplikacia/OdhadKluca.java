@@ -140,10 +140,7 @@ public class OdhadKluca {
 
     private boolean jeKlucDvojnasobok(int n,ArrayList<Double> odchylky){
         int index = odchylky.indexOf(Collections.min(odchylky));
-        if(index==n){
-            return true;
-        }
-        return false;
+        return index == n;
     }
 
 

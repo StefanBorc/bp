@@ -23,7 +23,7 @@ public class Priebeh {
         spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otNasifrovanie);
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti,transpozicia);
-        permutacia=new Permutacia(vlastnosti,odhadKluca,odhadKluca.getDlzkaKluca());
+        permutacia=new Permutacia(vlastnosti,odhadKluca);
         //transpozicia.vytlacPermutaciu();
         //permutacia.vytlacTestovanuPermutaciu();
 
@@ -52,42 +52,33 @@ public class Priebeh {
         }
         return vygenerovaneKluce;
     }
-    public void otestujRozneKluce(ArrayList<String> kluce,int poKolkychN,int pocetBehov){
+    public void otestujRozneKluce(ArrayList<String> kluce){
         int index=0;
-        double p=0;
-        double k=0;
-        for(int j=0;j<pocetBehov;j++){
-            double pocetNeuspesnychPermutacii=0;
-            double pocetNeuhadnutychKlucov=0;
-            for(int i=0;i<poKolkychN;i++){
-                String kluc=kluce.get(index);
-                transpozicia.setKluc(kluc);
-                odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-                index++;
-                if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
-                    pocetNeuhadnutychKlucov++;
-                    pocetNeuspesnychPermutacii++;
-                    continue;
-                }
-                permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
-                permutacia.hladajPermutaciu();
+        double pocetNeuspesnychPermutacii=0;
+        double pocetNeuhadnutychKlucov=0;
 
-                if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
-                    pocetNeuspesnychPermutacii++;
-                }
+        for(int i=0;i<kluce.size();i++){
+            String kluc=kluce.get(index);
+            transpozicia.setKluc(kluc);
+            odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+            index++;
+            if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
+                pocetNeuhadnutychKlucov++;
+                pocetNeuspesnychPermutacii++;
+                continue;
             }
-            double uspesnostKlucov=((poKolkychN-pocetNeuhadnutychKlucov)/(poKolkychN))*100;
-            double uspesnostPermutacii=((poKolkychN-pocetNeuspesnychPermutacii)/(poKolkychN))*100;
-            p+=uspesnostPermutacii;
-            k+=uspesnostKlucov;
-           // System.out.println((j+1)+".");
-            //System.out.println(uspesnostKlucov);
-          //  System.out.println(uspesnostPermutacii);
+            permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+            permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
+            permutacia.hladajPermutaciu();
+
+            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+                pocetNeuspesnychPermutacii++;
+            }
         }
-        p=p/pocetBehov;
-        k=k/pocetBehov;
-        System.out.println(k);
-        System.out.println(p);
+        double uspesnostKlucov=((kluce.size()-pocetNeuhadnutychKlucov)/kluce.size())*100;
+        double uspesnostPermutacii=((kluce.size()-pocetNeuspesnychPermutacii)/kluce.size())*100;
+        System.out.print(POCIATOCNA_VELKOST+" "+uspesnostKlucov+" "+uspesnostPermutacii);
+        System.out.println();
 
 
     }

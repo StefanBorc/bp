@@ -7,17 +7,16 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 200;
+    public static int POCIATOCNA_VELKOST = 100;
     public static String SUBOR="DE.txt";
 
     public static void main(String[] args) throws IOException {
         long start =System.currentTimeMillis();
         Text text=new Text(SUBOR);
         for(int i=POCIATOCNA_VELKOST;i<800;i+=100){
-            System.out.println(i);
             POCIATOCNA_VELKOST=i;
             Priebeh priebeh=new Priebeh(text.getTextNaSifrovanie(),text.getUpravenyText());
-            priebeh.otestujRozneKluce(text.getKluce(),200,5);
+            priebeh.otestujRozneKluce(text.getKluce());
         }
         long end=System.currentTimeMillis();
         System.out.println((end-start)/(1000*60));
