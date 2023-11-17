@@ -11,7 +11,7 @@ import static org.example.Main.SUBOR;
 public class OdhadKluca {
     @Getter
     private int dlzkaKluca;
-    private Map<Integer,Integer> odhadovaneDlzky;
+
     private Vlastnosti vlastnosti;
     ArrayList<String> topZlychBigramovOT;
     @Getter
@@ -42,7 +42,7 @@ public class OdhadKluca {
             topZlychBigramovOT= vlastnosti.getTopZlych();
         }
     }
-    private void hodnotyDlzkyKluca(ArrayList<StringBuilder> bloky,ArrayList<ArrayList<List<Map.Entry<String,Double>>>> bigramyMoznychKlucov,ArrayList<ArrayList<Integer[]>> mozneKombinacieKlucov) {
+    private void permutacia(ArrayList<StringBuilder> bloky) {
         List<Map.Entry<String, Double>> bigramyZT;
         int pocet=0;
         int vaha=1;
@@ -101,39 +101,10 @@ public class OdhadKluca {
             }
         }
         if(pocet>0) {
-            odhadovaneDlzky.put(bloky.size(),pocet);
-            mozneKombinacieKlucov.add(mozneKombinacie);
-            bigramyMoznychKlucov.add(bigramyMoznejPermutacieDlzkyKlucaN);
+            kombinacie=mozneKombinacie;
+            statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
+            int a=0;
         }
-    }
-    private int spravnyKluc(){
-        int max=0;
-        int maxIndex=0;
-        int poziciaKluca=0;
-        index=0;
-        for(var odhadovanaDlzka:odhadovaneDlzky.entrySet()){
-            if(odhadovanaDlzka.getValue()>max){
-                maxIndex=odhadovanaDlzka.getKey();
-                max=odhadovanaDlzka.getValue();
-            }
-        }
-        if(maxIndex>20 && maxIndex%2==0){
-            for(var odhad:odhadovaneDlzky.entrySet()){
-                if(maxIndex/2==odhad.getKey() && odhad.getValue()>5){
-                    maxIndex/=2;
-                    break;
-                }
-            }
-        }
-        for(var odhadovanaDlzka:odhadovaneDlzky.entrySet()){
-            if(odhadovanaDlzka.getKey().equals(maxIndex)){
-                index=poziciaKluca;
-                break;
-            }
-            poziciaKluca++;
-        }
-
-        return maxIndex;
     }
     public double dKluca(ArrayList<StringBuilder> bloky){
 
@@ -152,9 +123,8 @@ public class OdhadKluca {
         //spravit frekvenciu spoluhlasok samohlasok a porovnat to pre jednotlive dlzky klucov
     }
     protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
-        odhadovaneDlzky=new TreeMap<>();
-        ArrayList<ArrayList<Integer[]>> mozneKombinacieKlucov=new ArrayList<>();
-        ArrayList<ArrayList<List<Map.Entry<String,Double>>>> bigramyMoznychKlucov=new ArrayList<>();
+
+
         ArrayList<StringBuilder> riadky;
 
         ArrayList<Double> odchylky=new ArrayList<>();
@@ -190,16 +160,14 @@ public class OdhadKluca {
                 }
             }
 
-            hodnotyDlzkyKluca(riadky,bigramyMoznychKlucov,mozneKombinacieKlucov);
             double odchylka=dKluca(riadky);
             odchylky.add(odchylka);
             blokyDlzkyN.add(riadky);
         }
-        dlzkaKluca= spravnyKluc();
-        int o=vratKluc(odchylky);
-        System.out.println(o);
-        statistikaKombinacii=bigramyMoznychKlucov.get(index);
-        kombinacie=mozneKombinacieKlucov.get(index);
+        dlzkaKluca= vratKluc(odchylky);
+
+        permutacia(blokyDlzkyN.get(dlzkaKluca));
+
         transpozicia.setZtVBlokoch(blokyDlzkyN.get(dlzkaKluca));
     }
 

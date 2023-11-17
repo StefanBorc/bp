@@ -99,7 +99,6 @@ public class Vlastnosti {
         Map<String,Integer> indexyMapy=vratIndexyUsporiadanejMapy(statistikaBigramovUsporiadana);
         ArrayList<Double[]> listyPercient=new ArrayList<>(mapy.size());
         for(var mapa : mapy){
-
             Double[] usporiadanePercenta=new Double[statistikaBigramov.size()];
             Arrays.fill(usporiadanePercenta, 0.0);
             for(var bigram:mapa){
