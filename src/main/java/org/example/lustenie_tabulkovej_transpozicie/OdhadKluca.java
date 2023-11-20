@@ -1,45 +1,21 @@
-package org.example.aplikacia;
+package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
 import org.example.sifry.TabulkovaTranspozicia;
 
-import java.util.*;
-
-import static org.example.Main.POCIATOCNA_VELKOST;
-import static org.example.Main.SUBOR;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class OdhadKluca {
     @Getter
     private int dlzkaKluca;
-
     private Vlastnosti vlastnosti;
-    ArrayList<String> topZlychBigramovOT;
+
     @Getter
     ArrayList<StringBuilder> blokyDlzkyKluca;
-
-    int index;
-
     public OdhadKluca(Vlastnosti vlastnosti, TabulkovaTranspozicia transpozicia){
         this.vlastnosti = vlastnosti;
-        topZlych();
         najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-
-    }
-    private void topZlych(){
-        topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN1.txt") || SUBOR.equals("DE.txt")){
-            if(POCIATOCNA_VELKOST>500){
-                for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
-                    topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
-                }
-            }
-            else{
-                topZlychBigramovOT= vlastnosti.getTopZlych();
-            }
-        }
-        else{
-            topZlychBigramovOT= vlastnosti.getTopZlych();
-        }
     }
 
     public double dKluca(ArrayList<StringBuilder> bloky){

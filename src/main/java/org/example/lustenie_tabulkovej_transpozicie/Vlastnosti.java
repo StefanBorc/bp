@@ -1,4 +1,4 @@
-package org.example.aplikacia;
+package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
 
@@ -81,7 +81,7 @@ public class Vlastnosti {
     private void urobTopBigramov(){
         int n;
 
-        if(SUBOR.equals("DE.txt")){
+        if(SUBOR.equals("DE")){
             n=450;
         }
         else {

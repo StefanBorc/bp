@@ -3,6 +3,7 @@ package org.example.sifry;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.Sifra;
+import org.example.lustenie_tabulkovej_transpozicie.Permutacia;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,13 +15,19 @@ public class TabulkovaTranspozicia extends Sifra {
     private String kluc;
     @Getter
     private StringBuilder zasifrovanyText;
+    @Getter
     private int pocetRiadkov;
     @Setter@Getter
     private ArrayList<StringBuilder> ztVBlokoch;
     @Setter
     private StringBuilder textNaSifrovanie;
 
-    public TabulkovaTranspozicia(StringBuilder otUpraveny,String kluc) {
+    public void setPocetRiadkov(int pocetRiadkov, Permutacia permutacia) {
+        this.pocetRiadkov = pocetRiadkov;
+        permutacia.topZlych(pocetRiadkov);
+    }
+
+    public TabulkovaTranspozicia(StringBuilder otUpraveny, String kluc) {
         ztVBlokoch=new ArrayList<>();
         textNaSifrovanie=otUpraveny;
         pocetRiadkov = 0;

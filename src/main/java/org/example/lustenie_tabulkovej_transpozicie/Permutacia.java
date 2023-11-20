@@ -1,13 +1,11 @@
-package org.example.aplikacia;
+package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
 
-import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.SUBOR;
-
 
 public class Permutacia {
     private Vlastnosti vlastnosti;
@@ -25,7 +23,7 @@ public class Permutacia {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
         this.blokyZt=odhadKluca.blokyDlzkyKluca;
         this.vlastnosti = vlastnosti;
-        topZlych();
+        topZlych(100);
         hladajPermutaciu();
     }
     private void permutacia(ArrayList<StringBuilder> bloky) {
@@ -81,10 +79,10 @@ public class Permutacia {
             int a=0;
         }
     }
-    private void topZlych(){
+    public void topZlych(int pocetRiadkov){
         topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN1.txt")){
-            if(POCIATOCNA_VELKOST>500){
+        if(SUBOR.equals("EN")){
+            if(pocetRiadkov>500){
                 for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
                     topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
                 }
@@ -148,7 +146,7 @@ public class Permutacia {
     private ArrayList<Integer[]> vyradNevhodneKombinacie(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
         for(int i=0;i<mozneKombinacie.size();i++){
             for(int j=0;j<mozneKombinacie.size();j++){
-                if(mozneKombinacie.get(i)!=mozneKombinacie.get(j)){
+                if((i<mozneKombinacie.size() && j<mozneKombinacie.size() && mozneKombinacie.get(i)!=mozneKombinacie.get(j))){
                     if(suRovnake(mozneKombinacie.get(i),mozneKombinacie.get(j))){
                         spravPodrobnuStatistikuRovnakych(mozneKombinacie,usporiadanePodlaOT,new int[]{mozneKombinacie.indexOf(mozneKombinacie.get(i)),mozneKombinacie.indexOf(mozneKombinacie.get(j))});
                     }
