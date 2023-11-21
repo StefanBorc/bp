@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class JednoduchaSubstitucia extends Sifra {
     private String kluc;
+
     private char zaciatokSifrovania;
     private ArrayList<Character> zasifrovanaAbeceda;
     @Getter
@@ -17,6 +18,11 @@ public class JednoduchaSubstitucia extends Sifra {
     private StringBuilder textOt;
     @Setter
     private int pocetZnakov;
+
+    public void setKluc(String kluc) {
+        this.kluc = kluc;
+        zasifrujText();
+    }
     public JednoduchaSubstitucia(StringBuilder textOt,char c, String kluc,int pocetZnakov) {
         this.zaciatokSifrovania = Character.toUpperCase(c);
         this.textOt=textOt;

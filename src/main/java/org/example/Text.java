@@ -72,9 +72,16 @@ public class Text {
             }
             textyNaSifrovanie.add(new StringBuilder(t));
         }
-
          br.close();
-
-
+    }
+    public ArrayList<String> nacitajKluce(String dir) throws IOException {
+        ArrayList<String> kluce=new ArrayList<>();
+        File k=new File(dir+".txt");
+        BufferedReader br =new BufferedReader(new FileReader(k));
+        String st;
+        while ((st = br.readLine()) != null) {
+            kluce.add(st);
+        }
+        return kluce;
     }
 }

@@ -31,7 +31,7 @@ public class Permutacia {
         int pocet=0;
         int vaha=1;
         int velkostPorovnaniaPrePermutaciu=30;
-        int velkostPorovnaniaPreKluc=20;
+
         ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
         ArrayList<List<Map.Entry<String,Double>>> bigramyMoznejPermutacieDlzkyKlucaN=new ArrayList<>();
 

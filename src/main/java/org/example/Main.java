@@ -1,9 +1,10 @@
 package org.example;
 
-import org.example.lustenie_tabulkovej_transpozicie.LustenieTabulkovejTranspozicie;
+import org.example.lustenie_jednoduchej_substitucie.LustenieJednoduchejSubstitucie;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -16,12 +17,14 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Text text = new Text(SUBOR);
 
+        ArrayList<String> kluce=text.nacitajKluce("KLUCESUB");
+        /*
         System.out.println("CZ");
         LustenieTabulkovejTranspozicie priebeh = new LustenieTabulkovejTranspozicie(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
-
-        //Priebeh priebeh1=new Priebeh(text.getUpravenyText());
-
+        */
+        LustenieJednoduchejSubstitucie priebeh1=new LustenieJednoduchejSubstitucie(text.getUpravenyText(),text.getTextyNaSifrovanie().get(0));
+        priebeh1.otestujKluce(kluce);
     }
 
     public static String vygenerujKluc(int min, int max){
@@ -36,12 +39,12 @@ public class Main {
         }
         return s.toString();
     }
-    private static void vygenerujKluce(int n) throws IOException {
-        FileWriter wr = new FileWriter("KLUCE.txt");
+    private static void vygenerujKluce(int n,String dir) throws IOException {
+        FileWriter wr = new FileWriter(dir+".txt");
         Map<String, Integer> kluce = new HashMap<>();
         Random r = new Random();
-        int minI = 10;
-        int maxI = 30;
+        int minI = 5;
+        int maxI = 25;
         int minC = 'a';
         int maxC = 'z';
         while (kluce.size() != n) {

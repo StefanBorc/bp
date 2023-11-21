@@ -2,6 +2,7 @@ package org.example.lustenie_jednoduchej_substitucie;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +43,11 @@ public class Vlastnosti {
         return usporiadanaMapa;
 
     }
-    public void vytlacAbecedu(){
+    public ArrayList<Character> abeceda(){
+        ArrayList<Character> abeceda=new ArrayList<>();
         for(var c:frekvenciaOtUsporiadana){
-            System.out.print(c.getKey()+" ");
+            abeceda.add(c.getKey());
         }
+        return abeceda;
     }
 }

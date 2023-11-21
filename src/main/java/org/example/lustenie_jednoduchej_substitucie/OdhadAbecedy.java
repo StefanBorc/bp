@@ -10,18 +10,20 @@ import java.util.Map;
 public class OdhadAbecedy {
     private JednoduchaSubstitucia substitucia;
     private Vlastnosti vlastnosti;
+    private ArrayList<Character> abecedaOt;
 
     public OdhadAbecedy(JednoduchaSubstitucia substitucia,Vlastnosti vlastnosti){
         this.substitucia=substitucia;
         this.vlastnosti=vlastnosti;
+        abecedaOt=vlastnosti.abeceda();
         substitucia.zasifrujText();
-        porovnatStatistiky();
+
     }
     private List<Map.Entry<Character,Double>> frekvencnaAnalyzaZt(){
         Map<Character,Double> znakyZt=vlastnosti.frekvenciaZnakov(substitucia.getZasifrovanyText());
         return vlastnosti.usporiadatMapu(znakyZt);
     }
-    private void porovnatStatistiky(){
+    protected int porovnatStatistiky(){
         List<Map.Entry<Character,Double>> ot=new ArrayList<>(vlastnosti.getFrekvenciaOtUsporiadana());
         List<Map.Entry<Character,Double>> zt=frekvencnaAnalyzaZt();
 
@@ -29,12 +31,7 @@ public class OdhadAbecedy {
         for(var c:zt){
             abeceda.add(vyhodnotPismenoZt(c.getValue(),ot));
         }
-        for(var c:abeceda){
-            System.out.print(c+" ");
-        }
-        System.out.println();
-        vlastnosti.vytlacAbecedu();
-
+        return pocetUhadnutychPismen(abeceda);
     }
     private Character vyhodnotPismenoZt(Double vyskytZnakuZt,List<Map.Entry<Character,Double>> otStatistika){
         ArrayList<Double> odchylky=new ArrayList<>();
@@ -46,5 +43,16 @@ public class OdhadAbecedy {
         pismeno=otStatistika.get(odchylky.indexOf(Collections.min(odchylky))).getKey();
         otStatistika.remove(odchylky.indexOf(Collections.min(odchylky)));
         return pismeno;
+    }
+    private int pocetUhadnutychPismen(ArrayList<Character> ztAbeceda){
+        int pocet=0;
+        int index=0;
+        for(var c:abecedaOt){
+            if(c.equals(ztAbeceda.get(index))){
+                pocet++;
+            }
+            index++;
+        }
+        return pocet;
     }
 }
