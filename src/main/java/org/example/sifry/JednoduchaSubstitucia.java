@@ -1,6 +1,7 @@
 package org.example.sifry;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.Sifra;
 
 import java.util.ArrayList;
@@ -12,12 +13,17 @@ public class JednoduchaSubstitucia extends Sifra {
     private ArrayList<Character> zasifrovanaAbeceda;
     @Getter
     private StringBuilder zasifrovanyText;
-
-    public JednoduchaSubstitucia(char c, String kluc) {
-        this.zaciatokSifrovania = c;
+    @Setter
+    private StringBuilder textOt;
+    @Setter
+    private int pocetZnakov;
+    public JednoduchaSubstitucia(StringBuilder textOt,char c, String kluc,int pocetZnakov) {
+        this.zaciatokSifrovania = Character.toUpperCase(c);
+        this.textOt=textOt;
         zasifrovanaAbeceda=new ArrayList<>();
         zasifrovanyText = new StringBuilder();
         this.kluc = kluc;
+        this.pocetZnakov=pocetZnakov;
     }
 
     private ArrayList<Character> zasifrujAbecedu() {
@@ -36,6 +42,7 @@ public class JednoduchaSubstitucia extends Sifra {
             if (zaciatokSifrovania == abeceda.get(i)) {
                 abeceda.set(i, kluc.charAt(0));
                 opakovanaAbeceda.add(kluc.charAt(0));
+
                 index = i;
                 pocitadlo++;
                 index++;
@@ -69,22 +76,29 @@ public class JednoduchaSubstitucia extends Sifra {
         }
         return abeceda;
     }
-
+    public void zasifrujText(){
+        sifrovanie(textOt,kluc);
+    }
     @Override
     public void sifrovanie(StringBuilder text,String kluc)  {
         this.kluc=kluc;
         zasifrovanaAbeceda=zasifrujAbecedu();
         ArrayList<Character> abeceda = new ArrayList<>();
+
         if(zasifrovanaAbeceda!=null){
             for (char c = 'A'; c <= 'Z'; c++) {
                 abeceda.add(c);
             }
+            int i=0;
             for(char c: text.toString().toCharArray()){
+                if(i==pocetZnakov){
+                    break;
+                }
                 if((int)c-65<26){
                     zasifrovanyText.append(zasifrovanaAbeceda.get((int)c-65));
+                    i++;
                 }
             }
         }
-
     }
 }
