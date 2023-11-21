@@ -2,14 +2,14 @@ package org.example.lustenie_jednoduchej_substitucie;
 
 import org.example.sifry.JednoduchaSubstitucia;
 
-public class Priebeh {
+public class LustenieJednoduchejSubstitucie {
     private Vlastnosti vlastnosti;
     private JednoduchaSubstitucia substitucia;
     private OdhadAbecedy odhadAbecedy;
 
-    public Priebeh(StringBuilder textOt) {
+    public LustenieJednoduchejSubstitucie(StringBuilder textOt) {
         vlastnosti = new Vlastnosti(textOt);
-        substitucia = new JednoduchaSubstitucia(textOt, 'c', "KOKOTINACELA", 1000);
+        substitucia = new JednoduchaSubstitucia(textOt, 'c', "KOKOTINACELA", 50000);
         odhadAbecedy = new OdhadAbecedy(substitucia, vlastnosti);
     }
 

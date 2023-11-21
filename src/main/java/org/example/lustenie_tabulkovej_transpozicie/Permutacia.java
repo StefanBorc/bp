@@ -40,30 +40,20 @@ public class Permutacia {
                 if (prvy != druhy) {
                     StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
                     bigramyZT = vlastnosti.ngramy(text, 2, false);
-                    int pocitadloKluca=0;
+
                     int pocitadloPermutacie=0;
 
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
-                        if(bigram<velkostPorovnaniaPreKluc){
-                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                                if(vlastnosti.getTopZlych().contains(bigramyZT.get(bigram).getKey()) &&
-                                        bigramyZT.get(bigram).getValue()>0.5){
 
-                                    pocitadloKluca+=1;
-                                }
-                            }
-                        }
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
                                 pocitadloPermutacie+=1;
                             }
                         }
-                        if(pocitadloKluca>vaha || pocitadloKluca>1){
+                        if(pocitadloPermutacie>vaha){
                             break;
                         }
-                    }
-                    if(pocitadloKluca<1 ){
-                        pocet++;
+
                     }
                     if(pocitadloPermutacie<vaha){
                         mozneKombinacie.add(new Integer[]{prvy,druhy});
@@ -73,11 +63,10 @@ public class Permutacia {
                 }
             }
         }
-        if(pocet>0) {
-            kombinacie=mozneKombinacie;
-            statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
-            int a=0;
-        }
+
+        kombinacie=mozneKombinacie;
+        statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
+
     }
     public void topZlych(int pocetRiadkov){
         topZlychBigramovOT=new ArrayList<>();

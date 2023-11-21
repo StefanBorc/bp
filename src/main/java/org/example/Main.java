@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.lustenie_jednoduchej_substitucie.Priebeh;
+import org.example.lustenie_tabulkovej_transpozicie.LustenieTabulkovejTranspozicie;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,12 +15,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Text text = new Text(SUBOR);
-        /*
+
         System.out.println("CZ");
-        Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(1), text.getUpravenyText());
-        priebeh.otestujRozneKluce(text.getKluce());
-        */
-        Priebeh priebeh=new Priebeh(text.getUpravenyText());
+        LustenieTabulkovejTranspozicie priebeh = new LustenieTabulkovejTranspozicie(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
+        priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
+
+        //Priebeh priebeh1=new Priebeh(text.getUpravenyText());
 
     }
 
