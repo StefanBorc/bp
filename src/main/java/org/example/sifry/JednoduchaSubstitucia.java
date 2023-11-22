@@ -42,37 +42,38 @@ public class JednoduchaSubstitucia extends Sifra {
         for (char c = 'A'; c <= 'Z'; c++) {
             abeceda.add(c);
         }
-        int pocitadlo = 0;
-        int index = 0;
-        for (int i = 0; opakovanaAbeceda.size() != 26; i++) {
-            if (zaciatokSifrovania == abeceda.get(i)) {
-                abeceda.set(i, kluc.charAt(0));
-                opakovanaAbeceda.add(kluc.charAt(0));
 
-                index = i;
+        int index = 0;
+        int pocitadlo=0;
+        for (int i = 0; opakovanaAbeceda.size() != 26; i++) {
+            if(i==kluc.length()){
+                break;
+            }
+            if(opakovanaAbeceda.contains(kluc.charAt(i))){
+                index++;
+                continue;
+            }
+
+            if (!opakovanaAbeceda.contains(kluc.charAt(index)) && index < abeceda.size()) {
+                abeceda.set(pocitadlo, kluc.charAt(index));
+                opakovanaAbeceda.add(kluc.charAt(index));
                 pocitadlo++;
                 index++;
             }
-            if (pocitadlo > 0) {
-                if (!opakovanaAbeceda.contains(kluc.charAt(pocitadlo)) && index < abeceda.size()) {
-                    abeceda.set(index, kluc.charAt(pocitadlo));
-                    opakovanaAbeceda.add(kluc.charAt(pocitadlo));
-                    index++;
-                }
-                pocitadlo++;
-                if (index > abeceda.size()) {
-                    index = 0;
-                }
+
+            if (index > abeceda.size()) {
+                index = 0;
             }
-            if (pocitadlo == kluc.length()) {
+
+            if (index == kluc.length()) {
                 for (int j = 0; j < abeceda.size() - opakovanaAbeceda.size(); j++) {
                     for (char c = 'A'; c <= 'Z'; c++) {
                         if (!opakovanaAbeceda.contains(c)) {
-                            abeceda.set(index, c);
+                            abeceda.set(pocitadlo, c);
                             opakovanaAbeceda.add(c);
-                            index++;
-                            if (index > abeceda.size() - 1) {
-                                index = 0;
+                            pocitadlo++;
+                            if (pocitadlo > abeceda.size() - 1) {
+                                pocitadlo = 0;
                             }
                         }
                     }
@@ -88,9 +89,10 @@ public class JednoduchaSubstitucia extends Sifra {
     @Override
     public void sifrovanie(StringBuilder text,String kluc)  {
         this.kluc=kluc;
-        zasifrovanaAbeceda=zasifrujAbecedu();
-        ArrayList<Character> abeceda = new ArrayList<>();
 
+        zasifrovanaAbeceda=new ArrayList<>(zasifrujAbecedu());
+        ArrayList<Character> abeceda = new ArrayList<>();
+        zasifrovanyText=new StringBuilder();
         if(zasifrovanaAbeceda!=null){
             for (char c = 'A'; c <= 'Z'; c++) {
                 abeceda.add(c);

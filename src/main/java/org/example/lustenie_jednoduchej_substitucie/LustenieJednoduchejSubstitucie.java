@@ -18,21 +18,34 @@ public class LustenieJednoduchejSubstitucie {
 
     public void otestujKluce(ArrayList<String> kluce){
         char c='a';
-        substitucia = new JednoduchaSubstitucia(korpus, Character.toUpperCase(c), kluce.get(0), 5000);
+
+        final double startTime = System.currentTimeMillis();
+
+        substitucia = new JednoduchaSubstitucia(korpus, Character.toUpperCase(c), kluce.get(0), 50000);
         odhadAbecedy = new OdhadAbecedy(substitucia, vlastnosti);
         ArrayList<Integer> uspesnost=new ArrayList<>();
         int pocet=odhadAbecedy.porovnatStatistiky();
-        int pocitadlo=pocet;
+        double pocitadlo=pocet;
+        int i=0;
+
         for(var kluc:kluce){
             if(kluc.equals(kluce.get(0))){
                 continue;
             }
-            System.out.println(kluc);
+            if(i==1000){
+                break;
+            }
+
             substitucia.setKluc(kluc);
             pocet=odhadAbecedy.porovnatStatistiky();
+
             pocitadlo+=pocet;
+
+            i++;
         }
-        System.out.println(pocet/5000);
+        System.out.println((pocitadlo/1000));
+        double duration = System.currentTimeMillis() - startTime;
+        System.out.println(duration/60000);
     }
 
 }
