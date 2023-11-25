@@ -32,6 +32,7 @@ public class OdhadAbecedy {
             abeceda.add(vyhodnotPismenoZt(c.getValue(),ot));
         }
         int pocet=pocetUhadnutychPismen(abeceda);
+
         return pocet;
     }
     private Character vyhodnotPismenoZt(Double vyskytZnakuZt,List<Map.Entry<Character,Double>> otStatistika){

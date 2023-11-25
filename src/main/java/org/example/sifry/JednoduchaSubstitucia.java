@@ -44,7 +44,8 @@ public class JednoduchaSubstitucia extends Sifra {
         }
 
         int index = 0;
-        int pocitadlo=0;
+        int pocitadlo=abeceda.indexOf(zaciatokSifrovania);
+
         for (int i = 0; opakovanaAbeceda.size() != 26; i++) {
             if(i==kluc.length()){
                 break;
@@ -89,7 +90,6 @@ public class JednoduchaSubstitucia extends Sifra {
     @Override
     public void sifrovanie(StringBuilder text,String kluc)  {
         this.kluc=kluc;
-
         zasifrovanaAbeceda=new ArrayList<>(zasifrujAbecedu());
         ArrayList<Character> abeceda = new ArrayList<>();
         zasifrovanyText=new StringBuilder();
