@@ -4,7 +4,6 @@ import org.example.sifry.TabulkovaTranspozicia;
 
 import java.util.ArrayList;
 
-import static org.example.Main.POCIATOCNA_VELKOST;
 import static org.example.Main.vygenerujKluc;
 
 public class LustenieTabulkovejTranspozicie {
@@ -18,7 +17,7 @@ public class LustenieTabulkovejTranspozicie {
         String kluc=vygenerujKluc(10,30);
         pocetRiadkov=100;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
-        spustiSifrovanie(kluc,POCIATOCNA_VELKOST,otNasifrovanie);
+        spustiSifrovanie(kluc,pocetRiadkov,otNasifrovanie);
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti,transpozicia);
         permutacia=new Permutacia(vlastnosti,odhadKluca);

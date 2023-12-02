@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.lustenie_jednoduchej_substitucie.LustenieJednoduchejSubstitucie;
+import org.example.lustenie_tabulkovej_transpozicie.LustenieTabulkovejTranspozicie;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,20 +11,21 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static int POCIATOCNA_VELKOST = 100;
-    public static String SUBOR="CZ";
+    public static String SUBOR="SK";
 
     public static void main(String[] args) throws IOException {
         Text text = new Text(SUBOR);
 
         ArrayList<String> kluce=text.nacitajKluce("KLUCESUB");
-        /*
-        System.out.println("CZ");
+
+        System.out.println(SUBOR.toString());
         LustenieTabulkovejTranspozicie priebeh = new LustenieTabulkovejTranspozicie(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
-        */
+        /*
         LustenieJednoduchejSubstitucie priebeh1=new LustenieJednoduchejSubstitucie(text.getUpravenyText(),text.getTextyNaSifrovanie().get(0));
         priebeh1.otestujKluce(kluce);
+
+         */
     }
 
     public static String vygenerujKluc(int min, int max){

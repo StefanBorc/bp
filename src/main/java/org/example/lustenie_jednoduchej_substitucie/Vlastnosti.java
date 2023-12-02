@@ -21,7 +21,7 @@ public class Vlastnosti {
         Map<Character,Double> frekvenciaZnakov=new HashMap<>();
         frekvenciaZnakovOt=new HashMap<>();
         for(var c:text.toString().toCharArray()){
-            if(Character.isAlphabetic(c)){
+            if(Character.isAlphabetic(c) && ((c<91 && c>64))){
                 frekvenciaZnakov.merge(c,1.0,Double::sum);
             }
         }
@@ -29,8 +29,9 @@ public class Vlastnosti {
         for(var znak:frekvenciaZnakov.entrySet()){
             frekvenciaZnakov.replace(znak.getKey(),znak.getValue(),(znak.getValue()/pocetZnakov)*100);
         }
+
         char c='?';
-        while(frekvenciaZnakov.size()!=26){
+        while(frekvenciaZnakov.size()<26){
             frekvenciaZnakov.put(c++,1.0);
         }
         return frekvenciaZnakov;

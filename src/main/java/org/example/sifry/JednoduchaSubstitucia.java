@@ -55,7 +55,8 @@ public class JednoduchaSubstitucia extends Sifra {
                 continue;
             }
 
-            if (!opakovanaAbeceda.contains(kluc.charAt(index)) && index < abeceda.size()) {
+            if (!opakovanaAbeceda.contains(kluc.charAt(index)) && pocitadlo < abeceda.size()) {
+
                 abeceda.set(pocitadlo, kluc.charAt(index));
                 opakovanaAbeceda.add(kluc.charAt(index));
                 pocitadlo++;
@@ -70,12 +71,13 @@ public class JednoduchaSubstitucia extends Sifra {
                 for (int j = 0; j < abeceda.size() - opakovanaAbeceda.size(); j++) {
                     for (char c = 'A'; c <= 'Z'; c++) {
                         if (!opakovanaAbeceda.contains(c)) {
-                            abeceda.set(pocitadlo, c);
-                            opakovanaAbeceda.add(c);
-                            pocitadlo++;
                             if (pocitadlo > abeceda.size() - 1) {
                                 pocitadlo = 0;
                             }
+                            abeceda.set(pocitadlo, c);
+                            opakovanaAbeceda.add(c);
+                            pocitadlo++;
+
                         }
                     }
                 }
