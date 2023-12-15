@@ -21,11 +21,7 @@ public class Main {
         System.out.println(SUBOR.toString());
         LustenieTabulkovejTranspozicie priebeh = new LustenieTabulkovejTranspozicie(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
-        /*
-        LustenieJednoduchejSubstitucie priebeh1=new LustenieJednoduchejSubstitucie(text.getUpravenyText(),text.getTextyNaSifrovanie().get(0));
-        priebeh1.otestujKluce(kluce);
-
-         */
+       
     }
 
     public static String vygenerujKluc(int min, int max){
