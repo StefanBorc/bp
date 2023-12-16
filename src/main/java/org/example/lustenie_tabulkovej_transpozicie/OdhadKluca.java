@@ -16,6 +16,7 @@ public class OdhadKluca {
     public OdhadKluca(Vlastnosti vlastnosti, TabulkovaTranspozicia transpozicia){
         this.vlastnosti = vlastnosti;
         najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+        
     }
 
     public double dKluca(ArrayList<StringBuilder> bloky){
