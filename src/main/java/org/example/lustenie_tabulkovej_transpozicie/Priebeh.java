@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import static org.example.Main.vygenerujKluc;
 
-public class LustenieTabulkovejTranspozicie {
+public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
     private Vlastnosti vlastnosti;
     private int pocetRiadkov ;
 
-    public LustenieTabulkovejTranspozicie(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
+    public Priebeh(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
         pocetRiadkov=100;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
