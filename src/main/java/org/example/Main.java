@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.lustenie_tabulkovej_transpozicie.LustenieTabulkovejTranspozicie;
+import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,13 +19,15 @@ public class Main {
         ArrayList<String> kluce=text.nacitajKluce("KLUCESUB");
 
         System.out.println(SUBOR.toString());
-        LustenieTabulkovejTranspozicie priebeh = new LustenieTabulkovejTranspozicie(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-        priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
-        /*
-        LustenieJednoduchejSubstitucie priebeh1=new LustenieJednoduchejSubstitucie(text.getUpravenyText(),text.getTextyNaSifrovanie().get(0));
-        priebeh1.otestujKluce(kluce);
+        Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
+       priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
 
-         */
+
+        String kluc="dskaodaodakddsadsad";
+        System.out.println(kluc.length());
+        priebeh.otestujKlucPermutaciu(200,kluc);
+
+
     }
 
     public static String vygenerujKluc(int min, int max){

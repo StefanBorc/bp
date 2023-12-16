@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import static org.example.Main.vygenerujKluc;
 
-public class LustenieTabulkovejTranspozicie {
+public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
     private Permutacia permutacia;
     private Vlastnosti vlastnosti;
     private int pocetRiadkov ;
 
-    public LustenieTabulkovejTranspozicie(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
+    public Priebeh(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
         String kluc=vygenerujKluc(10,30);
         pocetRiadkov=100;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,kluc);
@@ -48,6 +48,7 @@ public class LustenieTabulkovejTranspozicie {
                 }
                 permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
                 permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
+
                 permutacia.hladajPermutaciu();
 
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
@@ -60,6 +61,18 @@ public class LustenieTabulkovejTranspozicie {
             System.out.println();
 
         }
+    }
+    public void otestujKlucPermutaciu(int n,String kluc){
+        transpozicia.setPocetRiadkov(n,permutacia);
+        transpozicia.setKluc(kluc);
+        odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+        permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+        System.out.println(odhadKluca.getDlzkaKluca());
+        permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
+        permutacia.hladajPermutaciu();
+        transpozicia.vytlacPermutaciu();
+        permutacia.vytlacTestovanuPermutaciu();
+
     }
     public void otestujKorpusy(ArrayList<String> kluce,ArrayList<StringBuilder> texty){
         for(int i=0;i<3;i++){

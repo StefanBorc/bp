@@ -69,6 +69,12 @@ public class Vlastnosti {
         }
         if(jeOtvorenyText && statistikaBigramov.isEmpty()){
             statistikaBigramov = ngramy;
+            double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
+            Map<String, Double> ngramyPercenta = new HashMap<>();
+            for (var bigram : ngramy.entrySet()) {
+                ngramyPercenta.put(bigram.getKey(), (bigram.getValue() / pocet) * 100);
+            }
+            statistikaBigramov=ngramyPercenta;
         }
 
         double pocet=ngramy.values().stream().mapToDouble(v -> v).sum();

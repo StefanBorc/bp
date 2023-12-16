@@ -16,11 +16,11 @@ public class Text {
     private ArrayList<String> kluce;
 
     public Text(String nazovSuboru) throws IOException {
-        vratSuborU(nazovSuboru);
+        vratOT(nazovSuboru);
         nacitajKluceText();
     }
 
-    protected StringBuilder vratSuborU(String nazovSuboru) throws IOException {
+    protected StringBuilder vratOT(String nazovSuboru) throws IOException {
 
         upravenyText =new StringBuilder();
         StringBuilder text = new StringBuilder();
@@ -33,7 +33,7 @@ public class Text {
         }
 
         for(char c: text.toString().toCharArray()){
-            if(Character.isAlphabetic(c)){
+            if(Character.isAlphabetic(c) || Character.isSpaceChar(c)){
                 upravenyText.append(Character.toUpperCase(c));
             }
         }
