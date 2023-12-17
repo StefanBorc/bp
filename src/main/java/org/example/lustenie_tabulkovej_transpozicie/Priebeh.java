@@ -28,18 +28,17 @@ public class Priebeh {
     }
 
     public void otestujRozneKluce(ArrayList<String> kluce){
+        pocetRiadkov=500;
         for(int d=pocetRiadkov;d<900;d+=100){
             transpozicia.setPocetRiadkov(d,permutacia);
             int index=0;
-
             double pocetNeuspesnychPermutacii=0;
             double pocetNeuhadnutychKlucov=0;
-
             for(int i=0;i<kluce.size();i++){
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
+                transpozicia.vytlacPermutaciu();
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-                //transpozicia.vytlacPermutaciu();
                 index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;
