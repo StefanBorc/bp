@@ -21,8 +21,6 @@ public class Priebeh {
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti,transpozicia);
         permutacia=new Permutacia(vlastnosti,odhadKluca);
-        //transpozicia.vytlacPermutaciu();
-        //permutacia.vytlacTestovanuPermutaciu();
 
     }
     private void spustiSifrovanie(String kluc, int n,StringBuilder text) {
@@ -33,6 +31,7 @@ public class Priebeh {
         for(int d=pocetRiadkov;d<900;d+=100){
             transpozicia.setPocetRiadkov(d,permutacia);
             int index=0;
+
             double pocetNeuspesnychPermutacii=0;
             double pocetNeuhadnutychKlucov=0;
 
@@ -40,6 +39,7 @@ public class Priebeh {
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+                //transpozicia.vytlacPermutaciu();
                 index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                     pocetNeuhadnutychKlucov++;

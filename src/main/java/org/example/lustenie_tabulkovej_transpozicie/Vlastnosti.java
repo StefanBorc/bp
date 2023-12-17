@@ -55,8 +55,9 @@ public class Vlastnosti {
             pripocitaj=0;
         }
         else{
-            pripocitaj=1;
+            pripocitaj=n-1;
         }
+
         for (int i = 0; i < text.length() - n; i++) {
             String ngram= "";
             for (int j = i; j < i+n; j++) {
@@ -68,29 +69,31 @@ public class Vlastnosti {
             for(var c:ngram.toCharArray()){
                 if(!Character.isAlphabetic(c)){
                     suZnaky=false;
+                    break;
                 }
             }
             if(suZnaky){
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && statistikaBigramov.isEmpty() && n==2){
-            statistikaBigramov = ngramy;
+        if(jeOtvorenyText && statistikaBigramov.isEmpty()){
+            if(n==2){
+                statistikaBigramov = ngramy;
+            }
+            else if(n==3){
+                statistikaTrigramov = ngramy;
+            }
             double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
             Map<String, Double> ngramyPercenta = new HashMap<>();
-            for (var bigram : ngramy.entrySet()) {
-                ngramyPercenta.put(bigram.getKey(), (bigram.getValue() / pocet) * 100);
+            for (var ngram : ngramy.entrySet()) {
+                ngramyPercenta.put(ngram.getKey(), (ngram.getValue() / pocet) * 100);
             }
-            statistikaBigramov=ngramyPercenta;
-        }
-        else if(jeOtvorenyText && statistikaTrigramov.isEmpty() && n==3){
-            statistikaTrigramov = ngramy;
-            double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
-            Map<String, Double> ngramyPercenta = new HashMap<>();
-            for (var trigram : ngramy.entrySet()) {
-                ngramyPercenta.put(trigram.getKey(), (trigram.getValue() / pocet) * 100);
+            if(n==2){
+                statistikaBigramov=ngramyPercenta;
+            } else if (n==3) {
+                statistikaTrigramov=ngramyPercenta;
             }
-            statistikaTrigramov=ngramyPercenta;
+
         }
 
         double pocet=ngramy.values().stream().mapToDouble(v -> v).sum();
