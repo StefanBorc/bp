@@ -4,29 +4,33 @@ import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static String SUBOR="SK";
+    public static String SUBOR="CZ";
 
     public static void main(String[] args) throws IOException {
+
+        long startTime = System.currentTimeMillis();
+        //skusit naprogramovat aby to zobralo 2 najlepsie kombinacie a podla trigramov ich vysortovalo
         Text text = new Text(SUBOR);
-
-        ArrayList<String> kluce=text.nacitajKluce("KLUCESUB");
-
         System.out.println(SUBOR.toString());
         Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-       priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
+        priebeh.otestujKorpusy(text.getKluce(),text.getTextyNaSifrovanie());
 
-
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
+        long minutes = (elapsedTime / 1000) / 60;
+        long seconds = (elapsedTime / 1000) % 60;
+        System.out.println("Elapsed Time: " + minutes + " minutes and " + seconds + " seconds");
+        /*
         String kluc="dskaodaodakddsadsad";
         System.out.println(kluc.length());
         priebeh.otestujKlucPermutaciu(200,kluc);
-
+*/
 
     }
 

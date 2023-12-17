@@ -13,7 +13,11 @@ public class Vlastnosti {
     @Getter
     private List<Map.Entry<String,Double>> statistikaBigramovUsporiadana;
     @Getter
+    private List<Map.Entry<String,Double>> statistikaTrigramovUsporiadana;
+    @Getter
     private Map<String,Double> statistikaBigramov;
+    @Getter
+    private Map<String, Double> statistikaTrigramov;
     @Getter
     private ArrayList<String> topZlych;
     @Getter
@@ -24,6 +28,8 @@ public class Vlastnosti {
         vsetkySlova = ot.toString().split(" ");
         statistikaBigramov =new HashMap<>();
         statistikaBigramovUsporiadana = ngramy(ot,2,true);
+        statistikaTrigramov =new HashMap<>();
+        statistikaTrigramovUsporiadana = ngramy(ot,3,true);
         urobTopBigramov();
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
     }
@@ -57,17 +63,18 @@ public class Vlastnosti {
                 ngram+=text.charAt(j);
             }
             i+=pripocitaj;
-            boolean jeBigramZnakov=true;
+
+            boolean suZnaky=true;
             for(var c:ngram.toCharArray()){
                 if(!Character.isAlphabetic(c)){
-                    jeBigramZnakov=false;
+                    suZnaky=false;
                 }
             }
-            if(jeBigramZnakov){
+            if(suZnaky){
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && statistikaBigramov.isEmpty()){
+        if(jeOtvorenyText && statistikaBigramov.isEmpty() && n==2){
             statistikaBigramov = ngramy;
             double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
             Map<String, Double> ngramyPercenta = new HashMap<>();
@@ -75,6 +82,15 @@ public class Vlastnosti {
                 ngramyPercenta.put(bigram.getKey(), (bigram.getValue() / pocet) * 100);
             }
             statistikaBigramov=ngramyPercenta;
+        }
+        else if(jeOtvorenyText && statistikaTrigramov.isEmpty() && n==3){
+            statistikaTrigramov = ngramy;
+            double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
+            Map<String, Double> ngramyPercenta = new HashMap<>();
+            for (var trigram : ngramy.entrySet()) {
+                ngramyPercenta.put(trigram.getKey(), (trigram.getValue() / pocet) * 100);
+            }
+            statistikaTrigramov=ngramyPercenta;
         }
 
         double pocet=ngramy.values().stream().mapToDouble(v -> v).sum();
@@ -86,7 +102,6 @@ public class Vlastnosti {
     }
     private void urobTopBigramov(){
         int n;
-
         if(SUBOR.equals("DE")){
             n=450;
         }
@@ -102,11 +117,11 @@ public class Vlastnosti {
             topDobrych.add(statistikaBigramovUsporiadana.get(i).getKey());
         }
     }
-    protected ArrayList<Double[]> usporiadajPodlaOT(ArrayList<List<Map.Entry<String, Double>>> mapy){
-        Map<String,Integer> indexyMapy=vratIndexyUsporiadanejMapy(statistikaBigramovUsporiadana);
+    protected ArrayList<Double[]> usporiadajPodlaOT(ArrayList<List<Map.Entry<String, Double>>> mapy,List<Map.Entry<String,Double>> statistikaOtUsporiadna){
+        Map<String,Integer> indexyMapy=vratIndexyUsporiadanejMapy(statistikaOtUsporiadna);
         ArrayList<Double[]> listyPercient=new ArrayList<>(mapy.size());
         for(var mapa : mapy){
-            Double[] usporiadanePercenta=new Double[statistikaBigramov.size()];
+            Double[] usporiadanePercenta=new Double[statistikaOtUsporiadna.size()];
             Arrays.fill(usporiadanePercenta, 0.0);
             for(var bigram:mapa){
                 int index=-1;

@@ -17,7 +17,8 @@ public class Permutacia {
     private ArrayList<StringBuilder> blokyZt;
     private ArrayList<String> topZlychBigramovOT;
     private ArrayList<Integer[]> kombinacie;
-    private ArrayList<List<Map.Entry<String, Double>>> statistikaKombinacii;
+    private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
+    private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
@@ -26,49 +27,7 @@ public class Permutacia {
         topZlych(100);
         hladajPermutaciu();
     }
-    private void permutacia(ArrayList<StringBuilder> bloky) {
-        List<Map.Entry<String, Double>> bigramyZT;
 
-        int vaha=1;
-        if(blokyZt.get(1).length()<400){
-            vaha=3;
-        }
-        int velkostPorovnaniaPrePermutaciu=30;
-
-        ArrayList<Integer[]> mozneKombinacie=new ArrayList<>();
-        ArrayList<List<Map.Entry<String,Double>>> bigramyMoznejPermutacieDlzkyKlucaN=new ArrayList<>();
-
-        for(int prvy=0;prvy<bloky.size();prvy++) {
-            for (int druhy = 0; druhy < bloky.size(); druhy++) {
-                if (prvy != druhy) {
-                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = vlastnosti.ngramy(text, 2, false);
-
-                    int pocitadloPermutacie=0;
-
-                    for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
-
-                        if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
-                                pocitadloPermutacie+=1;
-                            }
-                        }
-                        if(pocitadloPermutacie>vaha){
-                            break;
-                        }
-
-                    }
-                    if(pocitadloPermutacie<vaha){
-                        mozneKombinacie.add(new Integer[]{prvy,druhy});
-                        bigramyMoznejPermutacieDlzkyKlucaN.add(bigramyZT);
-                    }
-
-                }
-            }
-        }
-        kombinacie=mozneKombinacie;
-        statistikaKombinacii=bigramyMoznejPermutacieDlzkyKlucaN;
-    }
     public void topZlych(int pocetRiadkov){
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN")){
@@ -86,122 +45,12 @@ public class Permutacia {
         }
     }
     protected void hladajPermutaciu() {
-            //permutacia(blokyZt);
-            vybratNajlepsieKombinacie();
-            ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(statistikaKombinacii);
-            //najstCestu(kombinacie,usporiadanePodlaOT);
-            poskladatCestu(kombinacie,usporiadanePodlaOT);
-    }
-    private boolean suRovnake(Integer[] kombinacia1,Integer[] kombinacia2){
-        Integer[] kombinaciaPomocna=new Integer[]{kombinacia1[1],kombinacia1[0]};
-        return Arrays.equals(kombinaciaPomocna, kombinacia2);
-    }
-    private void spravPodrobnuStatistikuRovnakych(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT, int[] kombinacie){
-        ArrayList<Double> odchylky=new ArrayList<>();
-        for(int k=0;k<2;k++){
-            double odchylka=0.0;
-            for(int i=0;i<10;i++){
-                odchylka+=usporiadanePodlaOT.get(kombinacie[k])[i]*(10-i);
-            }
-            odchylky.add(odchylka);
-        }
-        if(odchylky.get(0)>odchylky.get(1)){
-            mozneKombinacie.remove(mozneKombinacie.remove(kombinacie[1]));
-        }
-        else{
-            mozneKombinacie.remove(mozneKombinacie.remove(kombinacie[0]));
-        }
 
+        vybratNajlepsieKombinacie();
+        ArrayList<Double[]> usporiadanePodlaOT = vlastnosti.usporiadajPodlaOT(bigramyPreMozneKombinacie,vlastnosti.getStatistikaBigramovUsporiadana());
+        poskladatCestu(kombinacie,usporiadanePodlaOT);
     }
-    private void vyraditZvysneKombinacie(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
-        ArrayList<Double> odchylky=new ArrayList<>();
-        int index=0;
-        int n=10;
-        for(var kombo:mozneKombinacie){
-            double odchylka=0;
-            for(int i=0;i<n;i++){
-                odchylka+=(usporiadanePodlaOT.get(index)[i])*(n-1);
-            }
-            odchylky.add(odchylka);
-            index++;
-        }
-        if(mozneKombinacie.size()>dlzkaKluca-1){
-            while(mozneKombinacie.size()!=dlzkaKluca-1){
-                int nevhodny=odchylky.indexOf(Collections.min(odchylky));
-                odchylky.remove(nevhodny);
-                mozneKombinacie.remove(nevhodny);
-            }
-        }
 
-    }
-    private ArrayList<Integer[]> vyradNevhodneKombinacie(ArrayList<Integer[]> mozneKombinacie,ArrayList<Double[]> usporiadanePodlaOT){
-        for(int i=0;i<mozneKombinacie.size();i++){
-            for(int j=0;j<mozneKombinacie.size();j++){
-                if((i<mozneKombinacie.size() && j<mozneKombinacie.size() && mozneKombinacie.get(i)!=mozneKombinacie.get(j))){
-                    if(suRovnake(mozneKombinacie.get(i),mozneKombinacie.get(j))){
-                        spravPodrobnuStatistikuRovnakych(mozneKombinacie,usporiadanePodlaOT,new int[]{mozneKombinacie.indexOf(mozneKombinacie.get(i)),mozneKombinacie.indexOf(mozneKombinacie.get(j))});
-                    }
-                }
-            }
-        }
-        if(mozneKombinacie.size()!=dlzkaKluca-1){
-            vyraditZvysneKombinacie( mozneKombinacie,usporiadanePodlaOT);
-        }
-        return mozneKombinacie;
-    }
-    private void najstCestu(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
-        if(mozneKombinacie.size()!=dlzkaKluca-1){
-            vyradNevhodneKombinacie(mozneKombinacie,usporiadanePodlaOT);
-        }
-        ArrayList<Integer> cesta=new ArrayList<>();
-        if(mozneKombinacie.size()==dlzkaKluca-1){
-            boolean najdenyPrvyStlpec;
-            int stlpec=0;
-            for(int i=0;i<mozneKombinacie.size();i++){
-                najdenyPrvyStlpec=true;
-                for(int j=0;j<mozneKombinacie.size();j++){
-                    if(j==i){
-                        continue;
-                    }
-                    if(Objects.equals(mozneKombinacie.get(i)[0], mozneKombinacie.get(j)[1])){
-                        najdenyPrvyStlpec=false;
-                    }
-                }
-                if(najdenyPrvyStlpec ){
-                    stlpec=mozneKombinacie.get(i)[0];
-                }
-            }
-            cesta.add(stlpec);
-            int dlzka=dlzkaKluca;
-            boolean stop=false;
-            while(cesta.size()!=dlzka){
-                boolean nasielSusednyStlpec=false;
-                for (Integer[] kombo : mozneKombinacie) {
-                    if (stlpec == kombo[0]) {
-                        stlpec = kombo[1];
-                        cesta.add(kombo[1]);
-                        nasielSusednyStlpec = true;
-                        if(cesta.size()==dlzka){
-                            stop=true;
-                            break;
-                        }
-                    }
-                }
-                if(stop){
-                    break;
-                }
-                if(!nasielSusednyStlpec){
-                    break;
-                }
-            }
-        }
-        if(cesta.size()<32){
-            permutacia=new int[cesta.size()];
-            for(int i=0;i<cesta.size();i++){
-                permutacia[i]=cesta.get(i);
-            }
-        }
-    }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
             for(var c:permutacia){
@@ -212,7 +61,7 @@ public class Permutacia {
 
     }
     //novy pokus s hladanim stlpcov
-    public ArrayList<ArrayList<Double>> spravitOdchylky(ArrayList<StringBuilder> bloky){
+    public ArrayList<ArrayList<Double>> vyladitBigramy(ArrayList<StringBuilder> bloky){
         List<Map.Entry<String, Double>> bigramyZT;
         int velkostPorovnaniaPrePermutaciu=30;
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
@@ -236,27 +85,68 @@ public class Permutacia {
                     }
                 }
                 else{
-                    odchylka=20;
+                    odchylka=20.0;
                 }
                 odchylkyStlpcov.get(prvy).add(odchylka);
             }
         }
         return odchylkyStlpcov;
     }
-    private void vybratNajlepsieKombinacie(){
-        ArrayList<ArrayList<Double>> odchylky=spravitOdchylky(blokyZt);
+    private void vyladitTrigramy(){
+        int velkostPorovnania=30;
+        ArrayList<Integer[]> kopiaKombinacii=new ArrayList<>(kombinacie);
         kombinacie=new ArrayList<>();
-        statistikaKombinacii=new ArrayList<>();
-        for(int i=0;i<odchylky.size();i++){
-            Integer minStlpec1=i;
-            Integer minStlpec2=odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
-            StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, minStlpec1, minStlpec2);
-            Integer[] kombinacia=new Integer[]{minStlpec1,minStlpec2};
-            kombinacie.add(kombinacia);
-            statistikaKombinacii.add(vlastnosti.ngramy(text,2,false));
+        for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
+            double odchylka=0.0;
+            for(int j=0;j<velkostPorovnania;j++){
+                if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j))) {
+                    if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j)) < 0.15) {
+                        System.out.println(1);
+                    }
+                }
+            }
         }
     }
+    private void vybratNajlepsieKombinacie() {
+        ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
+        kombinacie = new ArrayList<>();
+        bigramyPreMozneKombinacie = new ArrayList<>();
+        trigramyPreMozneKombinacie = new ArrayList<>();
+        for (int i = 0; i < odchylky.size(); i++) {
+            Integer minStlpec1 = odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
+            odchylky.get(i).set(odchylky.get(i).indexOf(Collections.min(odchylky.get(i))), 20.0);
+            Integer minStlpec2 = odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
+            StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec1);
+            Integer[] kombinacia = new Integer[]{i, minStlpec1};
+            kombinacie.add(kombinacia);
+            //kombinacia = new Integer[]{i, minStlpec2};
+            //kombinacie.add(kombinacia);
+            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
+        }
+    }
+    private void vyraditZvysneKombinacie(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
+        ArrayList<Double> odchylky=new ArrayList<>();
+        int index=0;
+        int n=10;
+        for(var kombo:mozneKombinacie){
+            double odchylka=0;
+            for(int i=0;i<n;i++){
+                odchylka+=(usporiadanePodlaOT.get(index)[i])*(n-1);
+            }
+            odchylky.add(odchylka);
+            index++;
+        }
+        if(mozneKombinacie.size()>dlzkaKluca-1){
+            while(mozneKombinacie.size()!=dlzkaKluca-1){
+                int nevhodny=odchylky.indexOf(Collections.min(odchylky));
+                odchylky.remove(nevhodny);
+                mozneKombinacie.remove(nevhodny);
+            }
+        }
+
+    }
     private void poskladatCestu(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
+       // vyladitTrigramy();
         if(mozneKombinacie.size()!=dlzkaKluca-1){
             vyraditZvysneKombinacie(mozneKombinacie, usporiadanePodlaOT);
         }
