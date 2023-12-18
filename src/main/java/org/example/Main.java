@@ -13,7 +13,6 @@ public class Main {
     public static String SUBOR="CZ";
 
     public static void main(String[] args) throws IOException {
-
         long startTime = System.currentTimeMillis();
         //skusit naprogramovat aby to zobralo 2 najlepsie kombinacie a podla trigramov ich vysortovalo
         Text text = new Text(SUBOR);

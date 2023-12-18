@@ -27,7 +27,14 @@ public class Permutacia {
         topZlych(100);
 
     }
+    protected void hladatPermutaciu() {
+        ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
+        vybratNajlepsieKombinacie(odchylky);
+        // vyladitTrigramy();
+        poskladatCestu();
+        //najstCestu();
 
+    }
     public void topZlych(int pocetRiadkov){
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN")){
@@ -44,15 +51,6 @@ public class Permutacia {
             topZlychBigramovOT= vlastnosti.getTopZlych();
         }
     }
-    protected void hladatPermutaciu() {
-        ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        vybratNajlepsieKombinacie(odchylky);
-        vyladitTrigramy();
-        //poskladatCestu();
-        najstCestu();
-
-    }
-
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
             for(var c:permutacia){
@@ -94,20 +92,10 @@ public class Permutacia {
         }
         return odchylkyStlpcov;
     }
-    private void vyladitTrigramy(){
-        ArrayList<Integer[]> kombinacie3Stlpov =new ArrayList<>();
 
-        for(int i=0;i<kombinacie.size();i++){
-            Integer[] moznaKombinaciaPredchodcu=najdiDalsiStlpec(kombinacie.get(i)[1]);
-            for(int j=0;j<2;j++){
-                if(!opakujuceCisla(kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j])){
-                    kombinacie3Stlpov.add(new Integer[]{kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j]});
-                }
-                else{
-                    kombinacie3Stlpov.add(null);
-                }
-            }
-        }
+    private void vyladitTrigramy(){
+        ArrayList<Integer[]> kombinacie3Stlpov =spravitKombinacie3Stlpcov();
+
         for(int i=0;i<kombinacie3Stlpov.size();i++){
             if(kombinacie3Stlpov.get(i)!=null){
                 StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,kombinacie3Stlpov.get(i)[0],kombinacie3Stlpov.get(i)[1]);
@@ -119,26 +107,11 @@ public class Permutacia {
             }
 
         }
-
-        int velkostPorovnania=20;
         ArrayList<Integer[]> kopiaKombinacii=new ArrayList<>();
         ArrayList<List<Map.Entry<String, Double>>> kopiaStatistik=new ArrayList<>();
-        ArrayList<Double> odchylky=new ArrayList<>();
-        for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
-            double odchylka=0.0;
-            if(trigramyPreMozneKombinacie.get(i).isEmpty()){
-                odchylky.add(100.0);
-                continue;
-            }
-            for(int j=0;j<velkostPorovnania;j++){
-                if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j).getKey())) {
-                    if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < 0.0001) {
-                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue());
-                    }
-                }
-            }
-            odchylky.add(odchylka);
-        }
+
+        ArrayList<Double> odchylky=spravitOdchylkyTrigramov(10);
+
         int index1;
         int index2;
         int vitaz;
@@ -175,6 +148,40 @@ public class Permutacia {
         }
 
  */
+    }
+    private ArrayList<Double> spravitOdchylkyTrigramov(int velkostPorovnania){
+        ArrayList<Double> odchylky=new ArrayList<>();
+        for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
+            double odchylka=0.0;
+            if(trigramyPreMozneKombinacie.get(i).isEmpty()){
+                odchylky.add(100.0);
+                continue;
+            }
+            for(int j=0;j<velkostPorovnania;j++){
+                if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j).getKey())) {
+                    if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < 0.0003) {
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue());
+                    }
+                }
+            }
+            odchylky.add(odchylka);
+        }
+        return odchylky;
+    }
+    private ArrayList<Integer[]> spravitKombinacie3Stlpcov(){
+        ArrayList<Integer[]> kombinacie3Stlpov=new ArrayList<>();
+        for(int i=0;i<kombinacie.size();i++){
+            Integer[] moznaKombinaciaPredchodcu=najdiDalsiStlpec(kombinacie.get(i)[1]);
+            for(int j=0;j<2;j++){
+                if(!opakujuceCisla(kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j])){
+                    kombinacie3Stlpov.add(new Integer[]{kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j]});
+                }
+                else{
+                    kombinacie3Stlpov.add(null);
+                }
+            }
+        }
+        return kombinacie3Stlpov;
     }
     private boolean opakujuceCisla(int n1,int n2,int n3){
         return n1 == n2 || n1 == n3 || n2 == n3;
@@ -219,11 +226,13 @@ public class Permutacia {
             Integer[] kombinacia = new Integer[]{i, minStlpec1};
             kombinacie.add(kombinacia);
             bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
-
+/*
             text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
             kombinacia = new Integer[]{i, minStlpec2};
             kombinacie.add(kombinacia);
             bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
+
+ */
 
         }
     }
@@ -257,22 +266,7 @@ public class Permutacia {
         }
         ArrayList<Integer> cesta=new ArrayList<>();
         if(kombinacie.size()==dlzkaKluca-1){
-            boolean najdenyPrvyStlpec;
-            int stlpec=0;
-            for(int i=0;i<kombinacie.size();i++){
-                najdenyPrvyStlpec=true;
-                for(int j=0;j<kombinacie.size();j++){
-                    if(j==i){
-                        continue;
-                    }
-                    if(Objects.equals(kombinacie.get(i)[0], kombinacie.get(j)[1])){
-                        najdenyPrvyStlpec=false;
-                    }
-                }
-                if(najdenyPrvyStlpec ){
-                    stlpec=kombinacie.get(i)[0];
-                }
-            }
+            int stlpec=najstPrvyStlpec();
             cesta.add(stlpec);
             int dlzka=dlzkaKluca;
             boolean stop=false;
@@ -305,22 +299,24 @@ public class Permutacia {
         }
 
     }
-
-    private int najstKoren(){
-        Set<Integer> druheCisla = new HashSet<>();
-
-        for (Integer[] kombinacia : kombinacie) {
-            Integer druheCislo = kombinacia[1];
-            druheCisla.add(druheCislo);
-        }
-
-        for (Integer[] kombinacia : kombinacie) {
-            Integer prveCislo = kombinacia[0];
-            if (!druheCisla.contains(prveCislo)) {
-                return prveCislo;
+    private int najstPrvyStlpec(){
+        boolean najdenyPrvyStlpec;
+        int stlpec=0;
+        for(int i=0;i<kombinacie.size();i++){
+            najdenyPrvyStlpec=true;
+            for(int j=0;j<kombinacie.size();j++){
+                if(j==i){
+                    continue;
+                }
+                if(Objects.equals(kombinacie.get(i)[0], kombinacie.get(j)[1])){
+                    najdenyPrvyStlpec=false;
+                }
+            }
+            if(najdenyPrvyStlpec ){
+                stlpec=kombinacie.get(i)[0];
             }
         }
-        return -1;
+        return stlpec;
     }
     private int[] najstCestu(){
         permutacia=new int[dlzkaKluca];
@@ -346,7 +342,20 @@ public class Permutacia {
         }
         return permutacia;
     }
+    private int najstKoren(){
+        Set<Integer> druheCisla = new HashSet<>();
 
+        for (Integer[] kombinacia : kombinacie) {
+            Integer druheCislo = kombinacia[1];
+            druheCisla.add(druheCislo);
+        }
 
+        for (Integer[] kombinacia : kombinacie) {
+            Integer prveCislo = kombinacia[0];
+            if (!druheCisla.contains(prveCislo)) {
+                return prveCislo;
+            }
+        }
+        return -1;
+    }
 }
-//[0 1 10 ][1 10 11 ][2 8 14 ][3 9 16 ][4 6 7 ][5 0 1 ][6 7 9 ][7 12 11 ][8 14 5 ][9 16 2 ][10 11 12 ][11 12 15 ][12 15 13 ][13 4 6 ][14 5 0 ][15 13 4 ][16 2 8 ]
