@@ -76,7 +76,7 @@ public class Vlastnosti {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && statistikaBigramov.isEmpty()){
+        if(jeOtvorenyText && (statistikaBigramov.isEmpty())||statistikaTrigramov.isEmpty()){
             if(n==2){
                 statistikaBigramov = ngramy;
             }

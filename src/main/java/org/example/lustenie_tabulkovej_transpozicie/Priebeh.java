@@ -28,7 +28,7 @@ public class Priebeh {
     }
 
     public void otestujRozneKluce(ArrayList<String> kluce){
-        pocetRiadkov=500;
+        pocetRiadkov=100;
         for(int d=pocetRiadkov;d<900;d+=100){
             transpozicia.setPocetRiadkov(d,permutacia);
             int index=0;
@@ -37,7 +37,7 @@ public class Priebeh {
             for(int i=0;i<kluce.size();i++){
                 String kluc=kluce.get(index);
                 transpozicia.setKluc(kluc);
-                transpozicia.vytlacPermutaciu();
+
                 odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
                 index++;
                 if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
@@ -48,7 +48,10 @@ public class Priebeh {
                 permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
                 permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
 
-                permutacia.hladajPermutaciu();
+                permutacia.hladatPermutaciu();
+
+                //transpozicia.vytlacPermutaciu();
+                //permutacia.vytlacTestovanuPermutaciu();
 
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                     pocetNeuspesnychPermutacii++;
@@ -68,7 +71,7 @@ public class Priebeh {
         permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
         System.out.println(odhadKluca.getDlzkaKluca());
         permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
-        permutacia.hladajPermutaciu();
+        permutacia.hladatPermutaciu();
         transpozicia.vytlacPermutaciu();
         permutacia.vytlacTestovanuPermutaciu();
 
