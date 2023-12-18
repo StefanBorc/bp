@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static String SUBOR="CZ";
+    public static String SUBOR="SK";
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();

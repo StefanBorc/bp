@@ -29,10 +29,9 @@ public class Permutacia {
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        vybratNajlepsieKombinacie(odchylky);
-        // vyladitTrigramy();
-        poskladatCestu();
-        //najstCestu();
+        najstPoradie(odchylky,false);
+
+
 
     }
     public void topZlych(int pocetRiadkov){
@@ -154,13 +153,13 @@ public class Permutacia {
         for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
             double odchylka=0.0;
             if(trigramyPreMozneKombinacie.get(i).isEmpty()){
-                odchylky.add(100.0);
+                odchylky.add(10.0);
                 continue;
             }
             for(int j=0;j<velkostPorovnania;j++){
                 if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j).getKey())) {
                     if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < 0.0003) {
-                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue());
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*((velkostPorovnania-j)*0.1);
                     }
                 }
             }
@@ -214,7 +213,7 @@ public class Permutacia {
         }
         return nastupcovia;
     }
-    private void vybratNajlepsieKombinacie(ArrayList<ArrayList<Double>> odchylky) {
+    private void vybratNajlepsieKombinacie(ArrayList<ArrayList<Double>> odchylky,boolean zahrnutViac) {
         kombinacie = new ArrayList<>();
         bigramyPreMozneKombinacie = new ArrayList<>();
         trigramyPreMozneKombinacie = new ArrayList<>();
@@ -226,14 +225,12 @@ public class Permutacia {
             Integer[] kombinacia = new Integer[]{i, minStlpec1};
             kombinacie.add(kombinacia);
             bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
-/*
-            text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
-            kombinacia = new Integer[]{i, minStlpec2};
-            kombinacie.add(kombinacia);
-            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
-
- */
-
+            if(zahrnutViac){
+                text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
+                kombinacia = new Integer[]{i, minStlpec2};
+                kombinacie.add(kombinacia);
+                bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
+            }
         }
     }
 
@@ -357,5 +354,15 @@ public class Permutacia {
             }
         }
         return -1;
+    }
+    private void najstPoradie(ArrayList<ArrayList<Double>> odchylky,boolean zahrnutTrigramy){
+        vybratNajlepsieKombinacie(odchylky,zahrnutTrigramy);
+        if(zahrnutTrigramy){
+            vyladitTrigramy();
+            najstCestu();
+        }
+        else{
+            poskladatCestu();
+        }
     }
 }
