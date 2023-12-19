@@ -28,8 +28,8 @@ public class Priebeh {
     }
 
     public void otestujRozneKluce(ArrayList<String> kluce){
-        pocetRiadkov=100;
-        for(int d=pocetRiadkov;d<900;d+=100){
+        pocetRiadkov=200;
+        for(int d=pocetRiadkov;d<300;d+=100){
             transpozicia.setPocetRiadkov(d,permutacia);
             int index=0;
             double pocetNeuspesnychPermutacii=0;
@@ -47,7 +47,7 @@ public class Priebeh {
                 }
                 permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
                 permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
-
+               // transpozicia.vytlacPermutaciu();
                 permutacia.hladatPermutaciu();
 
                // transpozicia.vytlacPermutaciu();

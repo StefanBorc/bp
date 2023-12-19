@@ -21,6 +21,7 @@ public class Permutacia {
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
     private double dolnaHranicaTrigramov;
     private double hornaHranicaTrigramov;
+    private int pocetRiadkov;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
@@ -35,6 +36,7 @@ public class Permutacia {
         najstPoradie(odchylky,false);
     }
     public void topZlych(int pocetRiadkov){
+        this.pocetRiadkov=pocetRiadkov;
         topZlychBigramovOT=new ArrayList<>();
         if(SUBOR.equals("EN")){
             if(pocetRiadkov>500){
@@ -49,6 +51,12 @@ public class Permutacia {
         else{
             topZlychBigramovOT= vlastnosti.getTopZlych();
         }
+        if(pocetRiadkov<=100){
+            topZlychBigramovOT=new ArrayList<>();
+            for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
+                topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
+            }
+        }
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
@@ -62,7 +70,15 @@ public class Permutacia {
     //novy pokus s hladanim stlpcov
     private ArrayList<ArrayList<Double>> vyladitBigramy(ArrayList<StringBuilder> bloky){
         List<Map.Entry<String, Double>> bigramyZT;
+
         int velkostPorovnaniaPrePermutaciu=30;
+        int vaha=3;
+        if(pocetRiadkov<=100){
+            if(!SUBOR.equals("EN")){
+                velkostPorovnaniaPrePermutaciu=25;
+            }
+            vaha=10;
+        }
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
 
         for(int prvy=0;prvy<bloky.size();prvy++) {
@@ -78,7 +94,7 @@ public class Permutacia {
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
                         }
-                        if(odchylka>3){
+                        if(odchylka>vaha){
                             break;
                         }
                     }

@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static String SUBOR="DE";
+    public static String SUBOR="CZ";
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
@@ -18,8 +18,23 @@ public class Main {
         Text text = new Text(SUBOR);
         System.out.println(SUBOR.toString());
         Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-        //priebeh.statistikaDlzkyTextov(text.getKluce());
         priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
+        SUBOR="SK";
+        text = new Text(SUBOR);
+        System.out.println(SUBOR.toString());
+        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
+        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
+        SUBOR="DE";
+        text = new Text(SUBOR);
+        System.out.println(SUBOR.toString());
+        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
+        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
+        SUBOR="EN";
+        text = new Text(SUBOR);
+        System.out.println(SUBOR.toString());
+        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
+        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
+
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
