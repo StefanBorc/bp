@@ -50,8 +50,8 @@ public class Priebeh {
 
                 permutacia.hladatPermutaciu();
 
-                //transpozicia.vytlacPermutaciu();
-                //permutacia.vytlacTestovanuPermutaciu();
+               // transpozicia.vytlacPermutaciu();
+               // permutacia.vytlacTestovanuPermutaciu();
 
                 if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                     pocetNeuspesnychPermutacii++;

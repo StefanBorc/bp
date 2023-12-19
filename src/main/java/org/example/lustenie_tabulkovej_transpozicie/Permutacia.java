@@ -19,20 +19,20 @@ public class Permutacia {
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
+    private double dolnaHranicaTrigramov;
+    private double hornaHranicaTrigramov;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
         this.blokyZt=odhadKluca.blokyDlzkyKluca;
         this.vlastnosti = vlastnosti;
+        odhadnutHranicuTrigramov(1500,300);
         topZlych(100);
 
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
         najstPoradie(odchylky,false);
-
-
-
     }
     public void topZlych(int pocetRiadkov){
         topZlychBigramovOT=new ArrayList<>();
@@ -109,7 +109,7 @@ public class Permutacia {
         ArrayList<Integer[]> kopiaKombinacii=new ArrayList<>();
         ArrayList<List<Map.Entry<String, Double>>> kopiaStatistik=new ArrayList<>();
 
-        ArrayList<Double> odchylky=spravitOdchylkyTrigramov(10);
+        ArrayList<Double> odchylky=spravitOdchylkyTrigramov(25);
 
         int index1;
         int index2;
@@ -150,16 +150,24 @@ public class Permutacia {
     }
     private ArrayList<Double> spravitOdchylkyTrigramov(int velkostPorovnania){
         ArrayList<Double> odchylky=new ArrayList<>();
+        var trigramyZtUsporiadane=vlastnosti.usporiadajPodlaOT(trigramyPreMozneKombinacie,vlastnosti.getStatistikaTrigramovUsporiadana());
+
         for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
             double odchylka=0.0;
             if(trigramyPreMozneKombinacie.get(i).isEmpty()){
-                odchylky.add(10.0);
+                odchylky.add(200.0);
                 continue;
             }
             for(int j=0;j<velkostPorovnania;j++){
                 if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j).getKey())) {
-                    if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < 0.0003) {
-                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*((velkostPorovnania-j)*0.1);
+                    if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < dolnaHranicaTrigramov) {
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*5;
+                    }
+                    else if(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) > hornaHranicaTrigramov){
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue());
+                    }
+                    else{
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*2.5;
                     }
                 }
             }
@@ -212,6 +220,10 @@ public class Permutacia {
             }
         }
         return nastupcovia;
+    }
+    private void odhadnutHranicuTrigramov(int dolnaHranica,int hornaHranica){
+        dolnaHranicaTrigramov =vlastnosti.getStatistikaTrigramovUsporiadana().get(dolnaHranica).getValue();
+        hornaHranicaTrigramov = vlastnosti.getStatistikaTrigramovUsporiadana().get(hornaHranica).getValue();
     }
     private void vybratNajlepsieKombinacie(ArrayList<ArrayList<Double>> odchylky,boolean zahrnutViac) {
         kombinacie = new ArrayList<>();
