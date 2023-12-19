@@ -76,11 +76,29 @@ public class Priebeh {
         permutacia.vytlacTestovanuPermutaciu();
 
     }
-    public void otestujKorpusy(ArrayList<String> kluce,ArrayList<StringBuilder> texty){
+    public void statistikaKorpusov(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
         for(int i=0;i<3;i++){
             transpozicia.setTextNaSifrovanie(texty.get(i));
             otestujRozneKluce(kluce);
             System.out.println();
+        }
+    }
+    public void statistikaDlzkyTextov(ArrayList<String> kluce){
+        pocetRiadkov=100;
+        for(int d=pocetRiadkov;d<900;d+=100){
+            transpozicia.setPocetRiadkov(d,permutacia);
+            int index=0;
+            int dlzkaKlucov=0;
+            int dlzkaZt=0;
+            for(int i=0;i<kluce.size();i++){
+                String kluc=kluce.get(index);
+                transpozicia.setKluc(kluc);
+                dlzkaKlucov+=kluc.length();
+                dlzkaZt+=transpozicia.getZasifrovanyText().length();
+                index++;
+
+            }
+            System.out.println(dlzkaZt/kluce.size());
         }
     }
 
