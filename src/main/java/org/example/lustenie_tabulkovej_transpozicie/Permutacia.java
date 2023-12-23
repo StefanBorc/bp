@@ -15,48 +15,38 @@ public class Permutacia {
     private int[] permutacia;
     @Setter
     private ArrayList<StringBuilder> blokyZt;
-    private ArrayList<String> topZlychBigramovOT;
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
+    private double dolnaHranicaBigramov;
     private double dolnaHranicaTrigramov;
     private double hornaHranicaTrigramov;
+    @Setter
     private int pocetRiadkov;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
         this.blokyZt=odhadKluca.blokyDlzkyKluca;
         this.vlastnosti = vlastnosti;
-        odhadnutHranicuTrigramov(1500,300);
-        topZlych(100);
-
+        odhadnutHranicuTrigramov(2500,1000);
+        odhadnutHranicuBigramov();
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
         najstPoradie(odchylky,false);
     }
-    public void topZlych(int pocetRiadkov){
-        this.pocetRiadkov=pocetRiadkov;
-        topZlychBigramovOT=new ArrayList<>();
-        if(SUBOR.equals("EN")){
-            if(pocetRiadkov>500){
-                for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
-                    topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
-                }
-            }
-            else{
-                topZlychBigramovOT= vlastnosti.getTopZlych();
-            }
+    public void odhadnutHranicuBigramov(){
+        int n;
+        if(SUBOR.equals("DE")){
+            n=450;
+        }
+        else if(SUBOR.equals("CZ") && pocetRiadkov<=100){
+            n=375;
         }
         else{
-            topZlychBigramovOT= vlastnosti.getTopZlych();
+            n=350;
         }
-        if(pocetRiadkov<=100){
-            topZlychBigramovOT=new ArrayList<>();
-            for(int i = 50; i< vlastnosti.getTopZlych().size(); i++){
-                topZlychBigramovOT.add(vlastnosti.getTopZlych().get(i));
-            }
-        }
+        dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
@@ -65,9 +55,7 @@ public class Permutacia {
             }
             System.out.println();
         }
-
     }
-    //novy pokus s hladanim stlpcov
     private ArrayList<ArrayList<Double>> vyladitBigramy(ArrayList<StringBuilder> bloky){
         List<Map.Entry<String, Double>> bigramyZT;
 
@@ -90,7 +78,7 @@ public class Permutacia {
                     bigramyZT = vlastnosti.ngramy(text, 2, false);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(topZlychBigramovOT.contains(bigramyZT.get(bigram).getKey())){
+                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
                         }
@@ -153,37 +141,27 @@ public class Permutacia {
         }
         kombinacie=(kopiaKombinacii);
         bigramyPreMozneKombinacie=(kopiaStatistik);
-/*
-        for(int i=0;i<kombinacie.size();i++){
-            System.out.print("[");
-            for(int j=0;j<kombinacie.get(i).length;j++) {
-                System.out.print(kombinacie.get(i)[j]+" ");
-            }
-            System.out.print("]");
-        }
 
- */
     }
     private ArrayList<Double> spravitOdchylkyTrigramov(int velkostPorovnania){
         ArrayList<Double> odchylky=new ArrayList<>();
-        var trigramyZtUsporiadane=vlastnosti.usporiadajPodlaOT(trigramyPreMozneKombinacie,vlastnosti.getStatistikaTrigramovUsporiadana());
 
         for(int i=0;i<trigramyPreMozneKombinacie.size();i++){
             double odchylka=0.0;
             if(trigramyPreMozneKombinacie.get(i).isEmpty()){
-                odchylky.add(200.0);
+                odchylky.add(500.0);
                 continue;
             }
             for(int j=0;j<velkostPorovnania;j++){
                 if(vlastnosti.getStatistikaTrigramov().containsKey(trigramyPreMozneKombinacie.get(i).get(j).getKey())) {
                     if (vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) < dolnaHranicaTrigramov) {
-                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*5;
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*15;
                     }
                     else if(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey()) > hornaHranicaTrigramov){
                         odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue());
                     }
                     else{
-                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*2.5;
+                        odchylka+=Math.abs(vlastnosti.getStatistikaTrigramov().get(trigramyPreMozneKombinacie.get(i).get(j).getKey())-trigramyPreMozneKombinacie.get(i).get(j).getValue())*5;
                     }
                 }
             }

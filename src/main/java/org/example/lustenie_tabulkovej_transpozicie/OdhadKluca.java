@@ -13,10 +13,8 @@ public class OdhadKluca {
 
     @Getter
     ArrayList<StringBuilder> blokyDlzkyKluca;
-    public OdhadKluca(Vlastnosti vlastnosti, TabulkovaTranspozicia transpozicia){
+    public OdhadKluca(Vlastnosti vlastnosti){
         this.vlastnosti = vlastnosti;
-        najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
-        
     }
 
     public double dKluca(ArrayList<StringBuilder> bloky){

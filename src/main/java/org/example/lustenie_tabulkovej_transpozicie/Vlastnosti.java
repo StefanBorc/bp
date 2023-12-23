@@ -5,8 +5,6 @@ import lombok.Getter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.example.Main.SUBOR;
-
 public class Vlastnosti {
     @Getter
     private String[] vsetkySlova;
@@ -19,10 +17,6 @@ public class Vlastnosti {
     @Getter
     private Map<String, Double> statistikaTrigramov;
     @Getter
-    private ArrayList<String> topZlych;
-    @Getter
-    private ArrayList<String> topDobrych;
-    @Getter
     private double statistikaSamohlasokSpoluhlasok;
     public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
@@ -30,7 +24,6 @@ public class Vlastnosti {
         statistikaBigramovUsporiadana = ngramy(ot,2,true);
         statistikaTrigramov =new HashMap<>();
         statistikaTrigramovUsporiadana = ngramy(ot,3,true);
-        urobTopBigramov();
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
@@ -102,23 +95,6 @@ public class Vlastnosti {
             ngramyPercenta.put(bigram.getKey(),(bigram.getValue()/pocet)*100);
         }
         return vytriedeneNgramy(ngramyPercenta);
-    }
-    private void urobTopBigramov(){
-        int n;
-        if(SUBOR.equals("DE")){
-            n=450;
-        }
-        else {
-            n=350;
-        }
-        topZlych=new ArrayList<>();
-        for(int i = statistikaBigramovUsporiadana.size()-1; i>= statistikaBigramovUsporiadana.size()-n; i--){
-            topZlych.add(statistikaBigramovUsporiadana.get(i).getKey());
-        }
-        topDobrych=new ArrayList<>();
-        for(int i=0;i<50;i++){
-            topDobrych.add(statistikaBigramovUsporiadana.get(i).getKey());
-        }
     }
     protected ArrayList<Double[]> usporiadajPodlaOT(ArrayList<List<Map.Entry<String, Double>>> mapy,List<Map.Entry<String,Double>> statistikaOtUsporiadna){
         Map<String,Integer> indexyMapy=vratIndexyUsporiadanejMapy(statistikaOtUsporiadna);

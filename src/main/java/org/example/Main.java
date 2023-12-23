@@ -4,13 +4,14 @@ import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Main {
     public static Random r = new Random();
-    public static String SUBOR="CZ";
+    public static String SUBOR="EN";
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
@@ -19,12 +20,12 @@ public class Main {
         System.out.println(SUBOR.toString());
         Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-        SUBOR="SK";
+        SUBOR="DE";
         text = new Text(SUBOR);
         System.out.println(SUBOR.toString());
         priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-        SUBOR="DE";
+        SUBOR="SK";
         text = new Text(SUBOR);
         System.out.println(SUBOR.toString());
         priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
@@ -61,7 +62,7 @@ public class Main {
         }
         return s.toString();
     }
-    private static void vygenerujKluce(int n,String dir) throws IOException {
+    private static ArrayList<String> vygenerujKluce(int n, String dir) throws IOException {
         FileWriter wr = new FileWriter(dir+".txt");
         Map<String, Integer> kluce = new HashMap<>();
         Random r = new Random();
@@ -76,12 +77,15 @@ public class Main {
             }
             kluce.merge(s.toString(), 1, Integer::sum);
         }
-        for (Map.Entry<String, Integer> vstup : kluce.entrySet()) {
-            String kluc = vstup.getKey();
-            wr.write(kluc);
-            wr.write("\n");
+        if(dir!=null){
+            for (Map.Entry<String, Integer> vstup : kluce.entrySet()) {
+                String kluc = vstup.getKey();
+                wr.write(kluc);
+                wr.write("\n");
+            }
+            wr.close();
         }
-        wr.close();
+        return (ArrayList<String>) kluce;
 
     }
 
