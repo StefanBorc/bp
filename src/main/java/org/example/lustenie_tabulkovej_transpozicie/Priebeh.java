@@ -1,7 +1,6 @@
 package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.example.aplikacia.Jazyk;
 import org.example.sifry.TabulkovaTranspozicia;
 
@@ -16,15 +15,16 @@ public class Priebeh {
     private Permutacia permutacia;
     @Getter
     private Vlastnosti vlastnosti;
-    @Setter
+    @Getter
     private int pocetRiadkov ;
 
-    public Priebeh(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
+    public Priebeh(Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
         pocetRiadkov=100;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,null);
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti);
-        permutacia=new Permutacia(vlastnosti,odhadKluca);
+        permutacia=new Permutacia(vlastnosti,odhadKluca,jazyk);
+
     }
     public void otestovatRiadky(ArrayList<String> kluce){
         pocetRiadkov=100;
@@ -65,7 +65,8 @@ public class Priebeh {
 
         }
     }
-    public void otestovatKorpus(ArrayList<String> kluce,int pocetRiadkov,int pocetKlucov){
+    public void otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetRiadkov,int pocetKlucov){
+        transpozicia.setTextNaSifrovanie(text);
 
         transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
         int index=0;
@@ -95,6 +96,7 @@ public class Priebeh {
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
+
     }
     public void otestujKlucPermutaciu(int n,String kluc){
         transpozicia.setPocetRiadkov(n,permutacia);
