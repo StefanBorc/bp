@@ -1,6 +1,7 @@
 package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,9 +9,9 @@ import java.util.stream.Collectors;
 public class Vlastnosti {
     @Getter
     private String[] vsetkySlova;
-    @Getter
+    @Getter@Setter
     private List<Map.Entry<String,Double>> statistikaBigramovUsporiadana;
-    @Getter
+    @Getter@Setter
     private List<Map.Entry<String,Double>> statistikaTrigramovUsporiadana;
     @Getter
     private Map<String,Double> statistikaBigramov;
@@ -21,9 +22,9 @@ public class Vlastnosti {
     public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
         statistikaBigramov =new HashMap<>();
-        statistikaBigramovUsporiadana = ngramy(ot,2,true);
+        statistikaBigramovUsporiadana = ngramy(ot,2,true,false);
         statistikaTrigramov =new HashMap<>();
-        statistikaTrigramovUsporiadana = ngramy(ot,3,true);
+        statistikaTrigramovUsporiadana = ngramy(ot,3,true,false);
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
@@ -41,7 +42,7 @@ public class Vlastnosti {
         }
         return indexyMapy;
     }
-    protected List<Map.Entry<String, Double>> ngramy(StringBuilder text, int n,boolean jeOtvorenyText) {
+    protected List<Map.Entry<String, Double>> ngramy(StringBuilder text, int n,boolean jeOtvorenyText,boolean zmenaTextu) {
         Map<String, Double> ngramy = new HashMap<>();
         int pripocitaj;
         if(jeOtvorenyText){
@@ -69,9 +70,10 @@ public class Vlastnosti {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && (statistikaBigramov.isEmpty())||statistikaTrigramov.isEmpty()){
+        if(jeOtvorenyText && (statistikaBigramov.isEmpty()) || statistikaTrigramov.isEmpty() || zmenaTextu ){
             if(n==2){
                 statistikaBigramov = ngramy;
+                int a=0;
             }
             else if(n==3){
                 statistikaTrigramov = ngramy;

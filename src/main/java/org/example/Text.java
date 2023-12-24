@@ -5,8 +5,6 @@ import lombok.Getter;
 import java.io.*;
 import java.util.ArrayList;
 
-import static org.example.Main.SUBOR;
-
 public class Text {
     @Getter
     private StringBuilder upravenyText;
@@ -15,26 +13,23 @@ public class Text {
     @Getter
     private ArrayList<String> kluce;
     private String nazovSuboru;
-    public String setNazovSuboru(String nazovSuboru) throws IOException {
-        vratOT(nazovSuboru);
+    public void setNazovSuboru(String nazovSuboru) throws IOException {
+        this.nazovSuboru=nazovSuboru;
+        vratOT();
         nacitajKluceText();
-        return nazovSuboru;
     }
-
     public Text(String nazovSuboru) throws IOException {
-        vratOT(nazovSuboru);
+        this.nazovSuboru=nazovSuboru;
+        vratOT();
         nacitajKluceText();
     }
-    public Text(){
 
-    }
-
-    protected StringBuilder vratOT(String nazovSuboru) throws IOException {
+    protected StringBuilder vratOT() throws IOException {
 
         upravenyText =new StringBuilder();
         StringBuilder text = new StringBuilder();
 
-        BufferedReader br = otvorSubor(nazovSuboru);
+        BufferedReader br = otvorSubor();
         String st;
 
         while ((st = br.readLine()) != null) {
@@ -49,7 +44,7 @@ public class Text {
         br.close();
         return upravenyText;
     }
-    private BufferedReader otvorSubor(String nazovSuboru) throws FileNotFoundException {
+    private BufferedReader otvorSubor() throws FileNotFoundException {
         File slovaTxt = new File("OT",nazovSuboru+".txt");
         return new BufferedReader(new FileReader(slovaTxt));
     }
@@ -65,7 +60,7 @@ public class Text {
             kluce.add(st);
         }
         int i;
-        File d=new File("KORPUSY",SUBOR);
+        File d=new File("KORPUSY",nazovSuboru);
         for(i=1;i<=3;i++){
             File p=new File(d,i+".txt");
             br=new BufferedReader(new FileReader(p));

@@ -50,6 +50,8 @@ public class Aplikacia {
 
         JLabel zvolenyPocetKlucov=new JLabel("Pocet klucov : "+prepinacKlucov.getValue());
         JLabel zvolenyPocetRiadkov=new JLabel("Pocet riadkov : "+prepinacRiadkov.getValue());
+        priebehAplikacie.setPocetKlucov(prepinacKlucov.getValue());
+        priebehAplikacie.setPocetRiadkov(prepinacRiadkov.getValue());
 
         JComboBox prepinacKorpusov =new JComboBox<>();
         prepinacKorpusov.addItem("DE");

@@ -25,10 +25,11 @@ public class Permutacia {
     @Setter
     private Jazyk jazyk;
 
-    public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
+    public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca,Jazyk jazyk) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
         this.blokyZt=odhadKluca.blokyDlzkyKluca;
         this.vlastnosti = vlastnosti;
+        this.jazyk=jazyk;
         odhadnutHranicuTrigramov(2500,1000);
         odhadnutHranicuBigramov();
     }
@@ -38,10 +39,10 @@ public class Permutacia {
     }
     public void odhadnutHranicuBigramov(){
         int n;
-        if(jazyk.equals(Jazyk.DE)){
+        if(jazyk.toString().equals("DE")){
             n=450;
         }
-        else if(jazyk.equals(Jazyk.CZ) && pocetRiadkov<=100){
+        else if(jazyk.toString().equals("CZ") && pocetRiadkov<=100){
             n=375;
         }
         else{
@@ -63,7 +64,7 @@ public class Permutacia {
         int velkostPorovnaniaPrePermutaciu=30;
         int vaha=3;
         if(pocetRiadkov<=100){
-            if(!jazyk.equals(Jazyk.EN)){
+            if(!jazyk.toString().equals("EN")){
                 velkostPorovnaniaPrePermutaciu=25;
             }
             vaha=10;
@@ -76,7 +77,7 @@ public class Permutacia {
                 double odchylka=0.0;
                 if (prvy != druhy) {
                     StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = vlastnosti.ngramy(text, 2, false);
+                    bigramyZT = vlastnosti.ngramy(text, 2, false,false);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
@@ -104,7 +105,7 @@ public class Permutacia {
             if(kombinacie3Stlpov.get(i)!=null){
                 StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,kombinacie3Stlpov.get(i)[0],kombinacie3Stlpov.get(i)[1]);
                 text=pridatStlpec(text,kombinacie3Stlpov.get(i)[2],3);
-                trigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,3,false));
+                trigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,3,false,false));
             }
             else {
                 trigramyPreMozneKombinacie.add(new ArrayList<>());
@@ -231,12 +232,12 @@ public class Permutacia {
             StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec1);
             Integer[] kombinacia = new Integer[]{i, minStlpec1};
             kombinacie.add(kombinacia);
-            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
+            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false));
             if(zahrnutViac){
                 text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
                 kombinacia = new Integer[]{i, minStlpec2};
                 kombinacie.add(kombinacia);
-                bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false));
+                bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false));
             }
         }
     }
