@@ -1,14 +1,22 @@
 package org.example.lustenie_tabulkovej_transpozicie;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.example.aplikacia.Jazyk;
 import org.example.sifry.TabulkovaTranspozicia;
 
 import java.util.ArrayList;
 
 public class Priebeh {
+    @Getter
     private TabulkovaTranspozicia transpozicia;
+    @Getter
     private OdhadKluca odhadKluca;
+    @Getter
     private Permutacia permutacia;
+    @Getter
     private Vlastnosti vlastnosti;
+    @Setter
     private int pocetRiadkov ;
 
     public Priebeh(StringBuilder otNasifrovanie, StringBuilder otUpraveny){
@@ -17,7 +25,6 @@ public class Priebeh {
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti);
         permutacia=new Permutacia(vlastnosti,odhadKluca);
-
     }
     public void otestovatRiadky(ArrayList<String> kluce){
         pocetRiadkov=100;
@@ -57,6 +64,37 @@ public class Priebeh {
             System.out.println();
 
         }
+    }
+    public void otestovatKorpus(ArrayList<String> kluce,int pocetRiadkov,int pocetKlucov){
+
+        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
+        int index=0;
+        double pocetNeuspesnychPermutacii=0;
+        double pocetNeuhadnutychKlucov=0;
+
+        for(int i=0;i<pocetKlucov;i++) {
+            String kluc = kluce.get(index);
+            transpozicia.setKluc(kluc);
+
+            odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(), transpozicia);
+            index++;
+            if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
+                pocetNeuhadnutychKlucov++;
+                pocetNeuspesnychPermutacii++;
+                continue;
+            }
+            permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+            permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
+            permutacia.hladatPermutaciu();
+
+            if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+                pocetNeuspesnychPermutacii++;
+            }
+        }
+        double uspesnostKlucov=((pocetKlucov-pocetNeuhadnutychKlucov)/pocetKlucov)*100;
+        double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
+        System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
+        System.out.println();
     }
     public void otestujKlucPermutaciu(int n,String kluc){
         transpozicia.setPocetRiadkov(n,permutacia);

@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.aplikacia.Aplikacia;
 import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
 
 import java.io.FileWriter;
@@ -15,27 +16,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
-        //skusit naprogramovat aby to zobralo 2 najlepsie kombinacie a podla trigramov ich vysortovalo
+        /*
         Text text = new Text(SUBOR);
         System.out.println(SUBOR.toString());
         Priebeh priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
         priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-        SUBOR="DE";
-        text = new Text(SUBOR);
-        System.out.println(SUBOR.toString());
-        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-        SUBOR="SK";
-        text = new Text(SUBOR);
-        System.out.println(SUBOR.toString());
-        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-        SUBOR="EN";
-        text = new Text(SUBOR);
-        System.out.println(SUBOR.toString());
-        priebeh = new Priebeh(text.getTextyNaSifrovanie().get(0), text.getUpravenyText());
-        priebeh.statistikaKorpusov(text.getKluce(),text.getTextyNaSifrovanie());
-
+         */
+        new Aplikacia();
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;

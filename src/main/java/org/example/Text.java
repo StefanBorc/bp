@@ -14,10 +14,19 @@ public class Text {
     private ArrayList<StringBuilder> textyNaSifrovanie;
     @Getter
     private ArrayList<String> kluce;
+    private String nazovSuboru;
+    public String setNazovSuboru(String nazovSuboru) throws IOException {
+        vratOT(nazovSuboru);
+        nacitajKluceText();
+        return nazovSuboru;
+    }
 
     public Text(String nazovSuboru) throws IOException {
         vratOT(nazovSuboru);
         nacitajKluceText();
+    }
+    public Text(){
+
     }
 
     protected StringBuilder vratOT(String nazovSuboru) throws IOException {

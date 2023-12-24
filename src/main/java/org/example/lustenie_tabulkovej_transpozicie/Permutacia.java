@@ -2,10 +2,9 @@ package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.aplikacia.Jazyk;
 
 import java.util.*;
-
-import static org.example.Main.SUBOR;
 
 public class Permutacia {
     private Vlastnosti vlastnosti;
@@ -23,6 +22,8 @@ public class Permutacia {
     private double hornaHranicaTrigramov;
     @Setter
     private int pocetRiadkov;
+    @Setter
+    private Jazyk jazyk;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
@@ -37,10 +38,10 @@ public class Permutacia {
     }
     public void odhadnutHranicuBigramov(){
         int n;
-        if(SUBOR.equals("DE")){
+        if(jazyk.equals(Jazyk.DE)){
             n=450;
         }
-        else if(SUBOR.equals("CZ") && pocetRiadkov<=100){
+        else if(jazyk.equals(Jazyk.CZ) && pocetRiadkov<=100){
             n=375;
         }
         else{
@@ -62,7 +63,7 @@ public class Permutacia {
         int velkostPorovnaniaPrePermutaciu=30;
         int vaha=3;
         if(pocetRiadkov<=100){
-            if(!SUBOR.equals("EN")){
+            if(!jazyk.equals(Jazyk.EN)){
                 velkostPorovnaniaPrePermutaciu=25;
             }
             vaha=10;
