@@ -4,6 +4,8 @@ import org.example.aplikacia.Jazyk;
 import org.example.sifry.TabulkovaTranspozicia;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
@@ -13,12 +15,11 @@ public class Priebeh {
     private int pocetRiadkov ;
 
     public Priebeh(Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
-        pocetRiadkov=100;
+        pocetRiadkov=0;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,null);
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti);
         permutacia=new Permutacia(vlastnosti,odhadKluca,jazyk);
-
     }
     public void setJazyk(Jazyk jazyk,StringBuilder ot) {
         permutacia.setJazyk(jazyk);
@@ -32,7 +33,12 @@ public class Priebeh {
         this.pocetRiadkov=pocetRiadkov;
         permutacia.setPocetRiadkov(pocetRiadkov);
     }
-
+    protected double podielSamohlasokSpoluhlasokOT(){
+        return vlastnosti.getStatistikaSamohlasokSpoluhlasok();
+    }
+    protected List<Map.Entry<String, Double>> vratBigramyOT(){
+        return vlastnosti.getStatistikaBigramovUsporiadana();
+    }
     public void otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetKlucov){
         transpozicia.setTextNaSifrovanie(text);
         transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
@@ -63,13 +69,6 @@ public class Priebeh {
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
 
-    }
-
-    public void statistikaKorpusov(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
-        for(int i=0;i<3;i++){
-            otestovatKorpus(texty.get(i),kluce,kluce.size());
-            System.out.println();
-        }
     }
 
 }

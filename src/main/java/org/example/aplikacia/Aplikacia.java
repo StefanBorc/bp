@@ -8,6 +8,9 @@ public class Aplikacia {
     public static final String SPUSTIT="SPUSTIT";
     public static final String PREPINAC_RIADKOV="PREPINAC_RIADKOV";
     public static final String PREPINAC_KLUCOV="PREPINAC_KLUCOV";
+    public static final String PODIEL_NADPIS ="Podiel hlasok : ";
+    public static final String BIGRAMY_NADPIS="bigramy OT : ";
+    public static final String POKUS_NADPIS="Vysledok pokusu : ";
     public Aplikacia() throws IOException {
         JFrame frame = new JFrame("Tabulkova transpozicia");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,33 +57,57 @@ public class Aplikacia {
         priebehAplikacie.setPocetRiadkov(prepinacRiadkov.getValue());
 
         JComboBox prepinacKorpusov =new JComboBox<>();
-        prepinacKorpusov.addItem("DE");
-        prepinacKorpusov.addItem("SK");
-        prepinacKorpusov.addItem("CZ");
-        prepinacKorpusov.addItem("EN");
+        prepinacKorpusov.addItem(Jazyk.DE);
+        prepinacKorpusov.addItem(Jazyk.SK);
+        prepinacKorpusov.addItem(Jazyk.CZ);
+        prepinacKorpusov.addItem(Jazyk.EN);
+        prepinacKorpusov.setBackground(Color.LIGHT_GRAY);
         prepinacKorpusov.addActionListener(priebehAplikacie);
 
         JComboBox prepinacVzorky =new JComboBox<>();
         prepinacVzorky.addItem("1");
         prepinacVzorky.addItem("2");
         prepinacVzorky.addItem("3");
+        prepinacVzorky.setBackground(Color.LIGHT_GRAY);
         prepinacVzorky.addActionListener(priebehAplikacie);
 
+        menu1.setLayout(new GridLayout(1,3));
         menu1.setBackground(Color.LIGHT_GRAY);
         menu1.add(prepinacKorpusov);
         menu1.add(prepinacVzorky);
-        menu1.add(prepinacKlucov);
-        menu1.add(zvolenyPocetKlucov);
+        menu1.add(tlacidloSpustit);
 
-        menu2.add(tlacidloSpustit,BorderLayout.WEST);
-        menu2.add(prepinacRiadkov,BorderLayout.SOUTH);
-        menu2.add(zvolenyPocetRiadkov,BorderLayout.EAST);
+        menu2.setLayout(new GridLayout(2,2));
+        menu2.add(zvolenyPocetKlucov);
+        zvolenyPocetKlucov.setHorizontalAlignment(SwingConstants.CENTER);
+        menu2.add(prepinacKlucov);
+        menu2.add(zvolenyPocetRiadkov);
+        zvolenyPocetRiadkov.setHorizontalAlignment(SwingConstants.CENTER);
+        menu2.add(prepinacRiadkov);
         menu2.setBackground(Color.LIGHT_GRAY);
         frame.add(menu1, BorderLayout.NORTH);
         frame.add(menu2,BorderLayout.SOUTH);
 
+        JLabel text1 = new JLabel(PODIEL_NADPIS);
+        JLabel text2 = new JLabel(BIGRAMY_NADPIS);
+        JLabel text3 = new JLabel(POKUS_NADPIS);
+        text1.setVerticalAlignment(SwingConstants.TOP);
+        text2.setVerticalAlignment(SwingConstants.TOP);
+        text3.setVerticalAlignment(SwingConstants.TOP);
+
+        JPanel strednyPanel = new JPanel(new GridLayout(1, 3));
+        JScrollPane panel1 = new JScrollPane(text1);
+        strednyPanel.add(panel1);
+        JScrollPane panel2 = new JScrollPane(text2);
+        strednyPanel.add(panel2);
+        JScrollPane panel3 = new JScrollPane(text3);
+        strednyPanel.add(panel3);
+
         priebehAplikacie.setZvolenyPocetKlucov(zvolenyPocetKlucov);
         priebehAplikacie.setZvolenyPocetRiadkov(zvolenyPocetRiadkov);
+
+
+        frame.add(strednyPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
     }

@@ -27,7 +27,7 @@ public class Permutacia {
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca,Jazyk jazyk) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
-        this.blokyZt=odhadKluca.blokyDlzkyKluca;
+        this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
         odhadnutHranicuTrigramov(2500,1000);

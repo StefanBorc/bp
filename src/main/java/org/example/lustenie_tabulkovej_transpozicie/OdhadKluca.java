@@ -10,9 +10,8 @@ public class OdhadKluca {
     @Getter
     private int dlzkaKluca;
     private Vlastnosti vlastnosti;
-
     @Getter
-    ArrayList<StringBuilder> blokyDlzkyKluca;
+    private ArrayList<StringBuilder> blokyDlzkyKluca;
     public OdhadKluca(Vlastnosti vlastnosti){
         this.vlastnosti = vlastnosti;
     }
@@ -32,7 +31,6 @@ public class OdhadKluca {
         return suma/pocet;
     }
     protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
-
 
         ArrayList<StringBuilder> riadky;
 

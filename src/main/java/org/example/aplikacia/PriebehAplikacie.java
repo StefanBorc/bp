@@ -68,11 +68,11 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         else{
             switch(item){
                 case "1" : cisloKorpusu=0;
-                break;
+                    break;
                 case "2" : cisloKorpusu=1;
-                break;
+                    break;
                 case "3" : cisloKorpusu=2;
-                break;
+                    break;
                 default:break;
             }
             priebeh.setTextPreTranspoziciu(text.getTextyNaSifrovanie().get(cisloKorpusu));
