@@ -1,6 +1,7 @@
 package org.example;
 
-import org.example.aplikacia.Aplikacia;
+import org.example.aplikacia.Jazyk;
+import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,18 +16,18 @@ public class Main {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
 
-        new Aplikacia();
+        //new Aplikacia();
+        Text text= new Text("EN");
+        Priebeh priebeh = new Priebeh(Jazyk.EN,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
+        priebeh.setPocetRiadkov(300);
+        priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(0),text.getKluce(),text.getKluce().size());
 
         long endTime = System.currentTimeMillis();
         long elapsedTime = endTime - startTime;
         long minutes = (elapsedTime / 1000) / 60;
         long seconds = (elapsedTime / 1000) % 60;
-     //   System.out.println("Elapsed Time: " + minutes + " minutes and " + seconds + " seconds");
-        /*
-        String kluc="dskaodaodakddsadsad";
-        System.out.println(kluc.length());
-        priebeh.otestujKlucPermutaciu(200,kluc);
-*/
+        System.out.println("Elapsed Time: " + minutes + " minutes and " + seconds + " seconds");
+
 
     }
 
