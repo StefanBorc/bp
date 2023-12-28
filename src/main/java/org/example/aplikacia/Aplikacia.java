@@ -106,6 +106,11 @@ public class Aplikacia {
         priebehAplikacie.setZvolenyPocetKlucov(zvolenyPocetKlucov);
         priebehAplikacie.setZvolenyPocetRiadkov(zvolenyPocetRiadkov);
 
+        priebehAplikacie.setPodielHlasokStatistika(text1);;
+        priebehAplikacie.setBigramyStatistika(text2);
+        priebehAplikacie.setPokusStatistika(text3);
+        priebehAplikacie.inicializaciaNadpisov();
+
 
         frame.add(strednyPanel, BorderLayout.CENTER);
 

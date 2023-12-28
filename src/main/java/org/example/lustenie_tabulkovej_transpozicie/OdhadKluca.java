@@ -94,6 +94,7 @@ public class OdhadKluca {
     private int vratKluc(ArrayList<Double> samohlaskySpoluhlaskyStatistika){
         ArrayList<Double> odchylky=new ArrayList<>();
         double otStatistika= vlastnosti.getStatistikaSamohlasokSpoluhlasok();
+
         for(var hodnota:samohlaskySpoluhlaskyStatistika){
             double odchylka=999.0;
             if(hodnota!=null){

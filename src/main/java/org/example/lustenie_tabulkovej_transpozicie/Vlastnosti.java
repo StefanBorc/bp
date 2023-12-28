@@ -17,7 +17,7 @@ public class Vlastnosti {
     private Map<String,Double> statistikaBigramov;
     @Getter
     private Map<String, Double> statistikaTrigramov;
-    @Getter
+    @Getter@Setter
     private double statistikaSamohlasokSpoluhlasok;
     public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
@@ -149,6 +149,7 @@ public class Vlastnosti {
                 pocetSpoluhlasok++;
             }
         }
+
         return pocetSamohlasok/pocetSpoluhlasok;
     }
 

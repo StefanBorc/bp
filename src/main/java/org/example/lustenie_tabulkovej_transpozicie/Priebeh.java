@@ -14,8 +14,8 @@ public class Priebeh {
     private Vlastnosti vlastnosti;
     private int pocetRiadkov ;
 
-    public Priebeh(Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
-        pocetRiadkov=0;
+    public Priebeh(int pocetRiadkov,Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
+        this.pocetRiadkov=pocetRiadkov;
         transpozicia=new TabulkovaTranspozicia(otNasifrovanie,null);
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti);
@@ -23,7 +23,7 @@ public class Priebeh {
     }
     public void setJazyk(Jazyk jazyk,StringBuilder ot) {
         permutacia.setJazyk(jazyk);
-        vlastnosti.samohlaskySpoluhlasky(ot.toString());
+        vlastnosti.setStatistikaSamohlasokSpoluhlasok(vlastnosti.samohlaskySpoluhlasky(ot.toString()));
         vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true));
     }
     public void setTextPreTranspoziciu(StringBuilder textPreTranspoziciu){
@@ -33,13 +33,13 @@ public class Priebeh {
         this.pocetRiadkov=pocetRiadkov;
         permutacia.setPocetRiadkov(pocetRiadkov);
     }
-    protected double podielSamohlasokSpoluhlasokOT(){
+    public double podielSamohlasokSpoluhlasokOT(){
         return vlastnosti.getStatistikaSamohlasokSpoluhlasok();
     }
-    protected List<Map.Entry<String, Double>> vratBigramyOT(){
+    public List<Map.Entry<String, Double>> bigramyOT(){
         return vlastnosti.getStatistikaBigramovUsporiadana();
     }
-    public void otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetKlucov){
+    public String otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetKlucov){
         transpozicia.setTextNaSifrovanie(text);
         transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
         int index=0;
@@ -68,7 +68,8 @@ public class Priebeh {
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
-
+        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br>"+"odhadnute poradia stlpcov : "+uspesnostPermutacii+"%";
+        return pokus;
     }
 
 }

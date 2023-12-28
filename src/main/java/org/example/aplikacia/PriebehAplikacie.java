@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import static org.example.aplikacia.Aplikacia.*;
 
@@ -24,15 +26,32 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private JLabel zvolenyPocetRiadkov;
     @Setter
     private JLabel zvolenyPocetKlucov;
+    @Setter
+    private JLabel podielHlasokStatistika;
+    @Setter
+    private JLabel bigramyStatistika;
+    @Setter
+    private JLabel pokusStatistika;
+    private String pokus;
+    private List<Map.Entry<String,Double>> bigramyOT;
     public PriebehAplikacie() throws IOException {
         super();
         jazyk=Jazyk.DE;
         cisloKorpusu=0;
         pocetRiadkov=500;
         text=new Text(jazyk.toString());
-        priebeh=new Priebeh(jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
+        priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
     }
-
+    protected void inicializaciaNadpisov(){
+        podielHlasokStatistika.setText(PODIEL_NADPIS+" "+priebeh.podielSamohlasokSpoluhlasokOT());
+        bigramyOT=priebeh.bigramyOT();
+        String textBigramy=" ";
+        for(var bigram:bigramyOT){
+            textBigramy+=bigram.toString();
+            textBigramy+="<br>";
+        }
+        bigramyStatistika.setText("<html>" +BIGRAMY_NADPIS+"<br>"+ textBigramy + "</html>");
+    }
     @Override
     public void stateChanged(ChangeEvent e) {
         if(((JSlider)e.getSource()).getName().equals(PREPINAC_KLUCOV)){
@@ -52,7 +71,8 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals(SPUSTIT)){
-            priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu),text.getKluce(),pocetKlucov);
+            pokus=priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu),text.getKluce(),pocetKlucov);
+            pokusStatistika.setText("<html>"+POKUS_NADPIS+"<br>"+pokus+"<html>");
             return;
         }
         String item=((JComboBox)e.getSource()).getSelectedItem().toString();
@@ -64,15 +84,16 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
             jazyk = Jazyk.valueOf(item);
             priebeh.setJazyk(jazyk,text.getUpravenyText());
+            inicializaciaNadpisov();
         }
         else{
             switch(item){
                 case "1" : cisloKorpusu=0;
-                    break;
+                break;
                 case "2" : cisloKorpusu=1;
-                    break;
+                break;
                 case "3" : cisloKorpusu=2;
-                    break;
+                break;
                 default:break;
             }
             priebeh.setTextPreTranspoziciu(text.getTextyNaSifrovanie().get(cisloKorpusu));
