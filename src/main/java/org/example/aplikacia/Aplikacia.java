@@ -11,12 +11,15 @@ public class Aplikacia {
     public static final String PODIEL_NADPIS ="Podiel hlasok : ";
     public static final String BIGRAMY_NADPIS="bigramy OT : ";
     public static final String POKUS_NADPIS="Vysledok pokusu : ";
+    public static final String PRIEMERNA_DLZKA_SLOV_NADPIS="Priemerna dlzka slov : ";
+    public static final String INDEX_KOINCIDENCIE_NADPIS="Index koincidencie : ";
+    public static final String TRIGRAMY_NADPIS="trigramy OT : ";
     public Aplikacia() throws IOException {
         JFrame frame = new JFrame("Tabulkova transpozicia");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
         frame.getContentPane().setBackground(Color.GRAY);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setFocusable(true);
         frame.requestFocusInWindow();
 
@@ -88,31 +91,55 @@ public class Aplikacia {
         frame.add(menu1, BorderLayout.NORTH);
         frame.add(menu2,BorderLayout.SOUTH);
 
-        JLabel text1 = new JLabel(PODIEL_NADPIS);
-        JLabel text2 = new JLabel(BIGRAMY_NADPIS);
-        JLabel text3 = new JLabel(POKUS_NADPIS);
-        text1.setVerticalAlignment(SwingConstants.TOP);
-        text2.setVerticalAlignment(SwingConstants.TOP);
-        text3.setVerticalAlignment(SwingConstants.TOP);
+        JLabel podielHlasokText = new JLabel(PODIEL_NADPIS);
+        JLabel bigramyText = new JLabel(BIGRAMY_NADPIS);
+        JLabel trigramyText = new JLabel(TRIGRAMY_NADPIS);
+        JLabel priemernaDlzkaSlov=new JLabel(PRIEMERNA_DLZKA_SLOV_NADPIS);
+        JLabel indexKoincidencieText=new JLabel(INDEX_KOINCIDENCIE_NADPIS);
 
-        JPanel strednyPanel = new JPanel(new GridLayout(1, 3));
-        JScrollPane panel1 = new JScrollPane(text1);
-        strednyPanel.add(panel1);
-        JScrollPane panel2 = new JScrollPane(text2);
-        strednyPanel.add(panel2);
-        JScrollPane panel3 = new JScrollPane(text3);
-        strednyPanel.add(panel3);
+        JLabel pokusText = new JLabel(POKUS_NADPIS);
+
+        podielHlasokText.setVerticalAlignment(SwingConstants.TOP);
+        bigramyText.setVerticalAlignment(SwingConstants.TOP);
+        priemernaDlzkaSlov.setVerticalAlignment(SwingConstants.TOP);
+        pokusText.setVerticalAlignment(SwingConstants.TOP);
+        indexKoincidencieText.setVerticalAlignment(SwingConstants.TOP);
+
+        JPanel hlavnyPanel = new JPanel(new GridLayout(1, 3));
+
+        JPanel statistikyOt1=new JPanel(new GridLayout(2,1));
+        JScrollPane podielHlasokPanel = new JScrollPane(podielHlasokText);
+        JScrollPane priemernaDlzkaSlovPanel = new JScrollPane(priemernaDlzkaSlov);
+        statistikyOt1.add(priemernaDlzkaSlovPanel);
+        statistikyOt1.add(podielHlasokPanel);
+        hlavnyPanel.add(statistikyOt1);
+
+        JPanel statistikyOt2=new JPanel(new GridLayout(2,1));
+        JScrollPane bigramyPanel = new JScrollPane(bigramyText);
+        JScrollPane trigramyPanel = new JScrollPane(trigramyText);
+        statistikyOt2.add(bigramyPanel);
+        statistikyOt2.add(trigramyPanel);
+        hlavnyPanel.add(statistikyOt2);
+
+        JPanel statistikyOt3=new JPanel(new GridLayout(2,1));
+        JScrollPane indexKoincidenciePanel = new JScrollPane(indexKoincidencieText);
+        JScrollPane pokusPanel = new JScrollPane(pokusText);
+        statistikyOt3.add(indexKoincidenciePanel);
+        statistikyOt3.add(pokusPanel);
+        hlavnyPanel.add(statistikyOt3);
 
         priebehAplikacie.setZvolenyPocetKlucov(zvolenyPocetKlucov);
         priebehAplikacie.setZvolenyPocetRiadkov(zvolenyPocetRiadkov);
 
-        priebehAplikacie.setPodielHlasokStatistika(text1);;
-        priebehAplikacie.setBigramyStatistika(text2);
-        priebehAplikacie.setPokusStatistika(text3);
+        priebehAplikacie.setPodielHlasokStatistika(podielHlasokText);;
+        priebehAplikacie.setBigramyStatistika(bigramyText);
+        priebehAplikacie.setTrigramyStatistika(trigramyText);
+        priebehAplikacie.setPriemernaDlzkaSlovStatistika(priemernaDlzkaSlov);
+        priebehAplikacie.setIndexKoincidencieStatistika(indexKoincidencieText);
+        priebehAplikacie.setPokusStatistika(pokusText);
         priebehAplikacie.inicializaciaNadpisov();
 
-
-        frame.add(strednyPanel, BorderLayout.CENTER);
+        frame.add(hlavnyPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
     }

@@ -25,6 +25,9 @@ public class Priebeh {
         permutacia.setJazyk(jazyk);
         vlastnosti.setStatistikaSamohlasokSpoluhlasok(vlastnosti.samohlaskySpoluhlasky(ot.toString()));
         vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true));
+        vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true));
+        vlastnosti.priemernaDlzkaSlov(ot.toString());
+        vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(vlastnosti.getStatistikaBigramov().values().toArray(new Double[0]), ot.length()));
     }
     public void setTextPreTranspoziciu(StringBuilder textPreTranspoziciu){
         transpozicia.setTextNaSifrovanie(textPreTranspoziciu);
@@ -38,6 +41,15 @@ public class Priebeh {
     }
     public List<Map.Entry<String, Double>> bigramyOT(){
         return vlastnosti.getStatistikaBigramovUsporiadana();
+    }
+    public List<Map.Entry<String, Double>> trigramyOT(){
+        return vlastnosti.getStatistikaTrigramovUsporiadana();
+    }
+    public double priemernaDlzkaSlovOT(){
+        return vlastnosti.getPriemernaDlzkaSlov();
+    }
+    public double indexKoincidencieOT(){
+        return vlastnosti.getIndexKoincidencie();
     }
     public String otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetKlucov){
         transpozicia.setTextNaSifrovanie(text);

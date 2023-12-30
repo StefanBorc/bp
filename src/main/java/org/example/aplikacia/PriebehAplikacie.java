@@ -31,9 +31,16 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JLabel bigramyStatistika;
     @Setter
+    private JLabel priemernaDlzkaSlovStatistika;
+    @Setter
+    private JLabel indexKoincidencieStatistika;
+    @Setter
+    private JLabel trigramyStatistika;
+    @Setter
     private JLabel pokusStatistika;
     private String pokus;
     private List<Map.Entry<String,Double>> bigramyOT;
+    private List<Map.Entry<String,Double>> trigramyOT;
     public PriebehAplikacie() throws IOException {
         super();
         jazyk=Jazyk.DE;
@@ -46,11 +53,25 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         podielHlasokStatistika.setText(PODIEL_NADPIS+" "+priebeh.podielSamohlasokSpoluhlasokOT());
         bigramyOT=priebeh.bigramyOT();
         String textBigramy=" ";
+        String textTrigramy=" ";
         for(var bigram:bigramyOT){
             textBigramy+=bigram.toString();
             textBigramy+="<br>";
         }
-        bigramyStatistika.setText("<html>" +BIGRAMY_NADPIS+"<br>"+ textBigramy + "</html>");
+        trigramyOT=priebeh.trigramyOT();
+        int i=0;
+        for(var trigram:trigramyOT){
+            if(i==500){
+                break;
+            }
+            textTrigramy+=trigram.toString();
+            textTrigramy+="<br>";
+            i++;
+        }
+        priemernaDlzkaSlovStatistika.setText(PRIEMERNA_DLZKA_SLOV_NADPIS+" "+priebeh.priemernaDlzkaSlovOT());
+        indexKoincidencieStatistika.setText(INDEX_KOINCIDENCIE_NADPIS+" "+priebeh.indexKoincidencieOT());
+        bigramyStatistika.setText("<html><font color='red'>" +BIGRAMY_NADPIS+"<br><font color='black'>"+ textBigramy + "</html>");
+        trigramyStatistika.setText("<html><font color='red'>" +TRIGRAMY_NADPIS+"<br><font color='black'>"+ textTrigramy + "</html>");
     }
     @Override
     public void stateChanged(ChangeEvent e) {

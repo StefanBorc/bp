@@ -19,6 +19,10 @@ public class Vlastnosti {
     private Map<String, Double> statistikaTrigramov;
     @Getter@Setter
     private double statistikaSamohlasokSpoluhlasok;
+    @Getter
+    private double priemernaDlzkaSlov;
+    @Getter@Setter
+    private double indexKoincidencie;
     public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
         statistikaBigramov =new HashMap<>();
@@ -26,6 +30,8 @@ public class Vlastnosti {
         statistikaTrigramov =new HashMap<>();
         statistikaTrigramovUsporiadana = ngramy(ot,3,true,false);
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
+        priemernaDlzkaSlov(ot.toString());
+        indexKoincidencie=indexKoincidencie(statistikaBigramov.values().toArray(new Double[0]), ot.length());
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
         List<Map.Entry<String, Double>> vytriedeneNgramy = mapa.entrySet()
@@ -61,7 +67,7 @@ public class Vlastnosti {
 
             boolean suZnaky=true;
             for(var c:ngram.toCharArray()){
-                if(!Character.isAlphabetic(c)){
+                if(!Character.isAlphabetic(c) ){
                     suZnaky=false;
                     break;
                 }
@@ -152,6 +158,21 @@ public class Vlastnosti {
 
         return pocetSamohlasok/pocetSpoluhlasok;
     }
-
-
+    protected void priemernaDlzkaSlov(String ot){
+        vsetkySlova = ot.toString().split(" ");
+        double pocetZnakov=0;
+        double pocetSlov=vsetkySlova.length;
+        for(var slovo : vsetkySlova){
+            pocetZnakov+= slovo.length();
+        }
+        priemernaDlzkaSlov=pocetZnakov/pocetSlov;
+    }
+    protected double indexKoincidencie(Double[] p,int dlzka){
+        double indexK=0.0;
+        for(Double d:p){
+            indexK+=d*(d-1);
+        }
+        indexK/=dlzka*(dlzka-1);
+        return indexK;
+    }
 }
