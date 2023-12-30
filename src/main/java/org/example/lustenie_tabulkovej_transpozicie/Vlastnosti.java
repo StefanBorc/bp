@@ -13,6 +13,8 @@ public class Vlastnosti {
     private List<Map.Entry<String,Double>> statistikaBigramovUsporiadana;
     @Getter@Setter
     private List<Map.Entry<String,Double>> statistikaTrigramovUsporiadana;
+    @Getter@Setter
+    private List<Map.Entry<String,Double>> statistikaZnakov;
     @Getter
     private Map<String,Double> statistikaBigramov;
     @Getter
@@ -29,6 +31,7 @@ public class Vlastnosti {
         statistikaBigramovUsporiadana = ngramy(ot,2,true,false);
         statistikaTrigramov =new HashMap<>();
         statistikaTrigramovUsporiadana = ngramy(ot,3,true,false);
+        statistikaZnakov=ngramy(ot,1,true,false);
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
         priemernaDlzkaSlov(ot.toString());
         indexKoincidencie=indexKoincidencie(statistikaBigramov.values().toArray(new Double[0]), ot.length());
@@ -76,10 +79,9 @@ public class Vlastnosti {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && (statistikaBigramov.isEmpty()) || statistikaTrigramov.isEmpty() || zmenaTextu ){
+        if(jeOtvorenyText && (statistikaBigramov.isEmpty()) || statistikaTrigramov.isEmpty() || zmenaTextu){
             if(n==2){
                 statistikaBigramov = ngramy;
-                int a=0;
             }
             else if(n==3){
                 statistikaTrigramov = ngramy;

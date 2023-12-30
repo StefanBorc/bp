@@ -24,6 +24,7 @@ public class Priebeh {
     public void setJazyk(Jazyk jazyk,StringBuilder ot) {
         permutacia.setJazyk(jazyk);
         vlastnosti.setStatistikaSamohlasokSpoluhlasok(vlastnosti.samohlaskySpoluhlasky(ot.toString()));
+        vlastnosti.setStatistikaZnakov(vlastnosti.ngramy(ot,1,true,true));
         vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true));
         vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true));
         vlastnosti.priemernaDlzkaSlov(ot.toString());
@@ -44,6 +45,9 @@ public class Priebeh {
     }
     public List<Map.Entry<String, Double>> trigramyOT(){
         return vlastnosti.getStatistikaTrigramovUsporiadana();
+    }
+    public List<Map.Entry<String,Double>> znakyOT(){
+        return vlastnosti.getStatistikaZnakov();
     }
     public double priemernaDlzkaSlovOT(){
         return vlastnosti.getPriemernaDlzkaSlov();

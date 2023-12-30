@@ -14,6 +14,7 @@ public class Aplikacia {
     public static final String PRIEMERNA_DLZKA_SLOV_NADPIS="Priemerna dlzka slov : ";
     public static final String INDEX_KOINCIDENCIE_NADPIS="Index koincidencie : ";
     public static final String TRIGRAMY_NADPIS="trigramy OT : ";
+    public static final String ZNAKY_NADPIS="znaky OT : ";
     public Aplikacia() throws IOException {
         JFrame frame = new JFrame("Tabulkova transpozicia");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,11 +92,12 @@ public class Aplikacia {
         frame.add(menu1, BorderLayout.NORTH);
         frame.add(menu2,BorderLayout.SOUTH);
 
-        JLabel podielHlasokText = new JLabel(PODIEL_NADPIS);
-        JLabel bigramyText = new JLabel(BIGRAMY_NADPIS);
-        JLabel trigramyText = new JLabel(TRIGRAMY_NADPIS);
-        JLabel priemernaDlzkaSlov=new JLabel(PRIEMERNA_DLZKA_SLOV_NADPIS);
-        JLabel indexKoincidencieText=new JLabel(INDEX_KOINCIDENCIE_NADPIS);
+        JLabel podielHlasokText = new JLabel();
+        JLabel znakyText=new JLabel();
+        JLabel bigramyText = new JLabel();
+        JLabel trigramyText = new JLabel();
+        JLabel priemernaDlzkaSlov=new JLabel();
+        JLabel indexKoincidencieText=new JLabel();
 
         JLabel pokusText = new JLabel(POKUS_NADPIS);
 
@@ -107,24 +109,26 @@ public class Aplikacia {
 
         JPanel hlavnyPanel = new JPanel(new GridLayout(1, 3));
 
-        JPanel statistikyOt1=new JPanel(new GridLayout(2,1));
+        JPanel statistikyOt1=new JPanel(new GridLayout(3,1));
+        JScrollPane indexKoincidenciePanel = new JScrollPane(indexKoincidencieText);
+        JScrollPane pokusPanel = new JScrollPane(pokusText);
         JScrollPane podielHlasokPanel = new JScrollPane(podielHlasokText);
         JScrollPane priemernaDlzkaSlovPanel = new JScrollPane(priemernaDlzkaSlov);
         statistikyOt1.add(priemernaDlzkaSlovPanel);
         statistikyOt1.add(podielHlasokPanel);
+        statistikyOt1.add(indexKoincidenciePanel);
         hlavnyPanel.add(statistikyOt1);
 
         JPanel statistikyOt2=new JPanel(new GridLayout(2,1));
-        JScrollPane bigramyPanel = new JScrollPane(bigramyText);
+        JScrollPane znakyPanel = new JScrollPane(znakyText);
         JScrollPane trigramyPanel = new JScrollPane(trigramyText);
-        statistikyOt2.add(bigramyPanel);
+        statistikyOt2.add(znakyPanel);
         statistikyOt2.add(trigramyPanel);
         hlavnyPanel.add(statistikyOt2);
 
         JPanel statistikyOt3=new JPanel(new GridLayout(2,1));
-        JScrollPane indexKoincidenciePanel = new JScrollPane(indexKoincidencieText);
-        JScrollPane pokusPanel = new JScrollPane(pokusText);
-        statistikyOt3.add(indexKoincidenciePanel);
+        JScrollPane bigramyPanel = new JScrollPane(bigramyText);
+        statistikyOt3.add(bigramyPanel);
         statistikyOt3.add(pokusPanel);
         hlavnyPanel.add(statistikyOt3);
 
@@ -132,6 +136,7 @@ public class Aplikacia {
         priebehAplikacie.setZvolenyPocetRiadkov(zvolenyPocetRiadkov);
 
         priebehAplikacie.setPodielHlasokStatistika(podielHlasokText);;
+        priebehAplikacie.setZnakyStatistika(znakyText);
         priebehAplikacie.setBigramyStatistika(bigramyText);
         priebehAplikacie.setTrigramyStatistika(trigramyText);
         priebehAplikacie.setPriemernaDlzkaSlovStatistika(priemernaDlzkaSlov);

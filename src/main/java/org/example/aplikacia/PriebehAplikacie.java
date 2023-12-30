@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import static org.example.aplikacia.Aplikacia.*;
 
@@ -29,18 +27,19 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JLabel podielHlasokStatistika;
     @Setter
+    private JLabel znakyStatistika;
+    @Setter
     private JLabel bigramyStatistika;
+    @Setter
+    private JLabel trigramyStatistika;
     @Setter
     private JLabel priemernaDlzkaSlovStatistika;
     @Setter
     private JLabel indexKoincidencieStatistika;
     @Setter
-    private JLabel trigramyStatistika;
-    @Setter
     private JLabel pokusStatistika;
     private String pokus;
-    private List<Map.Entry<String,Double>> bigramyOT;
-    private List<Map.Entry<String,Double>> trigramyOT;
+
     public PriebehAplikacie() throws IOException {
         super();
         jazyk=Jazyk.DE;
@@ -51,15 +50,26 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     }
     protected void inicializaciaNadpisov(){
         podielHlasokStatistika.setText(PODIEL_NADPIS+" "+priebeh.podielSamohlasokSpoluhlasokOT());
-        bigramyOT=priebeh.bigramyOT();
+        var znakyOT=priebeh.znakyOT();
+        int i=0;
+        String textZnaky=" ";
+        for(var znak:znakyOT){
+            char c=znak.getKey().charAt(0);
+            if(c>90 || c<65)
+                continue;
+            textZnaky+=znak.toString();
+            textZnaky+="<br>";
+            i++;
+        }
+        var bigramyOT=priebeh.bigramyOT();
         String textBigramy=" ";
         String textTrigramy=" ";
         for(var bigram:bigramyOT){
             textBigramy+=bigram.toString();
             textBigramy+="<br>";
         }
-        trigramyOT=priebeh.trigramyOT();
-        int i=0;
+        var trigramyOT=priebeh.trigramyOT();
+        i=0;
         for(var trigram:trigramyOT){
             if(i==500){
                 break;
@@ -70,6 +80,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         }
         priemernaDlzkaSlovStatistika.setText(PRIEMERNA_DLZKA_SLOV_NADPIS+" "+priebeh.priemernaDlzkaSlovOT());
         indexKoincidencieStatistika.setText(INDEX_KOINCIDENCIE_NADPIS+" "+priebeh.indexKoincidencieOT());
+        znakyStatistika.setText("<html><font color='red'>" +ZNAKY_NADPIS+"<br><font color='black'>"+ textZnaky + "</html>");
         bigramyStatistika.setText("<html><font color='red'>" +BIGRAMY_NADPIS+"<br><font color='black'>"+ textBigramy + "</html>");
         trigramyStatistika.setText("<html><font color='red'>" +TRIGRAMY_NADPIS+"<br><font color='black'>"+ textTrigramy + "</html>");
     }
