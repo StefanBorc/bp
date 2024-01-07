@@ -77,7 +77,7 @@ public class Permutacia {
                 double odchylka=0.0;
                 if (prvy != druhy) {
                     StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
-                    bigramyZT = vlastnosti.ngramy(text, 2, false,false);
+                    bigramyZT = vlastnosti.ngramy(text, 2, false,false,true);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
@@ -105,7 +105,7 @@ public class Permutacia {
             if(kombinacie3Stlpov.get(i)!=null){
                 StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,kombinacie3Stlpov.get(i)[0],kombinacie3Stlpov.get(i)[1]);
                 text=pridatStlpec(text,kombinacie3Stlpov.get(i)[2],3);
-                trigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,3,false,false));
+                trigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,3,false,false,true));
             }
             else {
                 trigramyPreMozneKombinacie.add(new ArrayList<>());
@@ -232,12 +232,12 @@ public class Permutacia {
             StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec1);
             Integer[] kombinacia = new Integer[]{i, minStlpec1};
             kombinacie.add(kombinacia);
-            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false));
+            bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false,true));
             if(zahrnutViac){
                 text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
                 kombinacia = new Integer[]{i, minStlpec2};
                 kombinacie.add(kombinacia);
-                bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false));
+                bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false,true));
             }
         }
     }

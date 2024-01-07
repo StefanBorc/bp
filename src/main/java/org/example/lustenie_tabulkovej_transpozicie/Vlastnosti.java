@@ -28,13 +28,13 @@ public class Vlastnosti {
     public Vlastnosti(StringBuilder ot) {
         vsetkySlova = ot.toString().split(" ");
         statistikaBigramov =new HashMap<>();
-        statistikaBigramovUsporiadana = ngramy(ot,2,true,false);
+        statistikaBigramovUsporiadana = ngramy(ot,2,true,false,true);
         statistikaTrigramov =new HashMap<>();
-        statistikaTrigramovUsporiadana = ngramy(ot,3,true,false);
-        statistikaZnakov=ngramy(ot,1,true,false);
+        statistikaTrigramovUsporiadana = ngramy(ot,3,true,false,true);
+        statistikaZnakov=ngramy(ot,1,true,false,true);
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
         priemernaDlzkaSlov(ot.toString());
-        indexKoincidencie=indexKoincidencie(statistikaBigramov.values().toArray(new Double[0]), ot.length());
+        indexKoincidencie=indexKoincidencie(ot);
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
         List<Map.Entry<String, Double>> vytriedeneNgramy = mapa.entrySet()
@@ -51,7 +51,7 @@ public class Vlastnosti {
         }
         return indexyMapy;
     }
-    protected List<Map.Entry<String, Double>> ngramy(StringBuilder text, int n,boolean jeOtvorenyText,boolean zmenaTextu) {
+    protected List<Map.Entry<String, Double>> ngramy(StringBuilder text, int n,boolean jeOtvorenyText,boolean zmenaTextu,boolean relativna) {
         Map<String, Double> ngramy = new HashMap<>();
         int pripocitaj;
         if(jeOtvorenyText){
@@ -79,13 +79,8 @@ public class Vlastnosti {
                 ngramy.merge(ngram,1.0,Double::sum);
             }
         }
-        if(jeOtvorenyText && (statistikaBigramov.isEmpty()) || statistikaTrigramov.isEmpty() || zmenaTextu){
-            if(n==2){
-                statistikaBigramov = ngramy;
-            }
-            else if(n==3){
-                statistikaTrigramov = ngramy;
-            }
+
+        if(jeOtvorenyText && (statistikaBigramov.isEmpty() || statistikaTrigramov.isEmpty() || zmenaTextu)){
             double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
             Map<String, Double> ngramyPercenta = new HashMap<>();
             for (var ngram : ngramy.entrySet()) {
@@ -99,12 +94,17 @@ public class Vlastnosti {
 
         }
 
-        double pocet=ngramy.values().stream().mapToDouble(v -> v).sum();
-        Map<String,Double> ngramyPercenta=new HashMap<>();
-        for(var bigram:ngramy.entrySet()){
-            ngramyPercenta.put(bigram.getKey(),(bigram.getValue()/pocet)*100);
+        double pocet = ngramy.values().stream().mapToDouble(v -> v).sum();
+        Map<String, Double> ngramyPercenta = new HashMap<>();
+        for (var bigram : ngramy.entrySet()) {
+            ngramyPercenta.put(bigram.getKey(), (bigram.getValue() / pocet) * 100);
         }
-        return vytriedeneNgramy(ngramyPercenta);
+        if(relativna){
+            return vytriedeneNgramy(ngramyPercenta);
+        }
+        else{
+            return vytriedeneNgramy(ngramy);
+        }
     }
     protected ArrayList<Double[]> usporiadajPodlaOT(ArrayList<List<Map.Entry<String, Double>>> mapy,List<Map.Entry<String,Double>> statistikaOtUsporiadna){
         Map<String,Integer> indexyMapy=vratIndexyUsporiadanejMapy(statistikaOtUsporiadna);
@@ -169,12 +169,20 @@ public class Vlastnosti {
         }
         priemernaDlzkaSlov=pocetZnakov/pocetSlov;
     }
-    protected double indexKoincidencie(Double[] p,int dlzka){
-        double indexK=0.0;
-        for(Double d:p){
-            indexK+=d*(d-1);
+    protected double indexKoincidencie(StringBuilder ot){
+        StringBuilder s=new StringBuilder();
+        for(var c:ot.toString().toCharArray()){
+            if(c<=90 && c>=65){
+                s.append(c);
+            }
         }
-        indexK/=dlzka*(dlzka-1);
+        double dlzka=s.length();
+        var ngramy=ngramy(s,1,true,true,false);
+        double indexK=0.0;
+        for(var d:ngramy){
+            indexK+=d.getValue()*(d.getValue()-1);
+        }
+        indexK=indexK/(dlzka*(dlzka-1));
         return indexK;
     }
 }

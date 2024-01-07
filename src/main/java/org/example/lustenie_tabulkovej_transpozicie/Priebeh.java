@@ -24,11 +24,11 @@ public class Priebeh {
     public void setJazyk(Jazyk jazyk,StringBuilder ot) {
         permutacia.setJazyk(jazyk);
         vlastnosti.setStatistikaSamohlasokSpoluhlasok(vlastnosti.samohlaskySpoluhlasky(ot.toString()));
-        vlastnosti.setStatistikaZnakov(vlastnosti.ngramy(ot,1,true,true));
-        vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true));
-        vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true));
+        vlastnosti.setStatistikaZnakov(vlastnosti.ngramy(ot,1,true,true,true));
+        vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true,true));
+        vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true,true));
         vlastnosti.priemernaDlzkaSlov(ot.toString());
-        vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(vlastnosti.getStatistikaBigramov().values().toArray(new Double[0]), ot.length()));
+        vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(ot));
     }
     public void setTextPreTranspoziciu(StringBuilder textPreTranspoziciu){
         transpozicia.setTextNaSifrovanie(textPreTranspoziciu);
