@@ -123,10 +123,10 @@ public class Vlastnosti {
         }
         return listyPercient;
     }
-    protected StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int n1, int n2) {
+    protected StringBuilder premenBlokyNaText(ArrayList<StringBuilder> bloky, int[] stlpce) {
         int pocetRiadkov = bloky.get(0).length();
-        int pocetStlpcov = 2;
-        int[] stlpce = new int[]{n1, n2};
+        int pocetStlpcov = stlpce.length;
+
         char[][] tabulka = new char[pocetRiadkov][2];
 
         for (int i = 0; i < pocetStlpcov; i++) {

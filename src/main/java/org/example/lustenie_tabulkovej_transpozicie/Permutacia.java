@@ -76,7 +76,7 @@ public class Permutacia {
             for (int druhy = 0; druhy < bloky.size(); druhy++) {
                 double odchylka=0.0;
                 if (prvy != druhy) {
-                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, prvy, druhy);
+                    StringBuilder text = vlastnosti.premenBlokyNaText(bloky, new int[]{prvy,druhy});
                     bigramyZT = vlastnosti.ngramy(text, 2, false,false,true);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
@@ -99,50 +99,35 @@ public class Permutacia {
     }
 
     private void vyladitTrigramy(){
-        ArrayList<Integer[]> kombinacie3Stlpov =spravitKombinacie3Stlpcov();
+        List<Map.Entry<String, Double>> trigramyZT;
+        ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
+        int velkostPorovnaniaPrePermutaciu=30;
+        int vaha=3;
+        for(int i=0;i<kombinacie.size();i++){
+            odchylkyStlpcov.add(new ArrayList<>());
+            double odchylka=0.0;
+            for(int j=0;j<blokyZt.size();j++){
+                if(j==kombinacie.get(i)[0] || j==kombinacie.get(i)[1]){
+                    odchylka=20.0;
+                    continue;
+                }
+                StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,new int[]{kombinacie.get(i)[0],kombinacie.get(i)[1],j});
+                trigramyZT = vlastnosti.ngramy(text, 3, false,false,true);
 
-        for(int i=0;i<kombinacie3Stlpov.size();i++){
-            if(kombinacie3Stlpov.get(i)!=null){
-                StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,kombinacie3Stlpov.get(i)[0],kombinacie3Stlpov.get(i)[1]);
-                text=pridatStlpec(text,kombinacie3Stlpov.get(i)[2],3);
-                trigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,3,false,false,true));
-            }
-            else {
-                trigramyPreMozneKombinacie.add(new ArrayList<>());
-            }
+                for(int trigram=0;trigram<velkostPorovnaniaPrePermutaciu;trigram++){
+                    if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
+                        if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=dolnaHranicaTrigramov ){
+                            odchylka+=Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                        }
+                    }
+                    if(odchylka>vaha){
+                        break;
+                    }
+                }
 
+            }
+            odchylkyStlpcov.get(i).add(odchylka);
         }
-        ArrayList<Integer[]> kopiaKombinacii=new ArrayList<>();
-        ArrayList<List<Map.Entry<String, Double>>> kopiaStatistik=new ArrayList<>();
-
-        ArrayList<Double> odchylky=spravitOdchylkyTrigramov(25);
-
-        int index1;
-        int index2;
-        int vitaz;
-        for(int i=0;i<kombinacie3Stlpov.size();i+=4){
-            boolean a=odchylky.get(i)>odchylky.get(i+1);
-            boolean b=odchylky.get(i+2)>odchylky.get(i+3);
-            index1=i;
-            index2=i+2;
-            if(a){
-                index1=i+1;
-            }
-            if(b){
-                index2=i+3;
-            }
-            boolean c=odchylky.get(index1)>odchylky.get(index2);
-            if(c){
-                vitaz=index2;
-            }
-            else{
-                vitaz=index1;
-            }
-            kopiaKombinacii.add(new Integer[]{kombinacie3Stlpov.get(vitaz)[0],kombinacie3Stlpov.get(vitaz)[1],kombinacie3Stlpov.get(vitaz)[2]});
-            kopiaStatistik.add(bigramyPreMozneKombinacie.get(vratIndexKombinacie(kombinacie3Stlpov.get(vitaz)[0],kombinacie3Stlpov.get(vitaz)[1])));
-        }
-        kombinacie=(kopiaKombinacii);
-        bigramyPreMozneKombinacie=(kopiaStatistik);
 
     }
     private ArrayList<Double> spravitOdchylkyTrigramov(int velkostPorovnania){
@@ -171,52 +156,7 @@ public class Permutacia {
         }
         return odchylky;
     }
-    private ArrayList<Integer[]> spravitKombinacie3Stlpcov(){
-        ArrayList<Integer[]> kombinacie3Stlpov=new ArrayList<>();
-        for(int i=0;i<kombinacie.size();i++){
-            Integer[] moznaKombinaciaPredchodcu=najdiDalsiStlpec(kombinacie.get(i)[1]);
-            for(int j=0;j<2;j++){
-                if(!opakujuceCisla(kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j])){
-                    kombinacie3Stlpov.add(new Integer[]{kombinacie.get(i)[0],kombinacie.get(i)[1],moznaKombinaciaPredchodcu[j]});
-                }
-                else{
-                    kombinacie3Stlpov.add(null);
-                }
-            }
-        }
-        return kombinacie3Stlpov;
-    }
-    private boolean opakujuceCisla(int n1,int n2,int n3){
-        return n1 == n2 || n1 == n3 || n2 == n3;
-    }
-    private int vratIndexKombinacie(int n1,int n2){
-        var kombo=new Integer[]{n1, n2};
-        for(int i=0;i<kombinacie.size();i++){
-            if(Arrays.equals(kombinacie.get(i),kombo)){
-                return i;
-            }
-        }
-        return 0;
-    }
-    private StringBuilder pridatStlpec(StringBuilder text,int stlpec,int pozicia){
-        int index=pozicia-1;
-        for(int i=0;i<blokyZt.get(stlpec).length()-pozicia;i++){
-            text.insert(index,blokyZt.get(stlpec).charAt(i));
-            index+=pozicia;
-        }
-        return text;
-    }
-    private Integer[] najdiDalsiStlpec(int n){
-        Integer[] nastupcovia=new Integer[2];
-        int index=0;
-        for(int i=0;i<kombinacie.size();i++){
-            if(kombinacie.get(i)[0]==n){
-                nastupcovia[index]=kombinacie.get(i)[1];
-                index++;
-            }
-        }
-        return nastupcovia;
-    }
+
     private void odhadnutHranicuTrigramov(int dolnaHranica,int hornaHranica){
         dolnaHranicaTrigramov =vlastnosti.getStatistikaTrigramovUsporiadana().get(dolnaHranica).getValue();
         hornaHranicaTrigramov = vlastnosti.getStatistikaTrigramovUsporiadana().get(hornaHranica).getValue();
@@ -229,12 +169,12 @@ public class Permutacia {
             Integer minStlpec1 = odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
             odchylky.get(i).set(odchylky.get(i).indexOf(Collections.min(odchylky.get(i))), 20.0);
             Integer minStlpec2 = odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
-            StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec1);
+            StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, new int[]{i,minStlpec1});
             Integer[] kombinacia = new Integer[]{i, minStlpec1};
             kombinacie.add(kombinacia);
             bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false,true));
             if(zahrnutViac){
-                text = vlastnosti.premenBlokyNaText(blokyZt, i, minStlpec2);
+                text = vlastnosti.premenBlokyNaText(blokyZt, new int[]{i,minStlpec2});
                 kombinacia = new Integer[]{i, minStlpec2};
                 kombinacie.add(kombinacia);
                 bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text,2,false,false,true));

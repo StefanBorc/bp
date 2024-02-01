@@ -5,7 +5,7 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Aplikacia {
-    public static final String SPUSTIT="SPUSTIT";
+    public static final String SPUSTIT="LUSTIT";
     public static final String PREPINAC_RIADKOV="PREPINAC_RIADKOV";
     public static final String PREPINAC_KLUCOV="PREPINAC_KLUCOV";
     public static final String PODIEL_NADPIS ="Podiel hlasok : ";
