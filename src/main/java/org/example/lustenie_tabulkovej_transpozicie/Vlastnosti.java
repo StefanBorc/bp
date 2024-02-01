@@ -127,7 +127,7 @@ public class Vlastnosti {
         int pocetRiadkov = bloky.get(0).length();
         int pocetStlpcov = stlpce.length;
 
-        char[][] tabulka = new char[pocetRiadkov][2];
+        char[][] tabulka = new char[pocetRiadkov][stlpce.length];
 
         for (int i = 0; i < pocetStlpcov; i++) {
             for (int j = 0; j < pocetRiadkov; j++) {

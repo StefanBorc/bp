@@ -65,7 +65,7 @@ public class Priebeh {
         for(int i=0;i<pocetKlucov;i++) {
             String kluc = kluce.get(index);
             transpozicia.setKluc(kluc);
-
+            transpozicia.vytlacPermutaciu();
             odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(), transpozicia);
             index++;
             if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
