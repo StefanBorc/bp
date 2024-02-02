@@ -30,7 +30,7 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
-        odhadnutHranicuTrigramov(2500,1000);
+        odhadnutHranicuTrigramov(2500,500);
         odhadnutHranicuBigramov();
     }
     protected void hladatPermutaciu() {
@@ -83,6 +83,7 @@ public class Permutacia {
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
+
                         }
                         if(odchylka>vaha){
                             break;
@@ -101,8 +102,8 @@ public class Permutacia {
     private ArrayList<ArrayList<Double>> vyladitTrigramy(){
         List<Map.Entry<String, Double>> trigramyZT;
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
-        int velkostPorovnaniaPrePermutaciu=30;
-        int vaha=10;
+        double velkostPorovnaniaPrePermutaciu=(double)pocetRiadkov/1.3;
+        int vaha=100;
         for(int i=0;i<kombinacie.size();i++){
             odchylkyStlpcov.add(new ArrayList<>());
             for(int j=0;j<blokyZt.size();j++){
@@ -112,9 +113,16 @@ public class Permutacia {
                     trigramyZT = vlastnosti.ngramy(text, 3, false,false,true);
                     for(int trigram=0;trigram<velkostPorovnaniaPrePermutaciu;trigram++){
                         if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
-                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=dolnaHranicaTrigramov ){
-                                odchylka+=Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov){
+                                odchylka+=0.3*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
+                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov/5){
+                                odchylka+=1.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            }
+                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=dolnaHranicaTrigramov){
+                                odchylka+=5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            }
+
                         }
                         if(odchylka>vaha){
                             break;
@@ -122,7 +130,7 @@ public class Permutacia {
                     }
                 }
                 else{
-                    odchylka=50.0;
+                    odchylka=200.0;
                 }
                 odchylkyStlpcov.get(i).add(odchylka);
             }
