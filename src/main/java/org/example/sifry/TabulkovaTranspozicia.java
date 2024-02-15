@@ -19,7 +19,7 @@ public class TabulkovaTranspozicia extends Sifra {
     private int pocetRiadkov;
     @Setter@Getter
     private ArrayList<StringBuilder> ztVBlokoch;
-    @Setter
+    @Setter@Getter
     private StringBuilder textNaSifrovanie;
 
     public void setPocetRiadkov(int pocetRiadkov, Permutacia permutacia) {
@@ -34,9 +34,9 @@ public class TabulkovaTranspozicia extends Sifra {
         pocetRiadkov = 0;
         this.kluc = kluc;
     }
-    public void setKluc(String kluc) {
+    public void setKluc(String kluc,StringBuilder text) {
         this.kluc = kluc;
-        sifrovanie(textNaSifrovanie,kluc);
+        sifrovanie(text,kluc);
     }
     private int min(ArrayList<Integer> p) {
         int minimum = p.get(0);

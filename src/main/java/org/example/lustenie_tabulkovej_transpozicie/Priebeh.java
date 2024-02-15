@@ -64,9 +64,11 @@ public class Priebeh {
 
         for(int i=0;i<pocetKlucov;i++) {
             String kluc = kluce.get(index);
-            transpozicia.setKluc(kluc);
-           // transpozicia.vytlacPermutaciu();
+            transpozicia.setKluc(kluc,transpozicia.getTextNaSifrovanie());
+            //StringBuilder zt=new StringBuilder(transpozicia.getZasifrovanyText());
+            //transpozicia.setKluc(kluc,zt);
             odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(), transpozicia);
+            //odhadKluca.setDlzkaKluca(kluc.length(),transpozicia);
             index++;
             if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
                 pocetNeuhadnutychKlucov++;
@@ -76,6 +78,9 @@ public class Priebeh {
             permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
             permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
             permutacia.hladatPermutaciu();
+            //transpozicia.vytlacPermutaciu();
+            //permutacia.vytlacTestovanuPermutaciu();
+
             if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                 pocetNeuspesnychPermutacii++;
             }

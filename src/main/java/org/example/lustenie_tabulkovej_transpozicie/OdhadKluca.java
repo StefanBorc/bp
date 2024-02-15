@@ -1,17 +1,50 @@
 package org.example.lustenie_tabulkovej_transpozicie;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.example.sifry.TabulkovaTranspozicia;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class OdhadKluca {
-    @Getter
+    @Getter@Setter
     private int dlzkaKluca;
     private Vlastnosti vlastnosti;
     @Getter
     private ArrayList<StringBuilder> blokyDlzkyKluca;
+
+    public void setDlzkaKluca(int dlzkaKluca,TabulkovaTranspozicia t) {
+        StringBuilder zt=t.getZasifrovanyText();
+        int n = zt.length();
+        int pZnakovVRiadku = n / dlzkaKluca;
+        int zvysok = n % dlzkaKluca;
+        int zvysokPreRiadok = 0;
+        if (zvysok != 0) {
+            zvysokPreRiadok = 1;
+            zvysok--;
+        }
+        ArrayList<StringBuilder> riadky = new ArrayList<>();
+        StringBuilder riadok = new StringBuilder();
+        for (int j = 0; j <= zt.length(); j++) {
+            if (riadok.length() == pZnakovVRiadku + zvysokPreRiadok) {
+                riadky.add(riadok);
+                riadok = new StringBuilder();
+                if (zvysok > 0) {
+                    zvysok--;
+                } else {
+                    zvysokPreRiadok = 0;
+                }
+            }
+            if (zt.length() > j) {
+                riadok.append(zt.charAt(j));
+            }
+        }
+        this.dlzkaKluca = dlzkaKluca;
+        t.setZtVBlokoch(riadky);
+        blokyDlzkyKluca=t.getZtVBlokoch();
+    }
+
     public OdhadKluca(Vlastnosti vlastnosti){
         this.vlastnosti = vlastnosti;
     }

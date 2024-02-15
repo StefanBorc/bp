@@ -45,7 +45,7 @@ public class Aplikacia {
         prepinacKlucov.setPaintLabels(true);
         prepinacKlucov.addChangeListener(priebehAplikacie);
 
-        JSlider prepinacRiadkov = new JSlider(JSlider.HORIZONTAL, 100, 1000, 500);
+        JSlider prepinacRiadkov = new JSlider(JSlider.HORIZONTAL, 100, 1000, 100);
         prepinacRiadkov.setName(PREPINAC_RIADKOV);
         prepinacRiadkov.setBackground(Color.LIGHT_GRAY);
         prepinacRiadkov.setMinorTickSpacing(100);

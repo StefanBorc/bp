@@ -30,12 +30,12 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
-        odhadnutHranicuTrigramov(2500,500);
+        odhadnutHranicuTrigramov(3000,1000);
         odhadnutHranicuBigramov();
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,true);
+        najstPoradie(odchylky,false);
     }
     public void odhadnutHranicuBigramov(){
         int n;
@@ -102,8 +102,9 @@ public class Permutacia {
     private ArrayList<ArrayList<Double>> vyladitTrigramy(){
         List<Map.Entry<String, Double>> trigramyZT;
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
-        double velkostPorovnaniaPrePermutaciu=(double)pocetRiadkov/1.3;
+
         int vaha=100;
+
         for(int i=0;i<kombinacie.size();i++){
             odchylkyStlpcov.add(new ArrayList<>());
             for(int j=0;j<blokyZt.size();j++){
@@ -111,16 +112,17 @@ public class Permutacia {
                 if(j!=kombinacie.get(i)[0] && j!=kombinacie.get(i)[1]){
                     StringBuilder text=vlastnosti.premenBlokyNaText(blokyZt,new int[]{kombinacie.get(i)[0],kombinacie.get(i)[1],j});
                     trigramyZT = vlastnosti.ngramy(text, 3, false,false,true);
+                    double velkostPorovnaniaPrePermutaciu=(double)trigramyZT.size()/1.2;
                     for(int trigram=0;trigram<velkostPorovnaniaPrePermutaciu;trigram++){
                         if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
                             if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov){
-                                odchylka+=0.3*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                                odchylka+=0.2*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
-                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov/5){
-                                odchylka+=1.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov/5){
+                                odchylka+=2.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
                             else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=dolnaHranicaTrigramov){
-                                odchylka+=5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                                odchylka+=4*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
 
                         }

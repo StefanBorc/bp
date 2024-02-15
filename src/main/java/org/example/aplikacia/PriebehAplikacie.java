@@ -44,7 +44,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         super();
         jazyk=Jazyk.DE;
         cisloKorpusu=0;
-        pocetRiadkov=500;
+        pocetRiadkov=100;
         text=new Text(jazyk.toString());
         priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
     }
