@@ -35,15 +35,12 @@ public class Permutacia {
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,false);
+        najstPoradie(odchylky,true);
     }
     public void odhadnutHranicuBigramov(){
         int n;
         if(jazyk.toString().equals("DE")){
             n=450;
-        }
-        else if(jazyk.toString().equals("CZ") && pocetRiadkov<=100){
-            n=375;
         }
         else{
             n=350;
@@ -83,7 +80,6 @@ public class Permutacia {
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
-
                         }
                         if(odchylka>vaha){
                             break;
@@ -91,7 +87,7 @@ public class Permutacia {
                     }
                 }
                 else{
-                    odchylka=20.0;
+                    odchylka=50.0;
                 }
                 odchylkyStlpcov.get(prvy).add(odchylka);
             }
@@ -145,7 +141,6 @@ public class Permutacia {
         hornaHranicaTrigramov = vlastnosti.getStatistikaTrigramovUsporiadana().get(hornaHranica).getValue();
     }
     private void vybratNajlepsieKombinacie(ArrayList<ArrayList<Double>> odchylky) {
-
         bigramyPreMozneKombinacie = new ArrayList<>();
         trigramyPreMozneKombinacie = new ArrayList<>();
         //ak su na rade bigramy
@@ -156,7 +151,18 @@ public class Permutacia {
                 Integer[] kombinacia = new Integer[]{i, minStlpec};
                 kombinacie.add(kombinacia);
                 bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text, 2, false, false, true));
+
+                /*
+                odchylky.get(i).set(odchylky.get(i).indexOf(Collections.min(odchylky.get(i))), 200.0);
+                int minStlpec2 = odchylky.get(i).indexOf(Collections.min(odchylky.get(i)));
+                StringBuilder text2=vlastnosti.premenBlokyNaText(blokyZt, new int[]{i, minStlpec2});
+                Integer[] kombinacia2=new Integer[]{i,minStlpec2}
+                //kombinacie.add(kombinacia2);
+                //bigramyPreMozneKombinacie.add(vlastnosti.ngramy(text2,2,false,false,true));
+
+                 */
             }
+            //vybratNajlepsie();
         }
         //ak su na rade trigramy
         else{
@@ -170,8 +176,36 @@ public class Permutacia {
         }
         int a=0;
     }
+    private void vybratNajlepsie(){
+        //tu vybrat najlepsie kombinacie z dvoch odchylike
+        ArrayList<Integer[]> kopiaKombinacii=new ArrayList<>();
+        ArrayList<List<Map.Entry<String, Double>>> kopiaBigramovPreKombinacie=new ArrayList<>();
 
+        ArrayList<Double> odchylky=new ArrayList<>();
+        int velkostPorovnania=10;
+        var bigramyZTUsporiadane=vlastnosti.usporiadajPodlaOT(bigramyPreMozneKombinacie,vlastnosti.getStatistikaBigramovUsporiadana());
+        for(int i=0;i<kombinacie.size();i++){
+            Double odchylka=0.0;
+            for(int j=0;j<velkostPorovnania;j++){
+                odchylka+=(Math.abs(bigramyZTUsporiadane.get(i)[j]-vlastnosti.getStatistikaBigramovUsporiadana().get(j).getValue()));
+            }
+            odchylky.add(odchylka);
+        }
 
+        for(int i=0;i<kombinacie.size();i+=2){
+            if(odchylky.get(i)>odchylky.get(i+1)){
+                kopiaKombinacii.add(kombinacie.get(i+1));
+                kopiaBigramovPreKombinacie.add(bigramyPreMozneKombinacie.get(i+1));
+            }
+            else {
+                kopiaKombinacii.add(kombinacie.get(i));
+                kopiaBigramovPreKombinacie.add(bigramyPreMozneKombinacie.get(i));
+            }
+        }
+        bigramyPreMozneKombinacie=new ArrayList<>(kopiaBigramovPreKombinacie);
+        kombinacie=new ArrayList<>(kopiaKombinacii);
+
+    }
     private void vyraditZvysneKombinacie(ArrayList<Integer[]> mozneKombinacie, ArrayList<Double[]> usporiadanePodlaOT){
         ArrayList<Double> odchylky=new ArrayList<>();
         int index=0;
