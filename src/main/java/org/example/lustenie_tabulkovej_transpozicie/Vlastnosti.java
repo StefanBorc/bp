@@ -167,6 +167,7 @@ public class Vlastnosti {
         for(var slovo : vsetkySlova){
             pocetZnakov+= slovo.length();
         }
+
         priemernaDlzkaSlov=pocetZnakov/pocetSlov;
     }
     protected double indexKoincidencie(StringBuilder ot){
