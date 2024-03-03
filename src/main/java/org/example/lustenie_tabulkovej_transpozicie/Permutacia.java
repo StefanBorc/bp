@@ -18,8 +18,7 @@ public class Permutacia {
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
     private double dolnaHranicaBigramov;
-    private double dolnaHranicaTrigramov;
-    private double hornaHranicaTrigramov;
+    private double[] hraniceTrigramov;
     @Setter
     private int pocetRiadkov;
     @Setter
@@ -30,12 +29,12 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
-        odhadnutHranicuTrigramov(3000,1000);
+        odhadnutHranicuTrigramov(new int[]{2500,3800,5000});
         odhadnutHranicuBigramov();
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,false);
+        najstPoradie(odchylky,true);
     }
     public void odhadnutHranicuBigramov(){
         int n;
@@ -103,7 +102,7 @@ public class Permutacia {
         List<Map.Entry<String, Double>> trigramyZT;
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
 
-        int vaha=100;
+        int vaha=200;
 
         for(int i=0;i<kombinacie.size();i++){
             odchylkyStlpcov.add(new ArrayList<>());
@@ -115,15 +114,17 @@ public class Permutacia {
                     double velkostPorovnaniaPrePermutaciu=(double)trigramyZT.size()/1.2;
                     for(int trigram=0;trigram<velkostPorovnaniaPrePermutaciu;trigram++){
                         if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
-                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov){
-                                odchylka+=0.2*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[0]){
+                                odchylka+=Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
-                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hornaHranicaTrigramov/5){
-                                odchylka+=2.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[1]){
+                                odchylka+=5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
-                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=dolnaHranicaTrigramov){
-                                odchylka+=4*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
+                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[2]){
+                                odchylka+=10*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()));
                             }
+
+
 
                         }
                         if(odchylka>vaha){
@@ -132,7 +133,7 @@ public class Permutacia {
                     }
                 }
                 else{
-                    odchylka=200.0;
+                    odchylka=500;
                 }
                 odchylkyStlpcov.get(i).add(odchylka);
             }
@@ -140,9 +141,11 @@ public class Permutacia {
         return odchylkyStlpcov;
     }
 
-    private void odhadnutHranicuTrigramov(int dolnaHranica,int hornaHranica){
-        dolnaHranicaTrigramov =vlastnosti.getStatistikaTrigramovUsporiadana().get(dolnaHranica).getValue();
-        hornaHranicaTrigramov = vlastnosti.getStatistikaTrigramovUsporiadana().get(hornaHranica).getValue();
+    private void odhadnutHranicuTrigramov(int[] hranice){
+        hraniceTrigramov=new double[hranice.length];
+        for(int i=0;i<hranice.length;i++){
+            hraniceTrigramov[i] =vlastnosti.getStatistikaTrigramovUsporiadana().get(hranice[i]).getValue();
+        }
     }
     private void vybratNajlepsieKombinacie(ArrayList<ArrayList<Double>> odchylky) {
 
@@ -231,6 +234,7 @@ public class Permutacia {
                 permutacia[i]=cesta.get(i);
             }
         }
+
 
     }
     private int najstPrvyStlpec(){
