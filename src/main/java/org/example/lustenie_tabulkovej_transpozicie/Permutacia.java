@@ -34,15 +34,18 @@ public class Permutacia {
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,true);
+        najstPoradie(odchylky,false);
     }
     public void odhadnutHranicuBigramov(){
         int n;
         if(jazyk.toString().equals("DE")){
             n=450;
         }
+        else if(jazyk.toString().equals("CZ")){
+            n=425;
+        }
         else{
-            n=350;
+            n=400;
         }
         dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
     }
@@ -58,7 +61,7 @@ public class Permutacia {
         List<Map.Entry<String, Double>> bigramyZT;
 
         int velkostPorovnaniaPrePermutaciu=30;
-        int vaha=3;
+        int vaha=4;
         if(pocetRiadkov<=100){
             if(!jazyk.toString().equals("EN")){
                 velkostPorovnaniaPrePermutaciu=25;

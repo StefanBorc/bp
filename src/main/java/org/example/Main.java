@@ -12,8 +12,8 @@ import java.util.Random;
 public class Main {
     public static Random r = new Random();
 
-    public static void main(String[] args) throws IOException {
-        long startTime = System.currentTimeMillis();
+    public static void main(String[] args) throws Exception {
+        //long startTime = System.currentTimeMillis();
 
         new Aplikacia();
         /*

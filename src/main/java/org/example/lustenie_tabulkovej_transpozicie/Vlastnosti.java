@@ -6,6 +6,8 @@ import lombok.Setter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.example.Text.text;
+
 public class Vlastnosti {
     @Getter
     private String[] vsetkySlova;
@@ -33,7 +35,7 @@ public class Vlastnosti {
         statistikaTrigramovUsporiadana = ngramy(ot,3,true,false,true);
         statistikaZnakov=ngramy(ot,1,true,false,true);
         statistikaSamohlasokSpoluhlasok=samohlaskySpoluhlasky(ot.toString());
-        priemernaDlzkaSlov(ot.toString());
+        priemernaDlzkaSlov(text.toString());
         indexKoincidencie=indexKoincidencie(ot);
     }
     private List<Map.Entry<String, Double>> vytriedeneNgramy(Map<String, Double> mapa) {
@@ -153,7 +155,7 @@ public class Vlastnosti {
             if(samohlasky.contains(c)){
                 pocetSamohlasok++;
             }
-            else{
+            else if(Character.isAlphabetic(c)){
                 pocetSpoluhlasok++;
             }
         }

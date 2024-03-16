@@ -42,11 +42,13 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
 
     public PriebehAplikacie() throws IOException {
         super();
-        jazyk=Jazyk.DE;
         cisloKorpusu=0;
         pocetRiadkov=100;
+        jazyk=Jazyk.DE;
         text=new Text(jazyk.toString());
-        priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
+        priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(2),text.getUpravenyText());
+        priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
+
     }
     protected void inicializaciaNadpisov(){
         podielHlasokStatistika.setText(PODIEL_NADPIS+" "+priebeh.podielSamohlasokSpoluhlasokOT());

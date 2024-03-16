@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Text {
     @Getter
     private StringBuilder upravenyText;
+    public static StringBuilder text;
     @Getter
     private ArrayList<StringBuilder> textyNaSifrovanie;
     @Getter
@@ -16,10 +17,13 @@ public class Text {
     public void setNazovSuboru(String nazovSuboru) throws IOException {
         this.nazovSuboru=nazovSuboru;
         vratOT();
+        vratOTSMedzerami();
         nacitajKluceText();
+
     }
     public Text(String nazovSuboru) throws IOException {
         this.nazovSuboru=nazovSuboru;
+        vratOTSMedzerami();
         vratOT();
         nacitajKluceText();
     }
@@ -37,12 +41,32 @@ public class Text {
         }
 
         for(char c: text.toString().toCharArray()){
-            if(Character.isAlphabetic(c) || Character.isSpaceChar(c)){
+            if(Character.isAlphabetic(c)){
                 upravenyText.append(Character.toUpperCase(c));
             }
         }
         br.close();
         return upravenyText;
+    }
+    protected StringBuilder vratOTSMedzerami() throws IOException {
+
+        text =new StringBuilder();
+        StringBuilder text = new StringBuilder();
+
+        BufferedReader br = otvorSubor();
+        String st;
+
+        while ((st = br.readLine()) != null) {
+            text.append(st);
+        }
+
+        for(char c: text.toString().toCharArray()){
+            if(Character.isAlphabetic(c) || Character.isSpaceChar(c)){
+                this.text.append(Character.toUpperCase(c));
+            }
+        }
+        br.close();
+        return text;
     }
     private BufferedReader otvorSubor() throws FileNotFoundException {
         File slovaTxt = new File("OT",nazovSuboru+".txt");

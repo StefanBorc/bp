@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.example.Text.text;
+
 public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
     private OdhadKluca odhadKluca;
@@ -20,6 +22,7 @@ public class Priebeh {
         vlastnosti = new Vlastnosti(otUpraveny);
         odhadKluca =new OdhadKluca(vlastnosti);
         permutacia=new Permutacia(vlastnosti,odhadKluca,jazyk);
+
     }
     public void setJazyk(Jazyk jazyk,StringBuilder ot) {
         permutacia.setJazyk(jazyk);
@@ -27,7 +30,7 @@ public class Priebeh {
         vlastnosti.setStatistikaZnakov(vlastnosti.ngramy(ot,1,true,true,true));
         vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true,true));
         vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true,true));
-        vlastnosti.priemernaDlzkaSlov(ot.toString());
+        vlastnosti.priemernaDlzkaSlov(text.toString());
         vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(ot));
     }
     public void setTextPreTranspoziciu(StringBuilder textPreTranspoziciu){
@@ -93,5 +96,43 @@ public class Priebeh {
         String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br>"+"odhadnute poradia stlpcov : "+uspesnostPermutacii+"%";
         return pokus;
     }
+    public void otestujRozneKluce(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
+        pocetRiadkov=100;
+        for(int r=1;r<3;r++){
+            transpozicia.setTextNaSifrovanie(texty.get(r));
+            for(int d=pocetRiadkov;d<=500;d+=100){
+                transpozicia.setPocetRiadkov(d,permutacia);
+                int index=0;
+                double pocetNeuspesnychPermutacii=0;
+                double pocetNeuhadnutychKlucov=0;
+                for(int i=0;i<kluce.size();i++){
+                    String kluc=kluce.get(index);
+                    transpozicia.setKluc(kluc,transpozicia.getTextNaSifrovanie());
 
+                    odhadKluca.najdiDlzkuKluca(transpozicia.getZasifrovanyText().toString(),transpozicia);
+                    index++;
+                    if (transpozicia.getKluc().length() != odhadKluca.getDlzkaKluca()) {
+                        pocetNeuhadnutychKlucov++;
+                        pocetNeuspesnychPermutacii++;
+                        continue;
+                    }
+                    permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
+                    permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
+
+                    permutacia.hladatPermutaciu();
+
+                    if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
+                        pocetNeuspesnychPermutacii++;
+                    }
+                }
+                double uspesnostKlucov=((kluce.size()-pocetNeuhadnutychKlucov)/kluce.size())*100;
+                double uspesnostPermutacii=((kluce.size()-pocetNeuspesnychPermutacii)/kluce.size())*100;
+                System.out.print(d+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
+                System.out.println();
+
+            }
+            System.out.println();
+        }
+
+    }
 }
