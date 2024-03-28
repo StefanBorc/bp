@@ -17,7 +17,9 @@ public class Permutacia {
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
+
     private double dolnaHranicaBigramov;
+    private double hornaHranicaBigramov;
     private double[] hraniceTrigramov;
     @Setter
     private int pocetRiadkov;
@@ -30,13 +32,14 @@ public class Permutacia {
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
         odhadnutHranicuTrigramov(new int[]{2500,3800,5000});
-        odhadnutHranicuBigramov();
+        odhadnutDolnuHranicuBigramov();
+        odhadnutHornuHranicu(50);
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,false);
+        najstPoradie(odchylky,true);
     }
-    public void odhadnutHranicuBigramov(){
+    public void odhadnutDolnuHranicuBigramov(){
         int n;
         if(jazyk.toString().equals("DE")){
             n=450;
@@ -48,6 +51,9 @@ public class Permutacia {
             n=400;
         }
         dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
+    }
+    public void odhadnutHornuHranicu(int n){
+        hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){
@@ -79,9 +85,13 @@ public class Permutacia {
                     bigramyZT = vlastnosti.ngramy(text, 2, false,false,true);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
+                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=hornaHranicaBigramov ){
+                                odchylka-=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
+                            }
+                            else if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
+
                         }
                         if(odchylka>vaha){
                             break;

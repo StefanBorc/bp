@@ -25,7 +25,7 @@ public class TabulkovaTranspozicia extends Sifra {
     public void setPocetRiadkov(int pocetRiadkov, Permutacia permutacia) {
         this.pocetRiadkov = pocetRiadkov;
         permutacia.setPocetRiadkov(pocetRiadkov);
-        permutacia.odhadnutHranicuBigramov();
+        permutacia.odhadnutDolnuHranicuBigramov();
     }
 
     public TabulkovaTranspozicia(StringBuilder otUpraveny, String kluc) {

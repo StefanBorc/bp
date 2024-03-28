@@ -46,8 +46,8 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         pocetRiadkov=100;
         jazyk=Jazyk.DE;
         text=new Text(jazyk.toString());
-        priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(2),text.getUpravenyText());
-        priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
+        priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
+        //priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
 
     }
     protected void inicializaciaNadpisov(){
