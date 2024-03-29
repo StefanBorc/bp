@@ -31,6 +31,8 @@ public class Aplikacia {
         JPanel menu2 = new JPanel();
         JButton tlacidloSpustit = new JButton(SPUSTIT);
 
+        JProgressBar progressBar;
+
         tlacidloSpustit.setBackground(Color.RED);
         tlacidloSpustit.addActionListener(priebehAplikacie);
         tlacidloSpustit.setFocusable(false);
