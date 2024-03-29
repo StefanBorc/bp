@@ -81,8 +81,8 @@ public class Priebeh {
             permutacia.setDlzkaKluca(odhadKluca.getDlzkaKluca());
             permutacia.setBlokyZt(transpozicia.getZtVBlokoch());
             permutacia.hladatPermutaciu();
-            transpozicia.vytlacPermutaciu();
-            permutacia.vytlacTestovanuPermutaciu();
+            //transpozicia.vytlacPermutaciu();
+            //permutacia.vytlacTestovanuPermutaciu();
 
             if (!transpozicia.jeZhodnaPermutacia(permutacia.getPermutacia())) {
                 pocetNeuspesnychPermutacii++;

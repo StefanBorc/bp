@@ -31,7 +31,7 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         this.jazyk=jazyk;
-        odhadnutHranicuTrigramov(new int[]{200,400,2500,3800,5000});
+        odhadnutHranicuTrigramov(new int[]{100,300,2500,3500,4000,6000});
         odhadnutDolnuHranicuBigramov();
         odhadnutHornuHranicuBigramov(50);
     }
@@ -129,7 +129,7 @@ public class Permutacia {
                     }
                     StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, new int[]{i,j,t});
                     trigramyZT = vlastnosti.ngramy(text, 3, false,false,true);
-                    int velkostPorovnania=trigramyZT.size()/2;
+                    double velkostPorovnania=trigramyZT.size()/1.4;
                     double odchylka=0.0;
                     for(int trigram=0;trigram<velkostPorovnania;trigram++){
                         if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
@@ -147,6 +147,9 @@ public class Permutacia {
                             }
                             else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[4] ){
                                 odchylka+=3.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
+                            }
+                            else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[5] ){
+                                odchylka+=5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
                             }
                         }
                     }
@@ -338,13 +341,13 @@ public class Permutacia {
     }
     private void najstPoradie(ArrayList<ArrayList<Double>> odchylky,boolean zahrnutTrigramy){
         kombinacie = new ArrayList<>();
-        //vybratNajlepsieKombinacie(odchylky);
         if(zahrnutTrigramy){
             var odchylkyTrigramov=vyladitTrigramy();
             vybratKombinacieTrigramov(odchylkyTrigramov);
             najstCestu();
         }
         else{
+            vybratNajlepsieKombinacie(odchylky);
             poskladatCestu();
         }
     }
