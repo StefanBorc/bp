@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.example.Text.text;
+import static org.example.aplikacia.Aplikacia.LADENIE_BIGRAMOV;
 
 public class Priebeh {
     private TabulkovaTranspozicia transpozicia;
@@ -16,6 +17,7 @@ public class Priebeh {
     private Permutacia permutacia;
     private Vlastnosti vlastnosti;
     private int pocetRiadkov ;
+    private boolean ladenieBigramov;
 
     public Priebeh(int pocetRiadkov,Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
         this.pocetRiadkov=pocetRiadkov;
@@ -33,6 +35,14 @@ public class Priebeh {
         vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true,true));
         vlastnosti.priemernaDlzkaSlov(text.toString());
         vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(ot));
+    }
+    public void setModLadenia(String mod){
+        if(mod.equals(LADENIE_BIGRAMOV)){
+            permutacia.setZahrnutTrigramy(false);
+        }
+        else{
+            permutacia.setZahrnutTrigramy(true);
+        }
     }
     public void setTextPreTranspoziciu(StringBuilder textPreTranspoziciu){
         transpozicia.setTextNaSifrovanie(textPreTranspoziciu);
@@ -99,7 +109,8 @@ public class Priebeh {
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
-        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br>"+"odhadnute poradia stlpcov : "+uspesnostPermutacii+"%";
+        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br><br>"+"odhadnute poradia stlpcov : "+
+                uspesnostPermutacii+"%"+"<br><br><br>"+"celkova uspesnost odhadnutia permutacii : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
         return pokus;
     }
     public void otestujRozneKluce(ArrayList<String> kluce, ArrayList<StringBuilder> texty){

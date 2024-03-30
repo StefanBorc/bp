@@ -28,7 +28,7 @@ public class Text {
         nacitajKluceText();
     }
 
-    protected StringBuilder vratOT() throws IOException {
+    protected void vratOT() throws IOException {
 
         upravenyText =new StringBuilder();
         StringBuilder text = new StringBuilder();
@@ -46,7 +46,6 @@ public class Text {
             }
         }
         br.close();
-        return upravenyText;
     }
     protected StringBuilder vratOTSMedzerami() throws IOException {
 

@@ -5,20 +5,22 @@ import java.awt.*;
 import java.io.IOException;
 
 public class Aplikacia {
-    public static final String SPUSTIT="LUSTIT";
+    public static final String SPUSTIT="LÚŠTIŤ";
+    public static final String LADENIE_BIGRAMOV="BIGRAMY";
+    public static final String LADENIE_TRIGRAMOV="TRIGRAMY";
     public static final String PREPINAC_RIADKOV="PREPINAC_RIADKOV";
     public static final String PREPINAC_KLUCOV="PREPINAC_KLUCOV";
     public static final String PODIEL_NADPIS ="Podiel hlasok : ";
     public static final String BIGRAMY_NADPIS="bigramy OT : ";
-    public static final String POKUS_NADPIS="Vysledok pokusu : ";
-    public static final String PRIEMERNA_DLZKA_SLOV_NADPIS="Priemerna dlzka slov : ";
+    public static final String POKUS_NADPIS="Výsledok pokusu : ";
+    public static final String PRIEMERNA_DLZKA_SLOV_NADPIS="Priemerná dĺžka slov : ";
     public static final String INDEX_KOINCIDENCIE_NADPIS="Index koincidencie : ";
     public static final String TRIGRAMY_NADPIS="trigramy OT : ";
     public static final String ZNAKY_NADPIS="znaky OT : ";
     public Aplikacia() throws IOException {
         JFrame frame = new JFrame("Tabulkova transpozicia");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(1000, 600);
         frame.getContentPane().setBackground(Color.GRAY);
         frame.setResizable(true);
         frame.setFocusable(true);
@@ -96,58 +98,72 @@ public class Aplikacia {
         frame.add(menu1, BorderLayout.NORTH);
         frame.add(menu2,BorderLayout.SOUTH);
 
-        JLabel podielHlasokText = new JLabel();
+        JLabel statistikyPreLabely = new JLabel();
         JLabel znakyText=new JLabel();
         JLabel bigramyText = new JLabel();
         JLabel trigramyText = new JLabel();
-        JLabel priemernaDlzkaSlov=new JLabel();
-        JLabel indexKoincidencieText=new JLabel();
-
         JLabel pokusText = new JLabel(POKUS_NADPIS);
+        //znakyText.setHorizontalAlignment(SwingConstants.CENTER);
+        //bigramyText.setHorizontalAlignment(SwingConstants.CENTER);
+        //trigramyText.setHorizontalAlignment(SwingConstants.CENTER);
 
-        podielHlasokText.setVerticalAlignment(SwingConstants.TOP);
+        statistikyPreLabely.setVerticalAlignment(SwingConstants.TOP);
         bigramyText.setVerticalAlignment(SwingConstants.TOP);
-        priemernaDlzkaSlov.setVerticalAlignment(SwingConstants.TOP);
+
         pokusText.setVerticalAlignment(SwingConstants.TOP);
-        indexKoincidencieText.setVerticalAlignment(SwingConstants.TOP);
 
         JPanel hlavnyPanel = new JPanel(new GridLayout(1, 3));
+        JPanel statistikyOt1=new JPanel(new GridLayout(2,1));
 
-        JPanel statistikyOt1=new JPanel(new GridLayout(3,1));
-        JScrollPane indexKoincidenciePanel = new JScrollPane(indexKoincidencieText);
         JScrollPane pokusPanel = new JScrollPane(pokusText);
-        JScrollPane podielHlasokPanel = new JScrollPane(podielHlasokText);
-        JScrollPane priemernaDlzkaSlovPanel = new JScrollPane(priemernaDlzkaSlov);
-        statistikyOt1.add(priemernaDlzkaSlovPanel);
+        JScrollPane podielHlasokPanel = new JScrollPane(statistikyPreLabely);
+
         statistikyOt1.add(podielHlasokPanel);
-        statistikyOt1.add(indexKoincidenciePanel);
+        JScrollPane znakyPanel = new JScrollPane(znakyText);
+        statistikyOt1.add(znakyPanel);
         hlavnyPanel.add(statistikyOt1);
 
         JPanel statistikyOt2=new JPanel(new GridLayout(2,1));
-        JScrollPane znakyPanel = new JScrollPane(znakyText);
+        JScrollPane bigramyPanel = new JScrollPane(bigramyText);
         JScrollPane trigramyPanel = new JScrollPane(trigramyText);
-        statistikyOt2.add(znakyPanel);
+        statistikyOt2.add(bigramyPanel);
         statistikyOt2.add(trigramyPanel);
         hlavnyPanel.add(statistikyOt2);
 
         JPanel statistikyOt3=new JPanel(new GridLayout(2,1));
-        JScrollPane bigramyPanel = new JScrollPane(bigramyText);
-        statistikyOt3.add(bigramyPanel);
+        JPanel prepinanieModov=new JPanel(new GridLayout(1,2));
+        JLabel prepinanieModovNadpis=new JLabel("Lúštenie pomocou :");
+        prepinanieModovNadpis.setHorizontalAlignment(SwingConstants.CENTER);
+        JPanel mody=new JPanel(new GridLayout(4,1));
+        JButton ladenieBigramov=new JButton(LADENIE_BIGRAMOV);
+        JButton ladenieTrigramov=new JButton(LADENIE_TRIGRAMOV);
+        ladenieBigramov.setEnabled(false);
+        ladenieBigramov.addActionListener(priebehAplikacie);
+        ladenieTrigramov.addActionListener(priebehAplikacie);
+        prepinanieModov.add(ladenieBigramov);
+        prepinanieModov.add(ladenieTrigramov);
+
+        mody.add(prepinanieModovNadpis);
+        mody.add(prepinanieModov);
+        mody.add(new JLabel());
+        mody.add(new JLabel());
+
+        statistikyOt3.add(mody);
         statistikyOt3.add(pokusPanel);
         hlavnyPanel.add(statistikyOt3);
 
         priebehAplikacie.setZvolenyPocetKlucov(zvolenyPocetKlucov);
         priebehAplikacie.setZvolenyPocetRiadkov(zvolenyPocetRiadkov);
 
-        priebehAplikacie.setPodielHlasokStatistika(podielHlasokText);;
+        priebehAplikacie.setStatistikyPreLabely(statistikyPreLabely);;
         priebehAplikacie.setZnakyStatistika(znakyText);
         priebehAplikacie.setBigramyStatistika(bigramyText);
         priebehAplikacie.setTrigramyStatistika(trigramyText);
-        priebehAplikacie.setPriemernaDlzkaSlovStatistika(priemernaDlzkaSlov);
-        priebehAplikacie.setIndexKoincidencieStatistika(indexKoincidencieText);
         priebehAplikacie.setPokusStatistika(pokusText);
         priebehAplikacie.inicializaciaNadpisov();
         priebehAplikacie.setProgressBar(progressBar);
+        priebehAplikacie.setLadenieBigramov(ladenieBigramov);
+        priebehAplikacie.setLadenieTrigramov(ladenieTrigramov);
 
         frame.add(hlavnyPanel, BorderLayout.CENTER);
 

@@ -25,11 +25,14 @@ public class Permutacia {
     private int pocetRiadkov;
     @Setter
     private Jazyk jazyk;
+    @Setter@Getter
+    private boolean zahrnutTrigramy;
 
     public Permutacia(Vlastnosti vlastnosti, OdhadKluca odhadKluca,Jazyk jazyk) {
         this.dlzkaKluca= odhadKluca.getDlzkaKluca();
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
+        zahrnutTrigramy=false;
         this.jazyk=jazyk;
         odhadnutHranicuTrigramov(new int[]{40,100,300,2500,3500,4000,6000});
         odhadnutDolnuHranicuBigramov();
@@ -37,7 +40,7 @@ public class Permutacia {
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,false);
+        najstPoradie(odchylky,zahrnutTrigramy);
     }
     public void odhadnutDolnuHranicuBigramov(){
         int n;

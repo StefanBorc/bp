@@ -25,7 +25,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JLabel zvolenyPocetKlucov;
     @Setter
-    private JLabel podielHlasokStatistika;
+    private JLabel statistikyPreLabely;
     @Setter
     private JLabel znakyStatistika;
     @Setter
@@ -33,14 +33,14 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JLabel trigramyStatistika;
     @Setter
-    private JLabel priemernaDlzkaSlovStatistika;
-    @Setter
-    private JLabel indexKoincidencieStatistika;
-    @Setter
     private JLabel pokusStatistika;
     private String pokus;
     @Setter
     private JProgressBar progressBar;
+    @Setter
+    private JButton ladenieBigramov;
+    @Setter
+    private JButton ladenieTrigramov;
     public PriebehAplikacie() throws IOException {
         super();
         cisloKorpusu=0;
@@ -52,7 +52,9 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
 
     }
     protected void inicializaciaNadpisov(){
-        podielHlasokStatistika.setText(PODIEL_NADPIS+" "+priebeh.podielSamohlasokSpoluhlasokOT());
+        statistikyPreLabely.setText("<html><font color='red'>"+PODIEL_NADPIS+" <font color='black'>"+priebeh.podielSamohlasokSpoluhlasokOT()+
+                "<br><br><br><br><font color='red'>"+PRIEMERNA_DLZKA_SLOV_NADPIS+" <font color='black'>"+priebeh.priemernaDlzkaSlovOT()+" znakov"+
+                "<br><br><br><br><font color='red'>"+INDEX_KOINCIDENCIE_NADPIS+" <font color='black'>"+priebeh.indexKoincidencieOT()+"<html>");
         var znakyOT=priebeh.znakyOT();
         int i=0;
         String textZnaky=" ";
@@ -81,8 +83,6 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             textTrigramy+="<br>";
             i++;
         }
-        priemernaDlzkaSlovStatistika.setText(PRIEMERNA_DLZKA_SLOV_NADPIS+" "+priebeh.priemernaDlzkaSlovOT());
-        indexKoincidencieStatistika.setText(INDEX_KOINCIDENCIE_NADPIS+" "+priebeh.indexKoincidencieOT());
         znakyStatistika.setText("<html><font color='red'>" +ZNAKY_NADPIS+"<br><font color='black'>"+ textZnaky + "</html>");
         bigramyStatistika.setText("<html><font color='red'>" +BIGRAMY_NADPIS+"<br><font color='black'>"+ textBigramy + "</html>");
         trigramyStatistika.setText("<html><font color='red'>" +TRIGRAMY_NADPIS+"<br><font color='black'>"+ textTrigramy + "</html>");
@@ -110,14 +110,24 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             ((JButton) e.getSource()).setEnabled(false);
             new Thread(() -> {
                     pokus = priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu), text.getKluce(), pocetKlucov, progressBar);
-                    final String result = pokus;
+                    final String vysledokPokusu = pokus;
                     SwingUtilities.invokeLater(() -> {
-                        pokusStatistika.setText("<html>" + POKUS_NADPIS + "<br>" + result + "<html>");
-                        JOptionPane.showMessageDialog(null, result);
+                        pokusStatistika.setText("<html>" + POKUS_NADPIS + "<br><br>" + vysledokPokusu + "<html>");
+                        JOptionPane.showMessageDialog(null, vysledokPokusu);
                         ((JButton) e.getSource()).setEnabled(true);
                     });
             }).start();
 
+        }
+        else if(e.getActionCommand().equals(LADENIE_BIGRAMOV)){
+            ladenieBigramov.setEnabled(false);
+            ladenieTrigramov.setEnabled(true);
+            priebeh.setModLadenia(LADENIE_BIGRAMOV);
+        }
+        else if(e.getActionCommand().equals(LADENIE_TRIGRAMOV)){
+            ladenieBigramov.setEnabled(true);
+            ladenieTrigramov.setEnabled(false);
+            priebeh.setModLadenia(LADENIE_TRIGRAMOV);
         }
         else {
             String polozka = ((JComboBox) e.getSource()).getSelectedItem().toString();

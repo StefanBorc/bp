@@ -13,21 +13,7 @@ public class Main {
     public static Random r = new Random();
 
     public static void main(String[] args) throws Exception {
-        //long startTime = System.currentTimeMillis();
-
         new Aplikacia();
-        /*
-        Text t=new Text("CZ");
-        Priebeh priebeh=new Priebeh(100, Jazyk.CZ,t.getTextyNaSifrovanie().get(0),t.getUpravenyText());
-        priebeh.otestovatKorpus(t.getTextyNaSifrovanie().get(0),t.getKluce(),t.getKluce().size());
-         */
-        //   System.out.println("Elapsed Time: " + minutes + " minutes and " + seconds + " seconds");
-        /*
-        String kluc="dskaodaodakddsadsad";
-        System.out.println(kluc.length());
-        priebeh.otestujKlucPermutaciu(200,kluc);
-*/
-
     }
 
     public static String vygenerujKluc(int min, int max){
