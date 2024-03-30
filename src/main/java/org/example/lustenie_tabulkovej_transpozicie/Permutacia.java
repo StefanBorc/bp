@@ -17,8 +17,9 @@ public class Permutacia {
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
-
+    @Setter@Getter
     private double dolnaHranicaBigramov;
+    @Setter@Getter
     private double hornaHranicaBigramov;
     private double[] hraniceTrigramov;
     @Setter
@@ -94,7 +95,7 @@ public class Permutacia {
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=hornaHranicaBigramov ){
-                                odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
+                                odchylka-=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
                             else if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));

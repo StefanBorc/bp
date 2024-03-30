@@ -31,7 +31,7 @@ public class TabulkovaTranspozicia extends Sifra {
     public TabulkovaTranspozicia(StringBuilder otUpraveny, String kluc) {
         ztVBlokoch=new ArrayList<>();
         textNaSifrovanie=otUpraveny;
-        pocetRiadkov = 0;
+        pocetRiadkov = 100;
         this.kluc = kluc;
     }
     public void setKluc(String kluc,StringBuilder text) {

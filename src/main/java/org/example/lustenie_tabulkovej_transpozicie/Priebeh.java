@@ -17,7 +17,6 @@ public class Priebeh {
     private Permutacia permutacia;
     private Vlastnosti vlastnosti;
     private int pocetRiadkov ;
-    private boolean ladenieBigramov;
 
     public Priebeh(int pocetRiadkov,Jazyk jazyk, StringBuilder otNasifrovanie, StringBuilder otUpraveny){
         this.pocetRiadkov=pocetRiadkov;
@@ -35,6 +34,7 @@ public class Priebeh {
         vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true,true));
         vlastnosti.priemernaDlzkaSlov(text.toString());
         vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(ot));
+        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
     }
     public void setModLadenia(String mod){
         if(mod.equals(LADENIE_BIGRAMOV)){
@@ -49,8 +49,9 @@ public class Priebeh {
     }
     public void setPocetRiadkov(int pocetRiadkov) {
         this.pocetRiadkov=pocetRiadkov;
-        permutacia.setPocetRiadkov(pocetRiadkov);
+        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
     }
+
     public double podielSamohlasokSpoluhlasokOT(){
         return vlastnosti.getStatistikaSamohlasokSpoluhlasok();
     }
@@ -68,6 +69,18 @@ public class Priebeh {
     }
     public double indexKoincidencieOT(){
         return vlastnosti.getIndexKoincidencie();
+    }
+    public void setDolnaHranicaBigramov(int n){
+       permutacia.setDolnaHranicaBigramov(n);
+    }
+    public double getDolnaHranicaBigramov(){
+        return permutacia.getDolnaHranicaBigramov();
+    }
+    public void setHornaHranicaBigramov(int n){
+        permutacia.setDolnaHranicaBigramov(n);
+    }
+    public double getHornaHranicaBigramov(){
+        return permutacia.getDolnaHranicaBigramov();
     }
     public String otestovatKorpus(StringBuilder text, ArrayList<String> kluce, int pocetKlucov, JProgressBar progressBar){
 

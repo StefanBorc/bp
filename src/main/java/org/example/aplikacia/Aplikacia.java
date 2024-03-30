@@ -8,6 +8,8 @@ public class Aplikacia {
     public static final String SPUSTIT="LÚŠTIŤ";
     public static final String LADENIE_BIGRAMOV="BIGRAMY";
     public static final String LADENIE_TRIGRAMOV="TRIGRAMY";
+    public static final String PREPINAC_HORNEJ_HRANICE_BIGRAMOV="PREPINAC_HORNEJ_HRANICE_BIGRAMOV";
+    public static final String PREPINAC_DOLNEJ_HRANICE_BIGRAMOV="PREPINAC_DOLNEJ_HRANICE_BIGRAMOV";
     public static final String PREPINAC_RIADKOV="PREPINAC_RIADKOV";
     public static final String PREPINAC_KLUCOV="PREPINAC_KLUCOV";
     public static final String PODIEL_NADPIS ="Podiel hlasok : ";
@@ -40,25 +42,12 @@ public class Aplikacia {
         tlacidloSpustit.addActionListener(priebehAplikacie);
         tlacidloSpustit.setFocusable(false);
 
-        JSlider prepinacKlucov = new JSlider(JSlider.HORIZONTAL, 1000, 5000, 3000);
-        prepinacKlucov.setName(PREPINAC_KLUCOV);
-        prepinacKlucov.setBackground(Color.LIGHT_GRAY);
-        prepinacKlucov.setMinorTickSpacing(500);
-        prepinacKlucov.setMajorTickSpacing(1000);
-        prepinacKlucov.setSnapToTicks(true);
-        prepinacKlucov.setPaintTicks(true);
-        prepinacKlucov.setPaintLabels(true);
-        prepinacKlucov.addChangeListener(priebehAplikacie);
+        JSlider prepinacKlucov = vytvoritJSlider(priebehAplikacie,PREPINAC_KLUCOV,1000,5000,3000,false,500,1000,Color.LIGHT_GRAY);
+        JSlider prepinacRiadkov = vytvoritJSlider(priebehAplikacie,PREPINAC_RIADKOV,100,1000,100,false,100,100,Color.LIGHT_GRAY);
+        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,10,676,50,true,10,10,Color.WHITE);
+        JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,10,676,400,true,10,10,Color.WHITE);
 
-        JSlider prepinacRiadkov = new JSlider(JSlider.HORIZONTAL, 100, 1000, 100);
-        prepinacRiadkov.setName(PREPINAC_RIADKOV);
-        prepinacRiadkov.setBackground(Color.LIGHT_GRAY);
-        prepinacRiadkov.setMinorTickSpacing(100);
-        prepinacRiadkov.setMajorTickSpacing(200);
-        prepinacRiadkov.setSnapToTicks(true);
-        prepinacRiadkov.setPaintTicks(true);
-        prepinacRiadkov.setPaintLabels(true);
-        prepinacRiadkov.addChangeListener(priebehAplikacie);
+        System.out.println(priebehAplikacie.getDolnaHranicaBigramov());
 
         JLabel zvolenyPocetKlucov=new JLabel("Počet klúčov : "+prepinacKlucov.getValue());
         JLabel zvolenyPocetRiadkov=new JLabel("Počet riadkov : "+prepinacRiadkov.getValue());
@@ -130,25 +119,40 @@ public class Aplikacia {
         statistikyOt2.add(trigramyPanel);
         hlavnyPanel.add(statistikyOt2);
 
-        JPanel statistikyOt3=new JPanel(new GridLayout(2,1));
+
+        JPanel statistikyOt3=new JPanel(new GridLayout(3,1));
         JPanel prepinanieModov=new JPanel(new GridLayout(1,2));
-        JLabel prepinanieModovNadpis=new JLabel("Lúštenie pomocou :");
-        prepinanieModovNadpis.setHorizontalAlignment(SwingConstants.CENTER);
+        JPanel prepinanieOdchyliekBigramov= new JPanel(new GridLayout(1,2));
+        JPanel zvoleneOdchylkyBigramov = new JPanel(new GridLayout(1,2));
         JPanel mody=new JPanel(new GridLayout(4,1));
+
+        JLabel prepinanieModovNadpis=new JLabel("Lúštenie pomocou :");
+        JLabel zvolenaHornaOdchylkaBigramov= new JLabel("<html>horná odchylka <br> bigramov : <html>"+prepinacHornejHraniceBigramov.getValue());
+        JLabel zvolenaDolnaOdchylkaBigramov= new JLabel("<html>dolná odchylka <br> bigramov : <html>"+prepinacDolnejHraniceBigramov.getValue());
+        zvolenaHornaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
+        zvolenaDolnaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
+        prepinanieModovNadpis.setHorizontalAlignment(SwingConstants.CENTER);
+
         JButton ladenieBigramov=new JButton(LADENIE_BIGRAMOV);
         JButton ladenieTrigramov=new JButton(LADENIE_TRIGRAMOV);
         ladenieBigramov.setEnabled(false);
         ladenieBigramov.addActionListener(priebehAplikacie);
         ladenieTrigramov.addActionListener(priebehAplikacie);
+
         prepinanieModov.add(ladenieBigramov);
         prepinanieModov.add(ladenieTrigramov);
+        prepinanieOdchyliekBigramov.add(prepinacHornejHraniceBigramov);
+        prepinanieOdchyliekBigramov.add(prepinacDolnejHraniceBigramov);
+        zvoleneOdchylkyBigramov.add(zvolenaHornaOdchylkaBigramov);
+        zvoleneOdchylkyBigramov.add(zvolenaDolnaOdchylkaBigramov);
 
         mody.add(prepinanieModovNadpis);
         mody.add(prepinanieModov);
-        mody.add(new JLabel());
-        mody.add(new JLabel());
+        mody.add(zvoleneOdchylkyBigramov);
+        mody.add(prepinanieOdchyliekBigramov);
 
         statistikyOt3.add(mody);
+        statistikyOt3.add(new JLabel());
         statistikyOt3.add(pokusPanel);
         hlavnyPanel.add(statistikyOt3);
 
@@ -164,11 +168,27 @@ public class Aplikacia {
         priebehAplikacie.setProgressBar(progressBar);
         priebehAplikacie.setLadenieBigramov(ladenieBigramov);
         priebehAplikacie.setLadenieTrigramov(ladenieTrigramov);
+        priebehAplikacie.setDolnaHranicaBigramovText(zvolenaDolnaOdchylkaBigramov);
+        priebehAplikacie.setHornaHranicaBigramovText(zvolenaHornaOdchylkaBigramov);
 
         frame.add(hlavnyPanel, BorderLayout.CENTER);
 
+
         frame.setVisible(true);
     }
-
+    private JSlider vytvoritJSlider(PriebehAplikacie priebehAplikacie, String nazov,int min , int max, int hodnota,boolean malySlider,int minorTick,int majorTick,Color farba){
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, hodnota);
+        slider.setName(nazov);
+        slider.setBackground(farba);
+        slider.setMinorTickSpacing(minorTick);
+        slider.setMajorTickSpacing(majorTick);
+        slider.setSnapToTicks(true);
+        if(!malySlider) {
+            slider.setPaintTicks(true);
+            slider.setPaintLabels(true);
+        }
+        slider.addChangeListener(priebehAplikacie);
+        return slider;
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.example.aplikacia;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.example.Text;
 import org.example.lustenie_tabulkovej_transpozicie.Priebeh;
@@ -20,6 +21,10 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private int pocetRiadkov;
     @Setter
     private int pocetKlucov;
+    @Setter@Getter
+    private double dolnaHranicaBigramov;
+    @Setter@Getter
+    private double hornaHranicaBigramov;
     @Setter
     private JLabel zvolenyPocetRiadkov;
     @Setter
@@ -34,6 +39,10 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private JLabel trigramyStatistika;
     @Setter
     private JLabel pokusStatistika;
+    @Setter
+    private JLabel dolnaHranicaBigramovText;
+    @Setter
+    private JLabel hornaHranicaBigramovText;
     private String pokus;
     @Setter
     private JProgressBar progressBar;
@@ -41,6 +50,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private JButton ladenieBigramov;
     @Setter
     private JButton ladenieTrigramov;
+
     public PriebehAplikacie() throws IOException {
         super();
         cisloKorpusu=0;
@@ -48,6 +58,8 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         jazyk=Jazyk.DE;
         text=new Text(jazyk.toString());
         priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
+        dolnaHranicaBigramov=priebeh.getDolnaHranicaBigramov();
+        hornaHranicaBigramov=priebeh.getHornaHranicaBigramov();
         //priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
 
     }
@@ -103,6 +115,27 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
                 priebeh.setPocetRiadkov(pocetRiadkov);
             }
         }
+        else if(((JSlider)e.getSource()).getName().equals(PREPINAC_HORNEJ_HRANICE_BIGRAMOV)){
+
+                hornaHranicaBigramovText.setText("<html>horná odchylka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                hornaHranicaBigramov=((JSlider) e.getSource()).getValue();
+
+                //priebeh.setDolnaHranicaBigramov((int)hornaHranicaBigramov);
+
+
+        }
+        else if(((JSlider)e.getSource()).getName().equals(PREPINAC_DOLNEJ_HRANICE_BIGRAMOV)){
+
+                dolnaHranicaBigramovText.setText("<html>dolná odchylka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                dolnaHranicaBigramov=((JSlider) e.getSource()).getValue();
+
+                //System.out.println(priebeh.getDolnaHranicaBigramov());
+                //priebeh.setDolnaHranicaBigramov((int)dolnaHranicaBigramov);
+
+
+        }
+
+
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -139,6 +172,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
                 }
                 jazyk = Jazyk.valueOf(polozka);
                 priebeh.setJazyk(jazyk, text.getUpravenyText());
+
                 inicializaciaNadpisov();
             } else {
                 switch (polozka) {
@@ -158,4 +192,5 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
         }
     }
+
 }
