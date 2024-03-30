@@ -107,14 +107,17 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals(SPUSTIT)){
+            ((JButton) e.getSource()).setEnabled(false);
             new Thread(() -> {
                     pokus = priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu), text.getKluce(), pocetKlucov, progressBar);
                     final String result = pokus;
                     SwingUtilities.invokeLater(() -> {
                         pokusStatistika.setText("<html>" + POKUS_NADPIS + "<br>" + result + "<html>");
                         JOptionPane.showMessageDialog(null, result);
+                        ((JButton) e.getSource()).setEnabled(true);
                     });
             }).start();
+
         }
         else {
             String polozka = ((JComboBox) e.getSource()).getSelectedItem().toString();

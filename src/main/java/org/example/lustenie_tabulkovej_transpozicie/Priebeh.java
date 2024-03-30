@@ -69,8 +69,8 @@ public class Priebeh {
 
         for(int i=0;i<pocetKlucov;i++) {
 
-            int progress = (int)(((double)i / pocetKlucov) * 100);
-            progressBar.setValue(progress);
+            int progres = (int)(((double) i / pocetKlucov) * 100)+1;
+            progressBar.setValue(progres);
 
             String kluc = kluce.get(index);
             transpozicia.setKluc(kluc,transpozicia.getTextNaSifrovanie());
