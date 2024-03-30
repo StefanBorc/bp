@@ -37,7 +37,7 @@ public class Permutacia {
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
-        najstPoradie(odchylky,true);
+        najstPoradie(odchylky,false);
     }
     public void odhadnutDolnuHranicuBigramov(){
         int n;

@@ -31,7 +31,8 @@ public class Aplikacia {
         JPanel menu2 = new JPanel();
         JButton tlacidloSpustit = new JButton(SPUSTIT);
 
-        JProgressBar progressBar;
+        JProgressBar progressBar=new JProgressBar(0,100);
+        progressBar.setStringPainted(true);
 
         tlacidloSpustit.setBackground(Color.RED);
         tlacidloSpustit.addActionListener(priebehAplikacie);
@@ -82,6 +83,7 @@ public class Aplikacia {
         menu1.add(prepinacKorpusov);
         menu1.add(prepinacVzorky);
         menu1.add(tlacidloSpustit);
+        menu1.add(progressBar);
 
         menu2.setLayout(new GridLayout(2,2));
         menu2.add(zvolenyPocetKlucov);
