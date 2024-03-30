@@ -3,6 +3,7 @@ package org.example.lustenie_tabulkovej_transpozicie;
 import org.example.aplikacia.Jazyk;
 import org.example.sifry.TabulkovaTranspozicia;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,8 @@ public class Priebeh {
     public double indexKoincidencieOT(){
         return vlastnosti.getIndexKoincidencie();
     }
-    public String otestovatKorpus(StringBuilder text,ArrayList<String> kluce,int pocetKlucov){
+    public String otestovatKorpus(StringBuilder text, ArrayList<String> kluce, int pocetKlucov, JProgressBar progressBar){
+
         transpozicia.setTextNaSifrovanie(text);
         transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
         int index=0;
@@ -66,6 +68,10 @@ public class Priebeh {
         double pocetNeuhadnutychKlucov=0;
 
         for(int i=0;i<pocetKlucov;i++) {
+
+            int progress = (int)(((double)i / pocetKlucov) * 100);
+            progressBar.setValue(progress);
+
             String kluc = kluce.get(index);
             transpozicia.setKluc(kluc,transpozicia.getTextNaSifrovanie());
             //StringBuilder zt=new StringBuilder(transpozicia.getZasifrovanyText());

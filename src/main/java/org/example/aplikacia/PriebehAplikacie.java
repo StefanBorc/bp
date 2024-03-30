@@ -39,7 +39,8 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JLabel pokusStatistika;
     private String pokus;
-
+    @Setter
+    private JProgressBar progressBar;
     public PriebehAplikacie() throws IOException {
         super();
         cisloKorpusu=0;
@@ -105,7 +106,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals(SPUSTIT)){
-            pokus=priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu),text.getKluce(),pocetKlucov);
+            pokus=priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu),text.getKluce(),pocetKlucov,progressBar);
             pokusStatistika.setText("<html>"+POKUS_NADPIS+"<br>"+pokus+"<html>");
             return;
         }

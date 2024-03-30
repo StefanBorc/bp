@@ -147,6 +147,7 @@ public class Aplikacia {
         priebehAplikacie.setIndexKoincidencieStatistika(indexKoincidencieText);
         priebehAplikacie.setPokusStatistika(pokusText);
         priebehAplikacie.inicializaciaNadpisov();
+        priebehAplikacie.setProgressBar(progressBar);
 
         frame.add(hlavnyPanel, BorderLayout.CENTER);
 
