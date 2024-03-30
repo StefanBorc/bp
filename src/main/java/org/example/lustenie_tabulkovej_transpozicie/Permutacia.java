@@ -37,7 +37,7 @@ public class Permutacia {
         this.jazyk=jazyk;
         odhadnutHranicuTrigramov(new int[]{40,100,300,2500,3500,4000,6000});
         odhadnutDolnuHranicuBigramov();
-        odhadnutHornuHranicuBigramov(50);
+        odhadnutHornuHranicuBigramov(20);
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
@@ -57,7 +57,7 @@ public class Permutacia {
         dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
     }
     public void odhadnutHornuHranicuBigramov(int n){
-        hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
+        hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
     }
     private void odhadnutHranicuTrigramov(int[] hranice){
         hraniceTrigramov=new double[hranice.length];
@@ -94,7 +94,7 @@ public class Permutacia {
                     bigramyZT = vlastnosti.ngramy(text, 2, false,false,true);
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
-                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=hornaHranicaBigramov ){
+                            if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())>=hornaHranicaBigramov ){
                                 odchylka-=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
                             }
                             else if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
