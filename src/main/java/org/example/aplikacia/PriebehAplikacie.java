@@ -89,6 +89,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     }
     @Override
     public void stateChanged(ChangeEvent e) {
+
         if(((JSlider)e.getSource()).getName().equals(PREPINAC_KLUCOV)){
             if(((JSlider)e.getSource()).getValue()%500==0){
                 zvolenyPocetKlucov.setText("Pocet klucov : "+((JSlider)e.getSource()).getValue());
@@ -106,32 +107,42 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().equals(SPUSTIT)){
-            pokus=priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu),text.getKluce(),pocetKlucov,progressBar);
-            pokusStatistika.setText("<html>"+POKUS_NADPIS+"<br>"+pokus+"<html>");
-            return;
+            new Thread(() -> {
+                    pokus = priebeh.otestovatKorpus(text.getTextyNaSifrovanie().get(cisloKorpusu), text.getKluce(), pocetKlucov, progressBar);
+                    final String result = pokus;
+                    SwingUtilities.invokeLater(() -> {
+                        pokusStatistika.setText("<html>" + POKUS_NADPIS + "<br>" + result + "<html>");
+                        JOptionPane.showMessageDialog(null, result);
+                    });
+            }).start();
         }
-        String item=((JComboBox)e.getSource()).getSelectedItem().toString();
-        if(item.length()>1){
-            try {
-                text.setNazovSuboru(item);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+        else {
+            String polozka = ((JComboBox) e.getSource()).getSelectedItem().toString();
+            if (polozka.length() > 1) {
+                try {
+                    text.setNazovSuboru(polozka);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                jazyk = Jazyk.valueOf(polozka);
+                priebeh.setJazyk(jazyk, text.getUpravenyText());
+                inicializaciaNadpisov();
+            } else {
+                switch (polozka) {
+                    case "1":
+                        cisloKorpusu = 0;
+                        break;
+                    case "2":
+                        cisloKorpusu = 1;
+                        break;
+                    case "3":
+                        cisloKorpusu = 2;
+                        break;
+                    default:
+                        break;
+                }
+                priebeh.setTextPreTranspoziciu(text.getTextyNaSifrovanie().get(cisloKorpusu));
             }
-            jazyk = Jazyk.valueOf(item);
-            priebeh.setJazyk(jazyk,text.getUpravenyText());
-            inicializaciaNadpisov();
-        }
-        else{
-            switch(item){
-                case "1" : cisloKorpusu=0;
-                break;
-                case "2" : cisloKorpusu=1;
-                break;
-                case "3" : cisloKorpusu=2;
-                break;
-                default:break;
-            }
-            priebeh.setTextPreTranspoziciu(text.getTextyNaSifrovanie().get(cisloKorpusu));
         }
     }
 }
