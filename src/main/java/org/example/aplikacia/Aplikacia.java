@@ -11,12 +11,12 @@ public class Aplikacia {
     public static final String PREPINAC_RIADKOV="PREPINAC_RIADKOV";
     public static final String PREPINAC_KLUCOV="PREPINAC_KLUCOV";
     public static final String PODIEL_NADPIS ="Podiel hlasok : ";
-    public static final String BIGRAMY_NADPIS="bigramy OT : ";
+    public static final String BIGRAMY_NADPIS="bigramy : ";
     public static final String POKUS_NADPIS="Výsledok pokusu : ";
     public static final String PRIEMERNA_DLZKA_SLOV_NADPIS="Priemerná dĺžka slov : ";
     public static final String INDEX_KOINCIDENCIE_NADPIS="Index koincidencie : ";
-    public static final String TRIGRAMY_NADPIS="trigramy OT : ";
-    public static final String ZNAKY_NADPIS="znaky OT : ";
+    public static final String TRIGRAMY_NADPIS="trigramy : ";
+    public static final String ZNAKY_NADPIS="znaky : ";
     public Aplikacia() throws IOException {
         JFrame frame = new JFrame("Tabulkova transpozicia");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,8 +60,8 @@ public class Aplikacia {
         prepinacRiadkov.setPaintLabels(true);
         prepinacRiadkov.addChangeListener(priebehAplikacie);
 
-        JLabel zvolenyPocetKlucov=new JLabel("Pocet klucov : "+prepinacKlucov.getValue());
-        JLabel zvolenyPocetRiadkov=new JLabel("Pocet riadkov : "+prepinacRiadkov.getValue());
+        JLabel zvolenyPocetKlucov=new JLabel("Počet klúčov : "+prepinacKlucov.getValue());
+        JLabel zvolenyPocetRiadkov=new JLabel("Počet riadkov : "+prepinacRiadkov.getValue());
         priebehAplikacie.setPocetKlucov(prepinacKlucov.getValue());
         priebehAplikacie.setPocetRiadkov(prepinacRiadkov.getValue());
 

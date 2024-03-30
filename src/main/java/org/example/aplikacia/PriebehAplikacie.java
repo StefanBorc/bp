@@ -92,13 +92,13 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
 
         if(((JSlider)e.getSource()).getName().equals(PREPINAC_KLUCOV)){
             if(((JSlider)e.getSource()).getValue()%500==0){
-                zvolenyPocetKlucov.setText("Pocet klucov : "+((JSlider)e.getSource()).getValue());
+                zvolenyPocetKlucov.setText("Počet klúčov : "+((JSlider)e.getSource()).getValue());
                 pocetKlucov=((JSlider) e.getSource()).getValue();
             }
         }
         else if(((JSlider)e.getSource()).getName().equals(PREPINAC_RIADKOV)){
             if(((JSlider)e.getSource()).getValue()%100==0){
-                zvolenyPocetRiadkov.setText("Pocet riadkov : "+((JSlider)e.getSource()).getValue());
+                zvolenyPocetRiadkov.setText("Počet riadkov : "+((JSlider)e.getSource()).getValue());
                 pocetRiadkov=((JSlider) e.getSource()).getValue();
                 priebeh.setPocetRiadkov(pocetRiadkov);
             }
