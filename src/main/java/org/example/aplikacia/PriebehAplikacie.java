@@ -183,5 +183,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
         }
     }
+    private void updatujOchylkyTrigramov(int indexOchylky){
 
+    }
 }

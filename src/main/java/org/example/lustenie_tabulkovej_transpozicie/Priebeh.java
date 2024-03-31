@@ -72,14 +72,8 @@ public class Priebeh {
     public void setDolnaHranicaBigramov(int n){
        permutacia.odhadnutDolnuHranicuBigramov(n);
     }
-    public double getDolnaHranicaBigramov(){
-        return permutacia.getDolnaHranicaBigramov();
-    }
     public void setHornaHranicaBigramov(int n){
         permutacia.odhadnutHornuHranicuBigramov(n);
-    }
-    public double getHornaHranicaBigramov(){
-        return permutacia.getDolnaHranicaBigramov();
     }
     public String otestovatKorpus(StringBuilder text, ArrayList<String> kluce, int pocetKlucov, JProgressBar progressBar){
         transpozicia.setTextNaSifrovanie(text);
@@ -120,8 +114,8 @@ public class Priebeh {
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
-        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br><br>"+"odhadnute poradia stlpcov : "+
-                uspesnostPermutacii+"%"+"<br><br><br>"+"celkova uspesnost odhadnutia permutacii : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
+        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br>"+"odhadnute poradia stlpcov : "+
+                uspesnostPermutacii+"%"+"<br><br>"+"celkova uspesnost odhadnutia permutacii : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
         return pokus;
     }
     public void otestujRozneKluce(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
