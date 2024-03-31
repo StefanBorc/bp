@@ -3,6 +3,7 @@ package org.example.aplikacia;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Aplikacia {
     public static final String SPUSTIT="LÚŠTIŤ";
@@ -42,10 +43,15 @@ public class Aplikacia {
         tlacidloSpustit.addActionListener(priebehAplikacie);
         tlacidloSpustit.setFocusable(false);
 
-        JSlider prepinacKlucov = vytvoritJSlider(priebehAplikacie,PREPINAC_KLUCOV,1000,5000,3000,false,500,1000,Color.LIGHT_GRAY);
-        JSlider prepinacRiadkov = vytvoritJSlider(priebehAplikacie,PREPINAC_RIADKOV,100,1000,100,false,100,100,Color.LIGHT_GRAY);
-        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,10,580,30,true,10,10,Color.WHITE);
-        JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,10,580,200,true,10,10,Color.WHITE);
+        JSlider prepinacKlucov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_KLUCOV,1000,5000,3000,false,500,1000,Color.LIGHT_GRAY);
+        JSlider prepinacRiadkov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_RIADKOV,100,1000,100,false,100,100,Color.LIGHT_GRAY);
+        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,10,580,30,true,10,10,Color.WHITE);
+        JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,true,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,10,580,200,true,10,10,Color.WHITE);
+        ArrayList<JSlider> prepinaceOdchyliekTrigramov=new ArrayList<>();
+        int[] pociatocneOdchylkyTrigramov=new int[]{50,100,300,2500,3500,4000,6000};
+        for(int i=0;i<7;i++){
+            prepinaceOdchyliekTrigramov.add(vytvoritJSlider(priebehAplikacie,false,""+i,10,10000,pociatocneOdchylkyTrigramov[i],true,10,10,Color.WHITE));
+        }
 
         JLabel zvolenyPocetKlucov=new JLabel("Počet klúčov : "+prepinacKlucov.getValue());
         JLabel zvolenyPocetRiadkov=new JLabel("Počet riadkov : "+prepinacRiadkov.getValue());
@@ -122,13 +128,19 @@ public class Aplikacia {
         JPanel prepinanieModov=new JPanel(new GridLayout(1,2));
         JPanel prepinanieOdchyliekBigramov= new JPanel(new GridLayout(1,2));
         JPanel zvoleneOdchylkyBigramov = new JPanel(new GridLayout(1,2));
-        JPanel mody=new JPanel(new GridLayout(4,1));
+        JPanel zvoleneOdchylkyTrigramov= new JPanel(new GridLayout(1,2));
+        JPanel mody1=new JPanel(new GridLayout(5,1));
+        JPanel mody2=new JPanel(new GridLayout(1,7));
 
         JLabel prepinanieModovNadpis=new JLabel("Lúštenie pomocou :");
         JLabel zvolenaHornaOdchylkaBigramov= new JLabel("<html>horná odchylka <br> bigramov : <html>"+prepinacHornejHraniceBigramov.getValue());
         JLabel zvolenaDolnaOdchylkaBigramov= new JLabel("<html>dolná odchylka <br> bigramov : <html>"+prepinacDolnejHraniceBigramov.getValue());
+        JLabel zvoleneHorneOdchylkyTrigramov= new JLabel("<html>horné odchylky <br> trigramov : <html>"+prepinacHornejHraniceBigramov.getValue());
+        JLabel zvoleneDolneOdchylkyTrigramov= new JLabel("<html>dolné odchylky <br> trigramov : <html>"+prepinacDolnejHraniceBigramov.getValue());
         zvolenaHornaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
         zvolenaDolnaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
+        zvoleneHorneOdchylkyTrigramov.setHorizontalAlignment(SwingConstants.CENTER);
+        zvoleneDolneOdchylkyTrigramov.setHorizontalAlignment(SwingConstants.CENTER);
         prepinanieModovNadpis.setHorizontalAlignment(SwingConstants.CENTER);
 
         JButton ladenieBigramov=new JButton(LADENIE_BIGRAMOV);
@@ -143,14 +155,21 @@ public class Aplikacia {
         prepinanieOdchyliekBigramov.add(prepinacDolnejHraniceBigramov);
         zvoleneOdchylkyBigramov.add(zvolenaHornaOdchylkaBigramov);
         zvoleneOdchylkyBigramov.add(zvolenaDolnaOdchylkaBigramov);
+        zvoleneOdchylkyTrigramov.add(zvoleneHorneOdchylkyTrigramov);
+        zvoleneOdchylkyTrigramov.add(zvoleneDolneOdchylkyTrigramov);
 
-        mody.add(prepinanieModovNadpis);
-        mody.add(prepinanieModov);
-        mody.add(zvoleneOdchylkyBigramov);
-        mody.add(prepinanieOdchyliekBigramov);
+        mody1.add(prepinanieModovNadpis);
+        mody1.add(prepinanieModov);
+        mody1.add(zvoleneOdchylkyBigramov);
+        mody1.add(prepinanieOdchyliekBigramov);
+        mody1.add(zvoleneOdchylkyTrigramov);
 
-        statistikyOt3.add(mody);
-        statistikyOt3.add(new JLabel());
+        for(int i=0;i<7;i++){
+            mody2.add(prepinaceOdchyliekTrigramov.get(i));
+        }
+
+        statistikyOt3.add(mody1);
+        statistikyOt3.add(mody2);
         statistikyOt3.add(pokusPanel);
         hlavnyPanel.add(statistikyOt3);
 
@@ -174,8 +193,14 @@ public class Aplikacia {
 
         frame.setVisible(true);
     }
-    private JSlider vytvoritJSlider(PriebehAplikacie priebehAplikacie, String nazov,int min , int max, int hodnota,boolean malySlider,int minorTick,int majorTick,Color farba){
-        JSlider slider = new JSlider(JSlider.HORIZONTAL, min, max, hodnota);
+    private JSlider vytvoritJSlider(PriebehAplikacie priebehAplikacie,boolean horizontalne, String nazov,int min , int max, int hodnota,boolean malySlider,int minorTick,int majorTick,Color farba){
+        JSlider slider;
+        if(horizontalne){
+            slider = new JSlider(JSlider.HORIZONTAL, min, max, hodnota);
+        }
+        else{
+            slider = new JSlider(JSlider.VERTICAL, min, max, hodnota);
+        }
         slider.setName(nazov);
         slider.setBackground(farba);
         slider.setMinorTickSpacing(minorTick);

@@ -30,7 +30,7 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         zahrnutTrigramy=false;
-        odhadnutHranicuTrigramov(new int[]{40,100,300,2500,3500,4000,6000});
+        odhadnutHraniceTrigramov(new int[]{50,100,300,2500,3500,4000,6000});
         odhadnutDolnuHranicuBigramov(200);
         odhadnutHornuHranicuBigramov(30);
     }
@@ -44,11 +44,15 @@ public class Permutacia {
     public void odhadnutHornuHranicuBigramov(int n){
         hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
     }
-    private void odhadnutHranicuTrigramov(int[] hranice){
+    public void odhadnutHraniceTrigramov(int[] hranice){
         hraniceTrigramov=new double[hranice.length];
         for(int i=0;i<hranice.length;i++){
             hraniceTrigramov[i] =vlastnosti.getStatistikaTrigramovUsporiadana().get(hranice[i]).getValue();
         }
+
+    }
+    public void odhadnutHranicuTrigramov(int index,int n){
+        hraniceTrigramov[index] = vlastnosti.getStatistikaTrigramovUsporiadana().get(n).getValue();
     }
     public void vytlacTestovanuPermutaciu(){
         if(permutacia.length>0){

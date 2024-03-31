@@ -75,6 +75,12 @@ public class Priebeh {
     public void setHornaHranicaBigramov(int n){
         permutacia.odhadnutHornuHranicuBigramov(n);
     }
+    public void setHranicaTrigramov(int index, int n){
+        permutacia.odhadnutHranicuTrigramov(index, n);
+    }
+    public void setHraniceTrigramov(int[] hranice ){
+        permutacia.odhadnutHraniceTrigramov(hranice);
+    }
     public String otestovatKorpus(StringBuilder text, ArrayList<String> kluce, int pocetKlucov, JProgressBar progressBar){
         transpozicia.setTextNaSifrovanie(text);
         transpozicia.setPocetRiadkov(pocetRiadkov);

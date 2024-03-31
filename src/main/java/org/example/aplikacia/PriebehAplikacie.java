@@ -50,6 +50,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private JButton ladenieBigramov;
     @Setter
     private JButton ladenieTrigramov;
+    private int[] hraniceTrigramov;
 
     public PriebehAplikacie() throws IOException {
         super();
@@ -60,6 +61,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
         priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
         priebeh.setDolnaHranicaBigramov(200);
         priebeh.setHornaHranicaBigramov(30);
+        hraniceTrigramov=new int[]{50,100,300,2500,3500,4000,6000};
         //priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
     }
     protected void inicializaciaNadpisov(){
@@ -124,6 +126,12 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
                 dolnaHranicaBigramov=((JSlider) e.getSource()).getValue();
                 priebeh.setDolnaHranicaBigramov(dolnaHranicaBigramov);
         }
+        else{
+            char c=((JSlider) e.getSource()).getName().charAt(0);
+            int index=(int)c-48;
+            hraniceTrigramov[index]=((JSlider) e.getSource()).getValue();
+            updatujOchylkyTrigramov(index,((JSlider) e.getSource()).getValue());
+        }
 
 
     }
@@ -164,6 +172,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
                 priebeh.setJazyk(text.getUpravenyText());
                 priebeh.setDolnaHranicaBigramov(dolnaHranicaBigramov);
                 priebeh.setHornaHranicaBigramov(hornaHranicaBigramov);
+                priebeh.setHraniceTrigramov(hraniceTrigramov);
                 inicializaciaNadpisov();
             } else {
                 switch (polozka) {
@@ -183,7 +192,7 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
         }
     }
-    private void updatujOchylkyTrigramov(int indexOchylky){
-
+    private void updatujOchylkyTrigramov(int indexOchylky,int n){
+        priebeh.setHranicaTrigramov(indexOchylky,n);
     }
 }
