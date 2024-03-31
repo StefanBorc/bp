@@ -114,9 +114,8 @@ public class Priebeh {
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
         System.out.print(pocetRiadkov+"        "+uspesnostKlucov+"         "+uspesnostPermutacii);
         System.out.println();
-        String pokus="odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br>"+"odhadnute poradia stlpcov : "+
+        return "odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br>"+"odhadnute poradia stlpcov : "+
                 uspesnostPermutacii+"%"+"<br><br>"+"celkova uspesnost odhadnutia permutacii : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
-        return pokus;
     }
     public void otestujRozneKluce(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
         pocetRiadkov=100;
