@@ -17,15 +17,11 @@ public class Permutacia {
     private ArrayList<Integer[]> kombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> bigramyPreMozneKombinacie;
     private ArrayList<List<Map.Entry<String, Double>>> trigramyPreMozneKombinacie;
-    @Setter@Getter
+    @Getter
     private double dolnaHranicaBigramov;
-    @Setter@Getter
+    @Getter
     private double hornaHranicaBigramov;
     private double[] hraniceTrigramov;
-    @Setter
-    private int pocetRiadkov;
-    @Setter
-    private Jazyk jazyk;
     @Setter@Getter
     private boolean zahrnutTrigramy;
 
@@ -34,27 +30,16 @@ public class Permutacia {
         this.blokyZt=odhadKluca.getBlokyDlzkyKluca();
         this.vlastnosti = vlastnosti;
         zahrnutTrigramy=false;
-        this.jazyk=jazyk;
         odhadnutHranicuTrigramov(new int[]{40,100,300,2500,3500,4000,6000});
-        odhadnutDolnuHranicuBigramov();
-        odhadnutHornuHranicuBigramov(20);
+        odhadnutDolnuHranicuBigramov(200);
+        odhadnutHornuHranicuBigramov(30);
     }
     protected void hladatPermutaciu() {
         ArrayList<ArrayList<Double>> odchylky = vyladitBigramy(blokyZt);
         najstPoradie(odchylky,zahrnutTrigramy);
     }
-    public void odhadnutDolnuHranicuBigramov(){
-        int n;
-        if(jazyk.toString().equals("DE")){
-            n=450;
-        }
-        else if(jazyk.toString().equals("CZ")){
-            n=425;
-        }
-        else{
-            n=400;
-        }
-        dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(vlastnosti.getStatistikaBigramovUsporiadana().size()-n).getValue();
+    public void odhadnutDolnuHranicuBigramov(int n){
+        dolnaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
     }
     public void odhadnutHornuHranicuBigramov(int n){
         hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
@@ -77,13 +62,8 @@ public class Permutacia {
         List<Map.Entry<String, Double>> bigramyZT;
 
         int velkostPorovnaniaPrePermutaciu=30;
-        int vaha=4;
-        if(pocetRiadkov<=100){
-            if(!jazyk.toString().equals("EN")){
-                velkostPorovnaniaPrePermutaciu=25;
-            }
-            vaha=10;
-        }
+        int vaha=7;
+
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
         for(int prvy=0;prvy<bloky.size();prvy++) {
             odchylkyStlpcov.add(new ArrayList<>());

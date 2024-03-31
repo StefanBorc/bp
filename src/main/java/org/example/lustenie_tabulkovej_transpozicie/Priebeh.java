@@ -26,15 +26,14 @@ public class Priebeh {
         permutacia=new Permutacia(vlastnosti,odhadKluca,jazyk);
 
     }
-    public void setJazyk(Jazyk jazyk,StringBuilder ot) {
-        permutacia.setJazyk(jazyk);
+    public void setJazyk(StringBuilder ot) {
         vlastnosti.setStatistikaSamohlasokSpoluhlasok(vlastnosti.samohlaskySpoluhlasky(ot.toString()));
         vlastnosti.setStatistikaZnakov(vlastnosti.ngramy(ot,1,true,true,true));
         vlastnosti.setStatistikaBigramovUsporiadana(vlastnosti.ngramy(ot,2,true,true,true));
         vlastnosti.setStatistikaTrigramovUsporiadana(vlastnosti.ngramy(ot,3,true,true,true));
         vlastnosti.priemernaDlzkaSlov(text.toString());
         vlastnosti.setIndexKoincidencie(vlastnosti.indexKoincidencie(ot));
-        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
+        transpozicia.setPocetRiadkov(pocetRiadkov);
     }
     public void setModLadenia(String mod){
         if(mod.equals(LADENIE_BIGRAMOV)){
@@ -49,7 +48,7 @@ public class Priebeh {
     }
     public void setPocetRiadkov(int pocetRiadkov) {
         this.pocetRiadkov=pocetRiadkov;
-        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
+        transpozicia.setPocetRiadkov(pocetRiadkov);
     }
 
     public double podielSamohlasokSpoluhlasokOT(){
@@ -71,21 +70,20 @@ public class Priebeh {
         return vlastnosti.getIndexKoincidencie();
     }
     public void setDolnaHranicaBigramov(int n){
-       permutacia.setDolnaHranicaBigramov(n);
+       permutacia.odhadnutDolnuHranicuBigramov(n);
     }
     public double getDolnaHranicaBigramov(){
         return permutacia.getDolnaHranicaBigramov();
     }
     public void setHornaHranicaBigramov(int n){
-        permutacia.setDolnaHranicaBigramov(n);
+        permutacia.odhadnutHornuHranicuBigramov(n);
     }
     public double getHornaHranicaBigramov(){
         return permutacia.getDolnaHranicaBigramov();
     }
     public String otestovatKorpus(StringBuilder text, ArrayList<String> kluce, int pocetKlucov, JProgressBar progressBar){
-
         transpozicia.setTextNaSifrovanie(text);
-        transpozicia.setPocetRiadkov(pocetRiadkov,permutacia);
+        transpozicia.setPocetRiadkov(pocetRiadkov);
         int index=0;
         double pocetNeuspesnychPermutacii=0;
         double pocetNeuhadnutychKlucov=0;
@@ -131,7 +129,7 @@ public class Priebeh {
         for(int r=1;r<3;r++){
             transpozicia.setTextNaSifrovanie(texty.get(r));
             for(int d=pocetRiadkov;d<=500;d+=100){
-                transpozicia.setPocetRiadkov(d,permutacia);
+                transpozicia.setPocetRiadkov(d);
                 int index=0;
                 double pocetNeuspesnychPermutacii=0;
                 double pocetNeuhadnutychKlucov=0;

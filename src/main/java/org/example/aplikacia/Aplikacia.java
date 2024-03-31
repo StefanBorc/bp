@@ -44,10 +44,8 @@ public class Aplikacia {
 
         JSlider prepinacKlucov = vytvoritJSlider(priebehAplikacie,PREPINAC_KLUCOV,1000,5000,3000,false,500,1000,Color.LIGHT_GRAY);
         JSlider prepinacRiadkov = vytvoritJSlider(priebehAplikacie,PREPINAC_RIADKOV,100,1000,100,false,100,100,Color.LIGHT_GRAY);
-        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,10,676,50,true,10,10,Color.WHITE);
-        JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,10,676,400,true,10,10,Color.WHITE);
-
-        System.out.println(priebehAplikacie.getDolnaHranicaBigramov());
+        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,10,580,30,true,10,10,Color.WHITE);
+        JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,10,580,200,true,10,10,Color.WHITE);
 
         JLabel zvolenyPocetKlucov=new JLabel("Počet klúčov : "+prepinacKlucov.getValue());
         JLabel zvolenyPocetRiadkov=new JLabel("Počet riadkov : "+prepinacRiadkov.getValue());
