@@ -45,6 +45,7 @@ public class Permutacia {
         hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
     }
     public void odhadnutHraniceTrigramov(int[] hranice){
+        System.out.println(vlastnosti.getStatistikaTrigramov().size());
         hraniceTrigramov=new double[hranice.length];
         for(int i=0;i<hranice.length;i++){
             hraniceTrigramov[i] =vlastnosti.getStatistikaTrigramovUsporiadana().get(hranice[i]).getValue();

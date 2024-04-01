@@ -43,6 +43,10 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private JLabel dolnaHranicaBigramovText;
     @Setter
     private JLabel hornaHranicaBigramovText;
+    @Setter
+    private JLabel horneHraniceTrigramovText;
+    @Setter
+    private JLabel dolneHraniceTrigramovText;
     private String pokus;
     @Setter
     private JProgressBar progressBar;
@@ -131,6 +135,21 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             int index=(int)c-48;
             hraniceTrigramov[index]=((JSlider) e.getSource()).getValue();
             updatujOchylkyTrigramov(index,((JSlider) e.getSource()).getValue());
+            String text="";
+            if(index<3){
+                text="<html>dolné odchylky <br> trigramov : <html>";
+                for(int i=0;i<3;i++){
+                    text+=hraniceTrigramov[i]+" ";
+                }
+                dolneHraniceTrigramovText.setText(text);
+            }
+            else {
+                text="<html>horné odchylky <br> trigramov :<br> <html>";
+                for(int i=3;i<hraniceTrigramov.length;i++){
+                    text+=hraniceTrigramov[i]+" ";
+                }
+                horneHraniceTrigramovText.setText(text);
+            }
         }
 
 
