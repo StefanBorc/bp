@@ -136,19 +136,20 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             hraniceTrigramov[index]=((JSlider) e.getSource()).getValue();
             updatujOchylkyTrigramov(index,((JSlider) e.getSource()).getValue());
             String text="";
-            if(index<3){
+            if(index>3){
                 text="<html>dolné odchylky <br> trigramov : <html>";
-                for(int i=0;i<3;i++){
+                for(int i=3;i<hraniceTrigramov.length;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }
                 dolneHraniceTrigramovText.setText(text);
             }
             else {
                 text="<html>horné odchylky <br> trigramov :<br> <html>";
-                for(int i=3;i<hraniceTrigramov.length;i++){
+                for(int i=0;i<3;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }
                 horneHraniceTrigramovText.setText(text);
+
             }
         }
     }

@@ -163,8 +163,9 @@ public class Aplikacia {
         prepinanieOdchyliekBigramov.add(prepinacDolnejHraniceBigramov);
         zvoleneOdchylkyBigramov.add(zvolenaHornaOdchylkaBigramov);
         zvoleneOdchylkyBigramov.add(zvolenaDolnaOdchylkaBigramov);
-        zvoleneOdchylkyTrigramov.add(zvoleneDolneOdchylkyTrigramov);
         zvoleneOdchylkyTrigramov.add(zvoleneHorneOdchylkyTrigramov);
+        zvoleneOdchylkyTrigramov.add(zvoleneDolneOdchylkyTrigramov);
+
 
         mody1.add(prepinanieModovNadpis);
         mody1.add(prepinanieModov);

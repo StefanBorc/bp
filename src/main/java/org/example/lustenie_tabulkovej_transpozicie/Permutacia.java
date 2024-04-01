@@ -45,7 +45,7 @@ public class Permutacia {
         hornaHranicaBigramov=vlastnosti.getStatistikaBigramovUsporiadana().get(n).getValue();
     }
     public void odhadnutHraniceTrigramov(int[] hranice){
-        System.out.println(vlastnosti.getStatistikaTrigramov().size());
+
         hraniceTrigramov=new double[hranice.length];
         for(int i=0;i<hranice.length;i++){
             hraniceTrigramov[i] =vlastnosti.getStatistikaTrigramovUsporiadana().get(hranice[i]).getValue();
@@ -118,12 +118,12 @@ public class Permutacia {
                     }
                     StringBuilder text = vlastnosti.premenBlokyNaText(blokyZt, new int[]{i,j,t});
                     trigramyZT = vlastnosti.ngramy(text, 3, false,false,true);
-                    double velkostPorovnania=trigramyZT.size()/1.4;
+                    double velkostPorovnania=trigramyZT.size()/2.0;
                     double odchylka=0.0;
                     for(int trigram=0;trigram<velkostPorovnania;trigram++){
                         if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())!=null){
                             if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())>=hraniceTrigramov[0] ){
-                                odchylka-=2.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
+                                odchylka-=2*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
                             }
                             else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())>=hraniceTrigramov[1] ){
                                 odchylka-=1.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
@@ -138,7 +138,7 @@ public class Permutacia {
                                 odchylka+=2*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
                             }
                             else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[5] ){
-                                odchylka+=3.5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
+                                odchylka+=3*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
                             }
                             else if(vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey())<=hraniceTrigramov[6] ){
                                 odchylka+=5*Math.abs(trigramyZT.get(trigram).getValue()-vlastnosti.getStatistikaTrigramov().get(trigramyZT.get(trigram).getKey()))*(velkostPorovnania-trigram);
