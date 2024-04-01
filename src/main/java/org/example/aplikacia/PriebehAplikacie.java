@@ -151,8 +151,6 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
                 horneHraniceTrigramovText.setText(text);
             }
         }
-
-
     }
     @Override
     public void actionPerformed(ActionEvent e) {
