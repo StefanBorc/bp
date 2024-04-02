@@ -121,12 +121,12 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
         }
         else if(((JSlider)e.getSource()).getName().equals(PREPINAC_HORNEJ_HRANICE_BIGRAMOV)){
-                hornaHranicaBigramovText.setText("<html>horná odchylka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                hornaHranicaBigramovText.setText("<html>horná odchýlka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
                 hornaHranicaBigramov=((JSlider) e.getSource()).getValue();
                 priebeh.setHornaHranicaBigramov(hornaHranicaBigramov);
         }
         else if(((JSlider)e.getSource()).getName().equals(PREPINAC_DOLNEJ_HRANICE_BIGRAMOV)){
-                dolnaHranicaBigramovText.setText("<html>dolná odchylka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                dolnaHranicaBigramovText.setText("<html>dolná odchýlka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
                 dolnaHranicaBigramov=((JSlider) e.getSource()).getValue();
                 priebeh.setDolnaHranicaBigramov(dolnaHranicaBigramov);
         }
@@ -136,15 +136,15 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             hraniceTrigramov[index]=((JSlider) e.getSource()).getValue();
             updatujOchylkyTrigramov(index,((JSlider) e.getSource()).getValue());
             String text="";
-            if(index>3){
-                text="<html>dolné odchylky <br> trigramov : <html>";
+            if(index>2){
+                text="<html>dolné odchýlky <br> trigramov : <html>";
                 for(int i=3;i<hraniceTrigramov.length;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }
                 dolneHraniceTrigramovText.setText(text);
             }
             else {
-                text="<html>horné odchylky <br> trigramov :<br> <html>";
+                text="<html>horné odchýlky <br> trigramov :<br> <html>";
                 for(int i=0;i<3;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }
