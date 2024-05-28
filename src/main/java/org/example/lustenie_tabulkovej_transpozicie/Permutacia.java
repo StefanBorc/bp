@@ -67,6 +67,7 @@ public class Permutacia {
         List<Map.Entry<String, Double>> bigramyZT;
 
         int velkostPorovnaniaPrePermutaciu=30;
+
         int vaha=7;
 
         ArrayList<ArrayList<Double>> odchylkyStlpcov=new ArrayList<>();
@@ -80,7 +81,7 @@ public class Permutacia {
                     for(int bigram=0;bigram<velkostPorovnaniaPrePermutaciu;bigram++){
                         if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())!=null){
                             if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())>=hornaHranicaBigramov ){
-                                odchylka-=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));
+                                odchylka-=0.5*(Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())));
                             }
                             else if(vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey())<=dolnaHranicaBigramov ){
                                 odchylka+=Math.abs(bigramyZT.get(bigram).getValue()-vlastnosti.getStatistikaBigramov().get(bigramyZT.get(bigram).getKey()));

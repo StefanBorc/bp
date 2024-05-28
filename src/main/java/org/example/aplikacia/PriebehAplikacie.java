@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.example.aplikacia.Aplikacia.*;
 
@@ -55,18 +57,21 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     @Setter
     private JButton ladenieTrigramov;
     private int[] hraniceTrigramov;
-
+    private ArrayList<String> kluceNaPorovnanie1;
+    private ArrayList<String> kluceNaPorovnanie2;
     public PriebehAplikacie() throws IOException {
         super();
+        kluceNaPorovnanie1 =new ArrayList<>(List.of("drugs","state","value","steps","miles","speed","horse","nurse","phone","lemon","lists","bored","angry","japan","hurry"));
+        kluceNaPorovnanie2=new ArrayList<>(List.of("ciphertexts","cryptography","quickstepping","complexifying","biotechnologies", "heliocentricism","denationalization","decriminalisation","keytextishiddenhere","warisstartingtomorrow"));
         cisloKorpusu=0;
         pocetRiadkov=100;
-        jazyk=Jazyk.DE;
+        jazyk=Jazyk.EN;
         text=new Text(jazyk.toString());
         priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
-        priebeh.setDolnaHranicaBigramov(200);
+        priebeh.setDolnaHranicaBigramov(220);
         priebeh.setHornaHranicaBigramov(30);
         hraniceTrigramov=new int[]{50,100,300,2500,3500,4000,6000};
-        //priebeh.otestujRozneKluce(text.getKluce(),text.getTextyNaSifrovanie());
+    //    priebeh.otestujRozneKluce(kluceNaPorovnanie2,text.getTextyNaSifrovanie());
     }
     protected void inicializaciaNadpisov(){
         statistikyPreLabely.setText("<html><font color='red'>"+PODIEL_NADPIS+" <font color='black'>"+priebeh.podielSamohlasokSpoluhlasokOT()+
@@ -121,12 +126,12 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             }
         }
         else if(((JSlider)e.getSource()).getName().equals(PREPINAC_HORNEJ_HRANICE_BIGRAMOV)){
-                hornaHranicaBigramovText.setText("<html>horná odchýlka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                hornaHranicaBigramovText.setText("<html>horná hranica <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
                 hornaHranicaBigramov=((JSlider) e.getSource()).getValue();
                 priebeh.setHornaHranicaBigramov(hornaHranicaBigramov);
         }
         else if(((JSlider)e.getSource()).getName().equals(PREPINAC_DOLNEJ_HRANICE_BIGRAMOV)){
-                dolnaHranicaBigramovText.setText("<html>dolná odchýlka <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
+                dolnaHranicaBigramovText.setText("<html>dolná hranica <br> bigramov : <html>"+((JSlider)e.getSource()).getValue());
                 dolnaHranicaBigramov=((JSlider) e.getSource()).getValue();
                 priebeh.setDolnaHranicaBigramov(dolnaHranicaBigramov);
         }
@@ -137,14 +142,14 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
             updatujOchylkyTrigramov(index,((JSlider) e.getSource()).getValue());
             String text="";
             if(index>2){
-                text="<html>dolné odchýlky <br> trigramov : <html>";
+                text="<html>dolné hranice <br> trigramov : <html>";
                 for(int i=3;i<hraniceTrigramov.length;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }
                 dolneHraniceTrigramovText.setText(text);
             }
             else {
-                text="<html>horné odchýlky <br> trigramov :<br> <html>";
+                text="<html>horné hranice <br> trigramov :<br> <html>";
                 for(int i=0;i<3;i++){
                     text+=hraniceTrigramov[i]+" ";
                 }

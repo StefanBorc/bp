@@ -141,11 +141,11 @@ public class Aplikacia {
         JPanel mody2=new JPanel(new GridLayout(1,7));
 
         JLabel prepinanieModovNadpis=new JLabel("Lúštenie pomocou :");
-        JLabel zvolenaHornaOdchylkaBigramov= new JLabel("<html>horná odchýlka <br> bigramov : <html>"+prepinacHornejHraniceBigramov.getValue());
-        JLabel zvolenaDolnaOdchylkaBigramov= new JLabel("<html>dolná odchýlka <br> bigramov : <html>"+prepinacDolnejHraniceBigramov.getValue());
-        JLabel zvoleneHorneOdchylkyTrigramov= new JLabel("<html>horné odchýlky <br> trigramov : <br>" +
-                " 60 100 300<html>"+prepinacHornejHraniceBigramov.getValue());
-        JLabel zvoleneDolneOdchylkyTrigramov= new JLabel("<html>dolné odchýlky <br> trigramov : <br>" +
+        JLabel zvolenaHornaOdchylkaBigramov= new JLabel("<html>horná hranica <br> bigramov : <html>"+prepinacHornejHraniceBigramov.getValue());
+        JLabel zvolenaDolnaOdchylkaBigramov= new JLabel("<html>dolná hranica <br> bigramov : <html>"+prepinacDolnejHraniceBigramov.getValue());
+        JLabel zvoleneHorneOdchylkyTrigramov= new JLabel("<html>horné hranice <br> trigramov : <br>" +
+                " 60 100 300<html>");
+        JLabel zvoleneDolneOdchylkyTrigramov= new JLabel("<html>dolné hranice <br> trigramov : <br>" +
                 "2500 3500 4000 6000 <html>"+prepinacDolnejHraniceBigramov.getValue());
         zvolenaHornaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
         zvolenaDolnaOdchylkaBigramov.setHorizontalAlignment(SwingConstants.CENTER);
@@ -203,7 +203,6 @@ public class Aplikacia {
 
         frame.add(hlavnyPanel, BorderLayout.CENTER);
 
-
         frame.setVisible(true);
     }
     private JSlider vytvoritJSlider(PriebehAplikacie priebehAplikacie,boolean horizontalne, String nazov,int min , int max, int hodnota,boolean malySlider,int minorTick,int majorTick,Color farba){
@@ -226,5 +225,6 @@ public class Aplikacia {
         slider.addChangeListener(priebehAplikacie);
         return slider;
     }
+
 
 }

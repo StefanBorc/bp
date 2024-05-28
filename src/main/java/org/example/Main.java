@@ -13,6 +13,7 @@ public class Main {
     public static Random r = new Random();
 
     public static void main(String[] args) throws Exception {
+
         new Aplikacia();
     }
 
@@ -54,6 +55,5 @@ public class Main {
         return (ArrayList<String>) kluce;
 
     }
-
 
 }

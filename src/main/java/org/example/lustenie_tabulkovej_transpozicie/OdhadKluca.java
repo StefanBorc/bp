@@ -13,7 +13,9 @@ public class OdhadKluca {
     private Vlastnosti vlastnosti;
     @Getter
     private ArrayList<StringBuilder> blokyDlzkyKluca;
-
+    public OdhadKluca(Vlastnosti vlastnosti){
+        this.vlastnosti = vlastnosti;
+    }
     public void setDlzkaKluca(int dlzkaKluca,TabulkovaTranspozicia t) {
         StringBuilder zt=t.getZasifrovanyText();
         int n = zt.length();
@@ -45,10 +47,6 @@ public class OdhadKluca {
         blokyDlzkyKluca=t.getZtVBlokoch();
     }
 
-    public OdhadKluca(Vlastnosti vlastnosti){
-        this.vlastnosti = vlastnosti;
-    }
-
     public double dKluca(ArrayList<StringBuilder> bloky){
 
         ArrayList<StringBuilder> text=citajStlpce(bloky);
@@ -63,7 +61,7 @@ public class OdhadKluca {
 
         return suma/pocet;
     }
-    protected void najdiDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
+    protected void najstDlzkuKluca(String zt, TabulkovaTranspozicia transpozicia) {
 
         ArrayList<StringBuilder> riadky;
 
@@ -99,7 +97,6 @@ public class OdhadKluca {
                     riadok.append(zt.charAt(j));
                 }
             }
-
             double odchylka=dKluca(riadky);
             odchylky.add(odchylka);
             blokyDlzkyN.add(riadky);
