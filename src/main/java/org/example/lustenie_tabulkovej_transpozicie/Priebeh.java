@@ -114,8 +114,8 @@ public class Priebeh {
         }
         double uspesnostKlucov=((pocetKlucov-pocetNeuhadnutychKlucov)/pocetKlucov)*100;
         double uspesnostPermutacii=((pocetKlucov-pocetNeuspesnychPermutacii)/pocetKlucov)*100;
-        return "odhadnute kluce : "+uspesnostKlucov+"%"+"<br><br>"+"odhadnute poradia stlpcov : "+
-                uspesnostPermutacii+"%"+"<br><br>"+"celkova uspesnost odhadnutia permutacii : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
+        return "odhadnuté kluče : "+uspesnostKlucov+"%"+"<br><br>"+"odhadnuté poradia stĺpcov : "+
+                uspesnostPermutacii+"%"+"<br><br>"+"celková úspešnosť odhadnutia permutacií : "+(uspesnostPermutacii/uspesnostKlucov)*100+" % ";
     }
 
     public void otestujRozneKluce(ArrayList<String> kluce, ArrayList<StringBuilder> texty){
