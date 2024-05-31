@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="vlastnosti:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/vlastnosti_jar</output-path>
+    <root id="archive" name="vlastnosti.jar">
+      <element id="module-output" name="vlastnosti" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

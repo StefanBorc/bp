@@ -68,25 +68,32 @@ public class Text {
         return text;
     }
     private BufferedReader otvorSubor() throws FileNotFoundException {
-        File slovaTxt = new File("OT",nazovSuboru+".txt");
-        return new BufferedReader(new FileReader(slovaTxt));
+        //File slovaTxt = new File("OT",nazovSuboru+".txt");
+        String cestaKSouboru = "/OT/" + nazovSuboru + ".txt";
+        InputStream inputStream = getClass().getResourceAsStream(cestaKSouboru);
+        int a=0;
+        return new BufferedReader(new InputStreamReader(inputStream));
     }
     protected void nacitajKluceText() throws IOException {
         kluce=new ArrayList<>();
         textyNaSifrovanie=new ArrayList<>();
+        String cestaKSouboru = "/KLUCE.txt";
+        InputStream inputStream = getClass().getResourceAsStream(cestaKSouboru);
 
-
-        File k=new File("KLUCE.txt");
-        BufferedReader br =new BufferedReader(new FileReader(k));
+       // File k=new File("KLUCE.txt");
+        BufferedReader br =new BufferedReader(new InputStreamReader(inputStream));
         String st;
         while ((st = br.readLine()) != null) {
             kluce.add(st);
         }
         int i;
-        File d=new File("KORPUSY",nazovSuboru);
+        //File d=new File("KORPUSY",nazovSuboru);
+
         for(i=1;i<=3;i++){
-            File p=new File(d,i+".txt");
-            br=new BufferedReader(new FileReader(p));
+            String cestaKSouboru1 =  "/KORPUSY/" + nazovSuboru + "/" + i + ".txt";
+            InputStream inputStream1 = getClass().getResourceAsStream(cestaKSouboru1);
+           // File p=new File(d,i+".txt");
+            br=new BufferedReader(new InputStreamReader(inputStream1));
             StringBuilder text=new StringBuilder();
             while ((st = br.readLine()) != null) {
                 text.append(st);
@@ -101,14 +108,5 @@ public class Text {
         }
          br.close();
     }
-    public ArrayList<String> nacitajKluce(String dir) throws IOException {
-        ArrayList<String> kluce=new ArrayList<>();
-        File k=new File(dir+".txt");
-        BufferedReader br =new BufferedReader(new FileReader(k));
-        String st;
-        while ((st = br.readLine()) != null) {
-            kluce.add(st);
-        }
-        return kluce;
-    }
+
 }
