@@ -45,7 +45,7 @@ public class Aplikacia {
 
         JSlider prepinacKlucov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_KLUCOV,1000,5000,3000,false,500,1000,Color.LIGHT_GRAY);
         JSlider prepinacRiadkov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_RIADKOV,100,1000,100,false,100,100,Color.LIGHT_GRAY);
-        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,0,580,30,true,10,10,Color.GREEN);
+        JSlider prepinacHornejHraniceBigramov = vytvoritJSlider(priebehAplikacie,true,PREPINAC_HORNEJ_HRANICE_BIGRAMOV,0,580,20,true,10,10,Color.GREEN);
         JSlider prepinacDolnejHraniceBigramov =vytvoritJSlider(priebehAplikacie,true,PREPINAC_DOLNEJ_HRANICE_BIGRAMOV,0,580,200,true,10,10,Color.RED);
         ArrayList<JSlider> prepinaceOdchyliekTrigramov=new ArrayList<>();
         int[] pociatocneOdchylkyTrigramov=new int[]{60,100,300,2500,3500,4000,6000};

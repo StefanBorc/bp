@@ -10,7 +10,6 @@ import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.example.aplikacia.Aplikacia.*;
 
@@ -61,15 +60,17 @@ public class PriebehAplikacie extends UniverzalnyAdapter {
     private ArrayList<String> kluceNaPorovnanie2;
     public PriebehAplikacie() throws IOException {
         super();
-        kluceNaPorovnanie1 =new ArrayList<>(List.of("drugs","state","value","steps","miles","speed","horse","nurse","phone","lemon","lists","bored","angry","japan","hurry"));
-        kluceNaPorovnanie2=new ArrayList<>(List.of("ciphertexts","cryptography","quickstepping","complexifying","biotechnologies", "heliocentricism","denationalization","decriminalisation","keytextishiddenhere","warisstartingtomorrow"));
+        //kluceNaPorovnanie1 =new ArrayList<>(List.of("drugs","state","value","steps","miles","speed","horse","nurse","phone","lemon","lists","bored","angry","japan","hurry"));
+        //kluceNaPorovnanie2=new ArrayList<>(List.of("ciphertexts","cryptography","quickstepping","complexifying","biotechnologies", "heliocentricism","denationalization","decriminalisation","keytextishiddenhere","warisstartingtomorrow"));
         cisloKorpusu=0;
+        dolnaHranicaBigramov=200;
+        hornaHranicaBigramov=20;
         pocetRiadkov=100;
         jazyk=Jazyk.DE;
         text=new Text(jazyk.toString());
         priebeh=new Priebeh(pocetRiadkov,jazyk,text.getTextyNaSifrovanie().get(0),text.getUpravenyText());
         priebeh.setDolnaHranicaBigramov(200);
-        priebeh.setHornaHranicaBigramov(30);
+        priebeh.setHornaHranicaBigramov(20);
         hraniceTrigramov=new int[]{50,100,300,2500,3500,4000,6000};
     //    priebeh.otestujRozneKluce(kluceNaPorovnanie2,text.getTextyNaSifrovanie());
     }

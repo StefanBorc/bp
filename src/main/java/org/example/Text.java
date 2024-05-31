@@ -65,7 +65,7 @@ public class Text {
             }
         }
         br.close();
-        return text;
+        return this.text;
     }
     private BufferedReader otvorSubor() throws FileNotFoundException {
         //File slovaTxt = new File("OT",nazovSuboru+".txt");
